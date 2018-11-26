@@ -156,8 +156,10 @@ def createlisting():
         'url': url,
         'details': detailsList,
         }
+
     # if there is an empty field, return the createlisting template
     if emptyField:
+        print 'empty field' #<-----------------------
         templateInfo['errorBool'] = True
         templateInfo['e'] = 'One of the fields below is empty.'
         return template('createlisting.tpl', templateInfo)
@@ -166,6 +168,7 @@ def createlisting():
         # modifies detailsList to include listingid and coursetitle
         createListing(detailsList)
     except Exception, e:
+        print 'createListing() not working. Exception raised' #<-----------------------
         templateInfo['errorBool'] = True
         templateInfo['e'] = e
         return template('createlisting.tpl', templateInfo
@@ -175,6 +178,8 @@ def createlisting():
     templateInfo['errorBool'] = False
     
     response.set_cookie('url', request.url)
+
+    print templateInfo['details'] #<-----------------------
     
     # Need to think about what template we return to. Maybe return to some new template that previews what your post looks like??
     # return template('createlisting.tpl', templateInfo)
