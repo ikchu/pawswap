@@ -40,9 +40,9 @@ import random
 #       - uses dictionary to add new row to database
 #           - will need to write helper function to create listingid
 #           - will need to connect registrar database to be able to add coursetitle to listing without user having to type it in manually
-#   - editListing(listingid, fieldDict)
-#       - edits any some field(s) of a listing
-#       - dictionary contains only the fields that are to be updated (name, email, bookname, dept, coursenum, price, condition, negotiable)
+#   - editListing(listingid, fieldList)
+#       - edits some field(s) of a listing
+#       - list contains only the fields that are to be updated (name, email, bookname, dept, coursenum, price, condition, negotiable)
 #   - deleteListing(listingid):
 #       - deletes row from database by listingid
 #-----------------------------------------------------------------------
@@ -142,7 +142,7 @@ def createListing(fieldList):
 #   - editListing(listingid, fieldDict)
 #       - edits any some field(s) of a listing
 #       - dictionary contains only the fields that are to be updated (any combo of name, email, bookname, dept, coursenum, price, condition, negotiable)
-def editListing(listingid, fieldDict):
+def editListing(listingid, fieldList):
 
     DATABASE_NAME = 'listings.sqlite'
 
@@ -153,12 +153,13 @@ def editListing(listingid, fieldDict):
         connection = connect(DATABASE_NAME)
         cursor = connection.cursor()
 
-        stmtStr = editListingStmtStr(fieldDict)
+        stmtStr = editListingStmtStr()
 
         # using .values instead of createValList() because we don't want to format what the user inputs when creating a post
-        fields = fieldDict.values()
-        fields.append(listingid)
+        # fields = fieldDict.values()
 
+        fields = fieldList.copy()
+        fields.append(listingid)
         cursor.execute(stmtStr, fields)
 
         cursor.close()
@@ -337,35 +338,38 @@ def getCourseTitle(dept, coursenum):
         connectionReg.close()
         raise Exception('Course title/num not found. Try different dept and coursenum')
 
-def editListingStmtStr(fieldDict):
+def editListingStmtStr():
 
-    stmtStrBase = 'UPDATE listings SET '
+    # stmtStrBase = 'UPDATE listings SET '
 
-    # specifies sort order - eventually have user select the 'sort by' method and adjust this accordingly
-    stmtStrEnd = 'WHERE listingid = ?'
+    # # specifies sort order - eventually have user select the 'sort by' method and adjust this accordingly
+    # stmtStrEnd = 'WHERE listingid = ?'
 
-    # for each valid key (ex. '-dept'), the value is the string that will be appended to stmtStr (ex. ' AND dept = \'COS\'')
-    # using 'LIKE' will take care of caps/lower issue. 
-    keyStmtDict = {
-        'name'       : 'name=? ',
-        'email'      : 'email=? ',
-        'bookname'   : 'bookname=? ',
-        'coursenum'  : 'coursenum=? ',
-        'condition'  : 'condition=? ',
-        'price'      : 'price=? ',
-        'negotiable' : 'negotiable=? '
-    }
+    # # for each valid key (ex. '-dept'), the value is the string that will be appended to stmtStr (ex. ' AND dept = \'COS\'')
+    # # using 'LIKE' will take care of caps/lower issue. 
+    # keyStmtDict = {
+    #     'name'       : 'name=? ',
+    #     'email'      : 'email=? ',
+    #     'bookname'   : 'bookname=? ',
+    #     'dept'       : 'dept=?',
+    #     'coursenum'  : 'coursenum=? ',
+    #     'condition'  : 'condition=? ',
+    #     'price'      : 'price=? ',
+    #     'negotiable' : 'negotiable=? '
+    # }
 
-    stmtStr = stmtStrBase
+    # stmtStr = stmtStrBase
 
-    # adding key/value conditions to stmtStr
-    for index, key in enumerate(fieldDict):
-        if index == 0: 
-            stmtStr += keyStmtDict[key]
-        else:
-            stmtStr += ', ' + keyStmtDict[key]
+    # # adding key/value conditions to stmtStr
+    # for index, key in enumerate(fieldDict):
+    #     if index == 0: 
+    #         stmtStr += keyStmtDict[key]
+    #     else:
+    #         stmtStr += ', ' + keyStmtDict[key]
 
-    stmtStr += stmtStrEnd
+    # stmtStr += stmtStrEnd
+
+    stmtStr = 'UPDATE listings SET name=? email=? bookname=? dept=? coursenum=? condition=? price=? negotiable=? WHERE listingid = ?'
 
     return stmtStr
 
