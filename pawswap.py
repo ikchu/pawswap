@@ -2,10 +2,8 @@
 
 #-----------------------------------------------------------------------
 # reg.py
-# Author: Reece Schachne and Zoe Barnswell
+# Author: Reece Schachne, David Bowman, and Ikaia Chu
 #-----------------------------------------------------------------------
-
-# added onto file after local pull but before final push
 
 from sys import argv
 from time import localtime, asctime, strftime
