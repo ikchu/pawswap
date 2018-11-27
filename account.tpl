@@ -19,6 +19,7 @@
 
         <table>
             <tr>
+              <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
                 <th>Dept</th>
                 <th>Coursenum</th>
