@@ -106,6 +106,11 @@ def listingsdetails():
 
 @route('/account')
 def account():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+    
     errorMsg = request.query.get('errorMsg')
     if errorMsg is None:
         errorMsg = ''   
@@ -141,7 +146,8 @@ def account():
         'coursenum': coursenum,
         'dept': dept,
         'title': title,
-        'listings': listings
+        'listings': listings,
+        'username': username
     }
     return template('account.tpl', templateInfo)
 
