@@ -84,6 +84,47 @@ def listingsdetails():
     }
     return template('listingsdetails.tpl', templateInfo)
 
+@route('/account')
+def account():
+    errorMsg = request.query.get('errorMsg')
+    if errorMsg is None:
+        errorMsg = ''   
+
+    dept = request.query.get('dept')
+    coursenum = request.query.get('coursenum')
+    title = request.query.get('coursetitle')
+    bookname = request.query.get('bookname')
+
+    response.set_cookie('url', request.url)
+
+    if bookname is None:
+        bookname = ""
+    if coursenum is None:
+        coursenum = ""
+    if dept is None:
+        dept = ""
+    if title is None:
+        title = ""
+
+    # create dictionary
+    dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
+    # search with that criteria; returns bookname, dept, coursenum, price
+    listings = getListings(dbSearchCriteria)
+    
+    url = request.get_cookie('url')
+    response.set_cookie('url', request.url)
+     
+    templateInfo = {
+        'url': url,
+        'errorMsg': errorMsg,
+        'bookname': bookname,
+        'coursenum': coursenum,
+        'dept': dept,
+        'title': title,
+        'listings': listings
+    }
+    return template('account.tpl', templateInfo)
+
 # This is the method that redirect the user to the creatlistings page
 # passing the current url as a cookie. The only problem I foresee is that createlisting.tpl
 # currently tries to reference things that are not passed in this dictionary (like courses)

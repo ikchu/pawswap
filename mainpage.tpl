@@ -17,8 +17,8 @@
     </div>
     <hr>
     
-    <!-- DIDNT DO THIS CORRECTLY -->
     <a href="/goToCreateListing" class="button">Create New Listing</a>
+    <a href="/account" class="button">My Account</a>
     
     <form action="/mainpage" method="get">
         <table class="w3-table-all">
