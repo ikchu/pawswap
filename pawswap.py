@@ -11,6 +11,8 @@ from urllib import quote_plus
 from Cookie import SimpleCookie
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH
+from bottle.ext import beaker
+from CASClient import CASClient
 from listings import getListings, getDetails, createListing, editListing, deleteListing
 TEMPLATE_PATH.insert(0, '')
 
@@ -64,6 +66,7 @@ def mainpage():
     listings = getListings(dbSearchCriteria)
 
     print listings
+    print 'username: ', username
 
     # first element of listings is the id
 
@@ -110,7 +113,7 @@ def account():
     
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
-    
+
     errorMsg = request.query.get('errorMsg')
     if errorMsg is None:
         errorMsg = ''   
