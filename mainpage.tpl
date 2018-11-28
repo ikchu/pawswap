@@ -18,7 +18,7 @@
     <hr>
     
     <a href="/goToCreateListing" class="button">Create New Listing</a>
-    <a href="/account" class="button" align = "right">My Account</a>
+    <a href="/account" class="button" style="float: right;">My Account</a>
 
     <form action="/mainpage" method="get">
         <table class="w3-table-all">
