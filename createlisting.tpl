@@ -32,12 +32,8 @@
     %if ({errorBool}):
         <strong>{{e}}</strong>
     %end
-    %if ({fromEditListing}):
-        <form action="/editlisting?listingid={{details[10]}}" method="get">
-        %else:
+    
         <form action="/createlisting" method="get">
-        %end
-    $end
         <table>
             <tr>
                 <td>Your Netid: </td>
@@ -97,12 +93,7 @@
             <tr>
                 <td></td>
                 <td>
-                %if ({fromEditListing}):
-                    <input type="submit" value="Confirm Edit">
-                    %else:
-                        <input type="submit" value="Submit">
-                    %end
-                %end
+                    <input type="submit" value="Submit">
                 </td>
             </tr>
         </table>

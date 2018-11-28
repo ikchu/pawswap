@@ -5,15 +5,19 @@
 
    <style>
       h1{
-          font-family: "Arial Black", Gadget, sans-serif;
           color: black;
       } 
+      .title {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+      }
     </style>
 
    <head>  
    </head>
    <body>
-      <div class= "w3-container w3-center w3-deep-orange">
+      <div class= "title">
          <h1>PawSwap Listing</h1>
        </div>
       <div class="w3-container">
