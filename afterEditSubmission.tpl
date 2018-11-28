@@ -16,7 +16,7 @@
        <h1>Your PawSwap Listing</h1>
       <hr>
         <!-- I don't think this is necessary % courseid, days, starttime, endtime, bldg, roomnum = details[0] -->
-        <a href="/goToEditListing?listingid={{details[10]}}&coursetitle={{details[9]}}">Click here to edit your listing</a>
+        <a href="/goToEditListing?listingid={{listingid}}">Click here to edit your listing</a>
         <br>
         <h2>Listing Details</h2>
             <strong> Name: </strong> {{details[1]}}<br>
@@ -24,7 +24,7 @@
             <strong> Textbook Name: </strong> {{details[3]}}<br>
             <strong> Department: </strong> {{details[4]}}<br>
             <strong> Course Number: </strong> {{details[5]}}<br>
-            <strong> Course Title: </strong> {{details[9]}}<br>
+            <strong> Course Title: </strong> {{coursetitle}}<br>
             <strong> Price: </strong> {{details[6]}}<br>
             <strong> Condition: </strong> {{details[7]}}<br>
             <strong> Price Negotiable: </strong> {{details[8]}}<br>

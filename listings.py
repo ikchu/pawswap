@@ -152,6 +152,8 @@ def editListing(listingid, fieldList):
     try:
         connection = connect(DATABASE_NAME)
         cursor = connection.cursor()
+        # dept, and num
+        coursetitle = getCourseTitle(fieldList[4], fieldList[5])
 
         stmtStr = editListingStmtStr()
 
@@ -159,8 +161,10 @@ def editListing(listingid, fieldList):
         # fields = fieldDict.values()
 
         fields = fieldList.copy()
+        fields.append(coursetitle)
         fields.append(listingid)
         cursor.execute(stmtStr, fields)
+        connection.commit()
 
         cursor.close()
         connection.close()
@@ -284,7 +288,7 @@ def createValList(searchDict):
     return valList
 
 def getdetailsStmtStr():
-    return 'SELECT name, email, bookname, dept, coursenum, coursetitle, condition, price, negotiable ' + \
+    return 'SELECT sellerid, name, email, bookname, dept, coursenum, condition, price, negotiable ' + \
         'FROM listings ' + \
         'WHERE listingid = ?'
 
@@ -369,7 +373,7 @@ def editListingStmtStr():
 
     # stmtStr += stmtStrEnd
 
-    stmtStr = 'UPDATE listings SET name=? email=? bookname=? dept=? coursenum=? condition=? price=? negotiable=? WHERE listingid = ?'
+    stmtStr = 'UPDATE listings SET sellerid=?, name=?, email=?, bookname=?, dept=?, coursenum=?, condition=?, price=?, negotiable=?, coursetitle=? WHERE listingid=?'
 
     return stmtStr
 
