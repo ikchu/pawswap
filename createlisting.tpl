@@ -3,6 +3,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
+        h1{
+            font-family: "Arial Black", Gadget, sans-serif;
+            color: black;
+          } 
        td, th {
            text-align: left;
        }   
@@ -11,7 +15,9 @@
       <title>PawSwap</title>
     </head>
     <body>
-      <h1>Post New Textbook for Sale</h2>
+        <div class= "w3-container w3-center w3-deep-orange">
+            <h2>Post New Textbook for Sale</h2>
+        </div>
     <hr>
     %if ({errorBool}):
         <strong>{{e}}</strong>

@@ -6,6 +6,30 @@
        td, th {
            text-align: left;
        }   
+       .newlistingbutton {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+       }
+       .accountbutton {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+       }
    </style>
     <head>
       <title>PawSwap</title>
@@ -17,8 +41,13 @@
     </div>
     <hr>
     
-    <a href="/goToCreateListing" class="button">Create New Listing</a>
-    <a href="/account" class="button" style="float: right;">My Account</a>
+    <div class="newlistingbutton">
+      <a href="/goToCreateListing" class="button">Create New Listing</a>
+    </div>
+
+    <div class = "accountbutton">
+      <a href="/account" class="button" style="float: right;">My Account</a>
+    </div>
 
     <form action="/mainpage" method="get">
         <table class="w3-table-all">
