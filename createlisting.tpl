@@ -10,12 +10,22 @@
        td, th {
            text-align: left;
        }   
+       .top {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
+       .footer {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
     </style>
     <head>
       <title>PawSwap</title>
     </head>
     <body>
-        <div class= "w3-container w3-center w3-deep-orange">
+        <div class= "top">
             <h2>Post New Textbook for Sale</h2>
         </div>
     <hr>
@@ -101,5 +111,10 @@
 <!-- do something here? -->
 
 Click here to <a href="/mainpage">go back to main page</a>.
-% include('footer.tpl')
+    <div class= "footer">
+        <hr>
+          Created by
+          Reece Schachne, David Bowman, and Ikaia Chu
+        <hr>
+    </div>
        

@@ -9,6 +9,7 @@ from sys import argv
 from time import localtime, asctime, strftime
 from urllib import quote_plus
 from Cookie import SimpleCookie
+from CASClient import CASClient 
 from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app

@@ -7,13 +7,23 @@
    </head>
    <style>
       h1{
-          font-family: "Arial Black", Gadget, sans-serif;
           color: black;
       } 
+      .title {
+        color: #FFFFFF;
+        background-color: #EE7F2D;
+        text-align: center;
+      }
+      .footer {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+
+       }
     </style>
 
    <body>
-       <div class= "w3-container w3-center w3-deep-orange">
+       <div class= "title">
           <h1>My Listings</h1>
        </div>
 
@@ -48,7 +58,12 @@
       
       <a href="/mainpage">Click here to go back to main page</a>.
 
-      % include('footer.tpl')
+      <div class= "footer">
+        <hr>
+          Created by
+          Reece Schachne, David Bowman, and Ikaia Chu
+        <hr>
+      </div>
 
     </div>
    </body>

@@ -7,35 +7,47 @@
            text-align: left;
        }   
        .newlistingbutton {
-        background-color: #4CAF50;
+        background-color: #EE7F2D;
         border: none;
-        color: white;
-        padding: 15px 32px;
+        color: black;
+        padding: 10px 20px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
-        margin: 4px 2px;
         cursor: pointer;
        }
        .accountbutton {
-        background-color: #4CAF50;
+        background-color: #EE7F2D;
         border: none;
-        color: white;
-        padding: 15px 32px;
+        float: right;
+        color: black;
+        padding: 10px 20px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
-        margin: 4px 2px;
         cursor: pointer;
+       }
+       .header {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
+       .footer {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
+       .center {
+        background-color: #EE7F2D;
        }
    </style>
     <head>
       <title>PawSwap</title>
    </head>
    <body>
-    <div class= "w3-container w3-center w3-deep-orange">
+    <div class= "header">
       <h1>Welcome to PawSwap!</h1>
       <h2>Search Listings by Dept, Course Number, Title, or Textbook Name</h2>
     </div>
@@ -111,7 +123,11 @@
              % end
        </table>
 
-      <!-- PUT IN COOKIE STUFF LATER -->
-      % include('footer.tpl')
+      <div class= "footer">
+        <hr>
+          Created by
+          Reece Schachne, David Bowman, and Ikaia Chu
+        <hr>
+      </div>
    </body>
 </html>
