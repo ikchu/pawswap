@@ -10,7 +10,7 @@ from time import localtime, asctime, strftime
 from urllib import quote_plus
 from Cookie import SimpleCookie
 from bottle import route, request, response, error, redirect, run, get
-from bottle import template, TEMPLATE_PATH
+from bottle import template, TEMPLATE_PATH, app
 from bottle.ext import beaker
 from CASClient import CASClient
 from listings import getListings, getDetails, createListing, editListing, deleteListing
@@ -64,9 +64,6 @@ def mainpage():
     dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
     # search with that criteria; returns bookname, dept, coursenum, price
     listings = getListings(dbSearchCriteria)
-
-    print listings
-    print 'username: ', username
 
     # first element of listings is the id
 
@@ -167,13 +164,16 @@ def goToCreateListing():
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
     emptyDetList = ['','','','','','','','','','','']
+    
+    print "TEST: goToCreateListing is being called"
 
     templateInfo = {
         'url' : url,
         'details': emptyDetList,
         'errorBool': False,
         'e': '',
-        'username': username
+        'username': username,
+        'fromEditListing': False
     }
     # if we are going to return this template, we need to remove the 
     # section of code in createlisting.tpl where Reece iterates through
@@ -232,9 +232,11 @@ def createlisting():
     detailsList = [netid, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
     templateInfo = {
+        'listingid': '',
         'url': url,
         'details': detailsList,
-        'username': username
+        'username': username,
+        'fromEditListing': False
         }
     # if there is an empty field, return the createlisting template
     if emptyField:
@@ -245,15 +247,20 @@ def createlisting():
     try:
         # modifies detailsList to include listingid and coursetitle
         createListing(detailsList)
+        print 'TEST HERE'
+        print detailsList 
     except Exception, e:
+        print e
         templateInfo['errorBool'] = True
         templateInfo['e'] = e
-        return template('createlisting.tpl', templateInfo
-        )
+        return template('createlisting.tpl', templateInfo)
+    print 'templateInfo: ', templateInfo
     # update the template now that listingid and course title have been appended
     templateInfo['details'] = detailsList
+    templateInfo['listingid'] = detailsList[10]
     templateInfo['errorBool'] = False
-    
+    print 'TemplateInfo[details]:'
+    print templateInfo['details']
     response.set_cookie('url', request.url)
     
     # Need to think about what template we return to. Maybe return to some new template that previews what your post looks like??
@@ -269,6 +276,11 @@ def goToEditListing():
 
     # request the listingid
     listingid = request.query.get('listingid')
+    coursetitle = request.query.get('coursetitle')
+
+    print 'listingid:', listingid
+    print 'coursetitle', coursetitle
+
     # call the get details function with this listingid
     detailsList = getDetails(listingid)
 
@@ -278,15 +290,17 @@ def goToEditListing():
 
     templateInfo = {
         'listingid': listingid,
+        'coursetitle': coursetitle,
         'details': detailsList,
         'url': url,
         'errorBool': False,
         'e': '',
         'emptyListing': False,
-        'username': username
+        'username': username,
+        'fromEditListing': True
     }
 
-    return template('createlisting.tpl', templateInfo)
+    return template('editlisting.tpl', templateInfo)
 
 @route('/editlisting')
 def editlisting():
@@ -296,6 +310,7 @@ def editlisting():
     username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
+    coursetitle = request.query.get('coursetitle')
     
     emptyField = False
 
@@ -342,25 +357,29 @@ def editlisting():
     detailsList = [netid, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
     templateInfo = {
+        'listingid': listingid,
+        'coursetitle': coursetitle,
         'url': url,
         'details': detailsList,
         'username': username,
-        'fromEditListing': False
+        'fromEditListing': True
         }
     # if there is an empty field, return the createlisting template
     if emptyField:
         templateInfo['errorBool'] = True
         templateInfo['e'] = 'One of the fields below is empty.'
-        return template('createlisting.tpl', templateInfo)
+        return template('editlisting.tpl', templateInfo)
     
+    print 'The Deets:', detailsList
     try:
         # modifies detailsList to include listingid and coursetitle
         editListing(listingid, detailsList)
     except Exception, e:
         templateInfo['errorBool'] = True
         templateInfo['e'] = e
-        return template('createlisting.tpl', templateInfo
-        )
+        templateInfo['fromEditListing'] = True
+        return template('editlisting.tpl', templateInfo)
+
     # update the template now that listingid and course title have been appended
     templateInfo['details'] = detailsList
     templateInfo['errorBool'] = False
@@ -369,16 +388,7 @@ def editlisting():
     
     # Need to think about what template we return to. Maybe return to some new template that previews what your post looks like??
     # return template('createlisting.tpl', templateInfo)
-    return template('afterSubmission.tpl', templateInfo)
-    try:
-        editListing(listingid, detailsList)
-    except Exception, e:
-        # not sure if this is what we want to return or not, could be something
-        # other than a mere empty field
-        templateInfo['errorBool'] = True
-        templateInfo['e'] = e
-        return template('createlisting.tpl', templateInfo
-        )
+    return template('afterEditSubmission.tpl', templateInfo)
 
 @route('/deletelisting')
 def deleteThisListing():
