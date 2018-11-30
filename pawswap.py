@@ -13,12 +13,8 @@ from CASClient import CASClient
 from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
-<<<<<<< HEAD
-=======
-from bottle.ext import beaker
-from CASClient import CASClient
->>>>>>> 249137d170c602399f567c0c77529c0f9244b966
 from listings import getListings, getDetails, createListing, editListing, deleteListing
+from listings import getMyListings
 TEMPLATE_PATH.insert(0, '')
 
 # CAS things
@@ -120,37 +116,21 @@ def account():
     if errorMsg is None:
         errorMsg = ''   
 
-    dept = request.query.get('dept')
-    coursenum = request.query.get('coursenum')
-    title = request.query.get('coursetitle')
-    bookname = request.query.get('bookname')
+    # returns a list of a user's listings
+    listings = getMyListings(username)
+    print 'listings BELOW:' 
+    print listings
 
-    response.set_cookie('url', request.url)
-
-    if bookname is None:
-        bookname = ""
-    if coursenum is None:
-        coursenum = ""
-    if dept is None:
-        dept = ""
-    if title is None:
-        title = ""
-
-    # create dictionary
-    dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
-    # search with that criteria; returns bookname, dept, coursenum, price
-    listings = getListings(dbSearchCriteria)
-    
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
      
     templateInfo = {
         'url': url,
         'errorMsg': errorMsg,
-        'bookname': bookname,
-        'coursenum': coursenum,
-        'dept': dept,
-        'title': title,
+        # 'bookname': bookname,
+        # 'coursenum': coursenum,
+        # 'dept': dept,
+        # 'title': title,
         'listings': listings,
         'username': username
     }
@@ -194,11 +174,9 @@ def createlisting():
 
     emptyField = False
 
-    # sellerid is the person's netid
-    netid = request.query.get('netid')
-    if ((netid is None) or (netid.strip() == '')):
-        netid = ''
-        emptyField = True
+    # sellerid is the person's username as collected by CAS
+    print 'username: ', username
+
     name = request.query.get('name')
     if ((name is None) or (name.strip() == '')):
         name = ''
@@ -234,7 +212,7 @@ def createlisting():
 
     # get the url of the former page
     url = request.get_cookie('url')
-    detailsList = [netid, name, email, bookname, dept, coursenum, condition, price, negotiable]
+    detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
     templateInfo = {
         'listingid': '',
@@ -319,11 +297,9 @@ def editlisting():
     
     emptyField = False
 
-    # sellerid is the person's netid
-    netid = request.query.get('netid')
-    if ((netid is None) or (netid.strip() == '')):
-        netid = ''
-        emptyField = True
+    # sellerid is the person's netid but this will be retrieved from username
+    print 'username is:', username
+
     name = request.query.get('name')
     if ((name is None) or (name.strip() == '')):
         name = ''
@@ -359,7 +335,7 @@ def editlisting():
 
     # get the url of the former page
     url = request.get_cookie('url')
-    detailsList = [netid, name, email, bookname, dept, coursenum, condition, price, negotiable]
+    detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
     templateInfo = {
         'listingid': listingid,

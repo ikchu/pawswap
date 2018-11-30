@@ -20,12 +20,6 @@
         <form action="/editlisting?listingid={{listingid}}&coursetitle={{coursetitle}}" method="get">
         <table>
             <tr>
-                <td>Your Netid: </td>
-                <td>
-                        <input type="text" name="netid" value={{details[0]}}> <br>
-                </td>
-            </tr>
-            <tr>
                 <td>Your Name: </td>
                 <td>
                         <input type="text" name="name" value={{details[1]}}> <br>
