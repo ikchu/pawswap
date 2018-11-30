@@ -13,11 +13,6 @@ from CASClient import CASClient
 from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
-<<<<<<< HEAD
-=======
-from bottle.ext import beaker
-from CASClient import CASClient
->>>>>>> 249137d170c602399f567c0c77529c0f9244b966
 from listings import getListings, getDetails, createListing, editListing, deleteListing
 TEMPLATE_PATH.insert(0, '')
 

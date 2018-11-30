@@ -58,7 +58,8 @@ class CASClient:
         
         # If the user's username is in the session, then the user was
         # authenticated previously.  So return the user's username.
-        username = session.get('username')
+        if session is not None:
+            username = session.get('username')
         if username is not None:
             return username
            
