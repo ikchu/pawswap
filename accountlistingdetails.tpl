@@ -22,6 +22,7 @@
        </div>
       <div class="w3-container">
          <hr>
+         <a href='/deletelisting?listingid={{listingid}}'>Click here to delete this listing.</a>
            <h2>Listing Details</h2>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>

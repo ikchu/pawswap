@@ -41,8 +41,8 @@
 <div align="center">There are no current listings.</div>
              % else:
              %    for row in listings:
-                    <tr href="/listingsdetails?listingid={{row[0]}}">
-                        <td><a href="/listingsdetails?listingid={{row[0]}}">{{row[1]}}</a></td>
+                    <tr href="/accountlistingsdetails?listingid={{row[0]}}">
+                        <td><a href="/accountlistingsdetails?listingid={{row[0]}}">{{row[1]}}</a></td>
                         <td>{{row[2]}}</td>
                         <td>{{row[3]}}</td>
                         <td>{{row[4]}}</td>

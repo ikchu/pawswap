@@ -324,7 +324,7 @@ def createValList(searchDict):
     return valList
 
 def getdetailsStmtStr():
-    return 'SELECT sellerid, name, email, bookname, dept, coursenum, condition, price, negotiable ' + \
+    return 'SELECT name, email, bookname, dept, coursenum, coursetitle, condition, price, negotiable ' + \
         'FROM listings ' + \
         'WHERE listingid = ?'
 
