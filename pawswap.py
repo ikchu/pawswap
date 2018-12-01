@@ -96,7 +96,7 @@ def listingsdetails():
     # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
-     
+
     templateInfo = {
         'listingid': listingid,
         'details': details,
@@ -104,6 +104,29 @@ def listingsdetails():
         'username': username
     }
     return template('listingsdetails.tpl', templateInfo)
+# same as listing deets except it returns accountlistingdetails.tpl which
+# has delete functionality; regular listingdetails does not
+@route('/accountlistingsdetails')
+def accListDet():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+
+    listingid = request.query.get('listingid')
+
+    details = getDetails(listingid)
+    # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
+    url = request.get_cookie('url')
+    response.set_cookie('url', request.url)
+
+    templateInfo = {
+        'listingid': listingid,
+        'details': details,
+        'url': url,
+        'username': username
+    }
+    return template('accountlistingsdetails.tpl', templateInfo)
 
 @route('/account')
 def account():
