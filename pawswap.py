@@ -141,8 +141,6 @@ def account():
 
     # returns a list of a user's listings
     listings = getMyListings(username)
-    print 'listings BELOW:' 
-    print listings
 
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
@@ -172,8 +170,6 @@ def goToCreateListing():
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
     emptyDetList = ['','','','','','','','','','','']
-    
-    print "TEST: goToCreateListing is being called"
 
     templateInfo = {
         'url' : url,
@@ -198,7 +194,6 @@ def createlisting():
     emptyField = False
 
     # sellerid is the person's username as collected by CAS
-    print 'username: ', username
 
     name = request.query.get('name')
     if ((name is None) or (name.strip() == '')):
@@ -252,21 +247,16 @@ def createlisting():
     
     try:
         # modifies detailsList to include listingid and coursetitle
-        createListing(detailsList)
-        print 'TEST HERE'
-        print detailsList 
+        detailsList = createListing(detailsList)
     except Exception, e:
         print e
         templateInfo['errorBool'] = True
         templateInfo['e'] = e
         return template('createlisting.tpl', templateInfo)
-    print 'templateInfo: ', templateInfo
     # update the template now that listingid and course title have been appended
     templateInfo['details'] = detailsList
     templateInfo['listingid'] = detailsList[10]
     templateInfo['errorBool'] = False
-    print 'TemplateInfo[details]:'
-    print templateInfo['details']
     response.set_cookie('url', request.url)
     
     # Need to think about what template we return to. Maybe return to some new template that previews what your post looks like??
@@ -284,11 +274,15 @@ def goToEditListing():
     listingid = request.query.get('listingid')
     coursetitle = request.query.get('coursetitle')
 
-    print 'listingid:', listingid
-    print 'coursetitle', coursetitle
-
     # call the get details function with this listingid
-    detailsList = getDetails(listingid)
+    # note: the cursor row is a tuple, not a list. so detailsList is actually a tuple
+    # using list() to convert tuple to list, then deleting coursetitle by index (since del and insert dont work on tuples)
+    detailsList = list(getDetails(listingid))
+    # removing coursetitle to have correct formatting for editlisting.tpl
+    del detailsList[5]
+    # inserting username at start to have correct formatting for editlisting.tpl
+    detailsList.insert(0, username)
+    # now detailsList has order [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
 
     # get current url to pass in case it goes back
     url = request.get_cookie('url')
@@ -302,26 +296,25 @@ def goToEditListing():
         'errorBool': False,
         'e': '',
         'emptyListing': False,
-        'username': username,
         'fromEditListing': True
     }
-
+    
     return template('editlisting.tpl', templateInfo)
 
 @route('/editlisting')
 def editlisting():
+
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
-    coursetitle = request.query.get('coursetitle')
+    # no longer need to get coursetitle because that'll be obtained once listings.py > editListing() is called
     
     emptyField = False
 
     # sellerid is the person's netid but this will be retrieved from username
-    print 'username is:', username
 
     name = request.query.get('name')
     if ((name is None) or (name.strip() == '')):
@@ -360,9 +353,9 @@ def editlisting():
     url = request.get_cookie('url')
     detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
+
     templateInfo = {
         'listingid': listingid,
-        'coursetitle': coursetitle,
         'url': url,
         'details': detailsList,
         'username': username,
@@ -373,11 +366,9 @@ def editlisting():
         templateInfo['errorBool'] = True
         templateInfo['e'] = 'One of the fields below is empty.'
         return template('editlisting.tpl', templateInfo)
-    
-    print 'The Deets:', detailsList
+
     try:
-        # modifies detailsList to include listingid and coursetitle
-        editListing(listingid, detailsList)
+        detailsList = editListing(listingid, detailsList)
     except Exception, e:
         templateInfo['errorBool'] = True
         templateInfo['e'] = e
