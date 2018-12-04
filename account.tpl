@@ -27,13 +27,13 @@
           <h1>My Listings</h1>
        </div>
 
-        <table>
+        <table class="w3-table-all">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
-                <th>Dept</th>
-                <th>Coursenum</th>
-                <th>Coursename</th>
+                <th>Department</th>
+                <th>Course Number</th>
+                <th>Course Name</th>
                 <th>Price</th>
             </tr>
              % if len(listings) == 0:

@@ -6,6 +6,9 @@
        td, th {
            text-align: left;
        }   
+       .header {
+        font-family: "Verdana", Geneva, sans-serif;
+       }
        .newlistingbutton {
         background-color: #EE7F2D;
         border: none;
@@ -48,8 +51,8 @@
    </head>
    <body>
     <div class= "header">
-      <h1>Welcome to PawSwap!</h1>
-      <h2>Search Listings by Dept, Course Number, Title, or Textbook Name</h2>
+      <h1>Welcome To PAWSWAP</h1>
+      <h2>Search Below to Find a Textbook for Sale</h2>
     </div>
     <hr>
     
@@ -98,13 +101,13 @@
       </form>
     <hr>
       <!-- PUT RESULTS IN HERE -->
-       <table>
+       <table class="w3-table-all">
             <tr>
                 <th>Book Name</th>
-                <th>Dept</th>
-                <th>Coursenum</th>
-                <th>Coursename</th>
-                <th>Price</th>
+                <th>Department</th>
+                <th>Course Number</th>
+                <th>Course Name</th>
+                <th>Price $</th>
             </tr>
              % if len(listings) == 0:
 <!-- do something here? -->

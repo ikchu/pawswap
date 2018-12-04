@@ -12,6 +12,11 @@
         background-color: #EE7F2D;
         text-align: center;
       }
+      .footer {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
     </style>
 
    <head>  
@@ -34,8 +39,13 @@
                <strong> Price Negotiable: </strong> {{details[8]}}<br>
          <hr>
          <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
-         Click here to go to <a href="/mainpage">main page</a>.
-         % include('footer.tpl')
+         <a href="/mainpage">Click here to go back to the main page</a>.
+          <div class= "footer">
+            <hr>
+            Created by
+            Reece Schachne, David Bowman, and Ikaia Chu
+            <hr>
+        </div>
    </div>
       <!-- PUT IN COOKIE STUFF LATER -->
    </body>
