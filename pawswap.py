@@ -27,12 +27,6 @@ sessionOptions = {
 
 pawswapApp = beaker.middleware.SessionMiddleware(app(), sessionOptions)
 
-@route('/customerror')
-def customerror(errorMsg):
-#    url = request.get_cookie('url')
-    e = {'errorMsg' : errorMsg}
-    return template('customerror.tpl', e)
-    
 @route('/')
 @route('/mainpage')
 def mainpage():
@@ -61,26 +55,25 @@ def mainpage():
     if title is None:
         title = ""
 
-    # create dictionary
-    dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
-    # search with that criteria; returns bookname, dept, coursenum, price
-    listings = getListings(dbSearchCriteria)
-
-    # first element of listings is the id
-
-    
-#    process template things so they are html safe
-    
     templateInfo = {
         'errorMsg': errorMsg,
         'bookname': bookname,
         'coursenum': coursenum,
         'dept': dept,
         'title': title,
-        'listings': listings,
         'username': username
         }
-    
+
+    try:
+        # create dictionary
+        dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
+        # search with that criteria; returns bookname, dept, coursenum, price
+        listings = getListings(dbSearchCriteria)
+        templateInfo['listings'] = listings
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e})
+
+    # first element of listings is the id
     return template('mainpage.tpl', templateInfo)
     
 @route('/listingsdetails')
@@ -92,7 +85,11 @@ def listingsdetails():
 
     listingid = request.query.get('listingid')
 
-    details = getDetails(listingid)
+    try: 
+        details = getDetails(listingid)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e})
+
     # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
@@ -115,7 +112,11 @@ def accListDet():
 
     listingid = request.query.get('listingid')
 
-    details = getDetails(listingid)
+    try:
+        details = getDetails(listingid)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e})
+
     # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
@@ -140,7 +141,10 @@ def account():
         errorMsg = ''   
 
     # returns a list of a user's listings
-    listings = getMyListings(username)
+    try: 
+        listings = getMyListings(username)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e})
 
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
@@ -298,7 +302,7 @@ def goToEditListing():
         'emptyListing': False,
         'fromEditListing': True
     }
-    
+
     return template('editlisting.tpl', templateInfo)
 
 @route('/editlisting')
@@ -393,7 +397,11 @@ def deleteThisListing():
     username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
-    deleteListing(listingid)
+
+    try:
+        deleteListing(listingid)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e})
     
     # create dictionary
     dept = ''
@@ -403,7 +411,10 @@ def deleteThisListing():
 
     dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
     # search with that criteria; returns bookname, dept, coursenum, price
-    listings = getListings(dbSearchCriteria)
+    try:
+        listings = getListings(dbSearchCriteria)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e})
 
     templateInfo = {
         'errorMsg': '',

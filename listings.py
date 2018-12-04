@@ -55,25 +55,21 @@ def getListings(userSearchDict):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = getListingsStmtStr(userSearchDict)
-        searchFields = createValList(userSearchDict)
+    stmtStr = getListingsStmtStr(userSearchDict)
+    searchFields = createValList(userSearchDict)
 
-        cursor.execute(stmtStr, searchFields)
+    cursor.execute(stmtStr, searchFields)
 
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
         row = cursor.fetchone()
-        while row is not None:
-            dataList.append(row)
-            row = cursor.fetchone()
 
-        cursor.close()
-        connection.close()
-
-    except Exception, e:
-        print >> stderr, "listings.py > getListings:", e
+    cursor.close()
+    connection.close()
 
     return dataList
 
@@ -84,22 +80,18 @@ def getDetails(listingid):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = getdetailsStmtStr()
-        cursor.execute(stmtStr, [listingid])
+    stmtStr = getdetailsStmtStr()
+    cursor.execute(stmtStr, [listingid])
 
-        row = cursor.fetchone()
+    row = cursor.fetchone()
 
-        cursor.close()
-        connection.close()
+    cursor.close()
+    connection.close()
 
-        return row
-
-    except Exception, e:
-        print >> stderr, "listings.py > getDetails:", e
+    return row
 
 # Takes in dictionary containing search fields
 # Returns listings list of tuples (containing all the fields)
@@ -180,19 +172,16 @@ def deleteListing(listingid):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = deleteListingStmtStr()
-        cursor.execute(stmtStr, [listingid])
-        connection.commit()
+    stmtStr = deleteListingStmtStr()
+    cursor.execute(stmtStr, [listingid])
+    connection.commit()
 
-        cursor.close()
-        connection.close()
+    cursor.close()
+    connection.close()
 
-    except Exception, e:
-        print >> stderr, "listings.py > deleteListing:", e
 # this method takes in a username as input, searches the database
 # for all listings with that username and returns the listings
 def getMyListings(username):
@@ -202,28 +191,24 @@ def getMyListings(username):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = ?'
-        usernameList = [username]
+    stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = ?'
+    usernameList = [username]
 
-        cursor.execute(stmtStr, usernameList)
+    cursor.execute(stmtStr, usernameList)
 
+    row = cursor.fetchone()
+    # testing to see if row is none
+    if row is None:
+        print "Row is None but it should NOT be"
+    while row is not None:
+        dataList.append(row)
         row = cursor.fetchone()
-        # testing to see if row is none
-        if row is None:
-            print "Row is None but it should NOT be"
-        while row is not None:
-            dataList.append(row)
-            row = cursor.fetchone()
 
-        cursor.close()
-        connection.close()
-
-    except Exception, e:
-        print >> stderr, "listings.py > getMyListings:", e
+    cursor.close()
+    connection.close()
 
     return dataList
 
