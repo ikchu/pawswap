@@ -55,28 +55,21 @@ def getListings(userSearchDict):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = getListingsStmtStr(userSearchDict)
-        searchFields = createValList(userSearchDict)
+    stmtStr = getListingsStmtStr(userSearchDict)
+    searchFields = createValList(userSearchDict)
 
-        print stmtStr
-        print searchFields
+    cursor.execute(stmtStr, searchFields)
 
-        cursor.execute(stmtStr, searchFields)
-
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
         row = cursor.fetchone()
-        while row is not None:
-            dataList.append(row)
-            row = cursor.fetchone()
 
-        cursor.close()
-        connection.close()
-
-    except Exception, e:
-        print >> stderr, "listings.py > getListings:", e
+    cursor.close()
+    connection.close()
 
     return dataList
 
@@ -87,28 +80,22 @@ def getDetails(listingid):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = getdetailsStmtStr()
-        cursor.execute(stmtStr, [listingid])
+    stmtStr = getdetailsStmtStr()
+    cursor.execute(stmtStr, [listingid])
 
-        row = cursor.fetchone()
+    row = cursor.fetchone()
 
-        cursor.close()
-        connection.close()
+    cursor.close()
+    connection.close()
 
-        return row
-
-    except Exception, e:
-        print >> stderr, "listings.py > getDetails:", e
+    return row
 
 # Takes in dictionary containing search fields
 # Returns listings list of tuples (containing all the fields)
 def createListing(fieldList):
-
-    listingFields = fieldList
     
     DATABASE_NAME = 'listings.sqlite'
 
@@ -123,10 +110,11 @@ def createListing(fieldList):
     # using .values instead of createValList() because we don't want to format what the user inputs when creating a post
     listingid = newListingID(cursor)
     # fieldList[3], fieldList[4] = dept, coursenum
-    coursetitle = getCourseTitle(listingFields[4], listingFields[5])
+    coursetitle = getCourseTitle(fieldList[4], fieldList[5])
 
     # adding these into the list before creating the new row in the db
     # these weren't in the user input 'fieldDict', but they need to be in the db row
+    listingFields = list(fieldList)
     listingFields.append(coursetitle)
     listingFields.append(listingid)
 
@@ -137,11 +125,11 @@ def createListing(fieldList):
     cursor.close()
     connection.close()
 
-    return listingid
+    return listingFields
 
-#   - editListing(listingid, fieldDict)
+#   - editListing(listingid, fieldList)
 #       - edits any some field(s) of a listing
-#       - dictionary contains only the fields that are to be updated (any combo of name, email, bookname, dept, coursenum, price, condition, negotiable)
+#       - fieldList contains only the fields that are to be updated (any combo of name, email, bookname, dept, coursenum, price, condition, negotiable)
 def editListing(listingid, fieldList):
 
     DATABASE_NAME = 'listings.sqlite'
@@ -149,28 +137,33 @@ def editListing(listingid, fieldList):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
-        # dept, and num
-        coursetitle = getCourseTitle(fieldList[4], fieldList[5])
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = editListingStmtStr()
+    # getting new coursetitle in case the user edited dept or coursenum
+    # fieldList[4] is dept, fieldList[5] is coursenum
+    coursetitle = getCourseTitle(fieldList[4], fieldList[5])
 
-        # using .values instead of createValList() because we don't want to format what the user inputs when creating a post
-        # fields = fieldDict.values()
+    stmtStr = editListingStmtStr()
 
-        fields = fieldList.copy()
-        fields.append(coursetitle)
-        fields.append(listingid)
-        cursor.execute(stmtStr, fields)
-        connection.commit()
+    # using .values instead of createValList() because we don't want to format what the user inputs when creating a post
+    # fields = fieldDict.values()
 
-        cursor.close()
-        connection.close()
+    fields = list(fieldList)
+    fields.append(coursetitle)
+    fields.append(listingid)
 
-    except Exception, e:
-        print >> stderr, "listings.py > editListing:", e
+    # PROBLEMS
+    #   - listingid is None
+    #   - things are out of order
+
+    cursor.execute(stmtStr, fields)
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+    return fields
 
 def deleteListing(listingid):
 
@@ -179,19 +172,16 @@ def deleteListing(listingid):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = deleteListingStmtStr()
-        cursor.execute(stmtStr, [listingid])
-        connection.commit()
+    stmtStr = deleteListingStmtStr()
+    cursor.execute(stmtStr, [listingid])
+    connection.commit()
 
-        cursor.close()
-        connection.close()
+    cursor.close()
+    connection.close()
 
-    except Exception, e:
-        print >> stderr, "listings.py > deleteListing:", e
 # this method takes in a username as input, searches the database
 # for all listings with that username and returns the listings
 def getMyListings(username):
@@ -201,31 +191,24 @@ def getMyListings(username):
     if not path.isfile(DATABASE_NAME):
         raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    try:
-        connection = connect(DATABASE_NAME)
-        cursor = connection.cursor()
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
 
-        stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = ?'
-        usernameList = [username]
+    stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = ?'
+    usernameList = [username]
 
-        print stmtStr
-        print usernameList
+    cursor.execute(stmtStr, usernameList)
 
-        cursor.execute(stmtStr, usernameList)
-
+    row = cursor.fetchone()
+    # testing to see if row is none
+    if row is None:
+        print "Row is None but it should NOT be"
+    while row is not None:
+        dataList.append(row)
         row = cursor.fetchone()
-        # testing to see if row is none
-        if row is None:
-            print "Row is None but it should NOT be"
-        while row is not None:
-            dataList.append(row)
-            row = cursor.fetchone()
 
-        cursor.close()
-        connection.close()
-
-    except Exception, e:
-        print >> stderr, "listings.py > getMyListings:", e
+    cursor.close()
+    connection.close()
 
     return dataList
 
@@ -361,7 +344,6 @@ def getCourseTitle(dept, coursenum):
     DATABASE_NAME_R = 'reg.sqlite'
 
     valList = [dept, coursenum]
-    print valList
 
     connectionReg = connect(DATABASE_NAME_R)
     cursorReg = connectionReg.cursor()
