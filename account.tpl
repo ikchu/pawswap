@@ -35,7 +35,7 @@
                 <th>Department</th>
                 <th>Course Number</th>
                 <th>Course Name</th>
-                <th>Price</th>
+                <th>Price $</th>
             </tr>
              % if len(listings) == 0:
             <!-- do something here? -->
