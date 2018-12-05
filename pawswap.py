@@ -14,7 +14,7 @@ from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
 from listings import getListings, getDetails, createListing, editListing, deleteListing
-from listings import getMyListings
+from listings import getMyListings, claimListing, getMyClaims
 TEMPLATE_PATH.insert(0, '')
 
 # CAS things
@@ -294,7 +294,7 @@ def goToEditListing():
     # get current url to pass in case it goes back
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
-
+    print 'details[3]', detailsList[3]
     templateInfo = {
         'listingid': listingid,
         'coursetitle': coursetitle,
@@ -439,8 +439,12 @@ def claimlisting():
     username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
+    details = getDetails(listingid)
+
+    print 'Details is: ', details
+
     try:
-        details = getDetails(listingid)
+        claimListing(listingid, username)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
     

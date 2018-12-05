@@ -90,6 +90,6 @@
             Reece Schachne, David Bowman, and Ikaia Chu
           <hr>
         </div>
-    </div>
+    
    </body>
 </html>

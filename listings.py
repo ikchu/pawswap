@@ -201,9 +201,6 @@ def getMyListings(username):
     cursor.execute(stmtStr, usernameList)
 
     row = cursor.fetchone()
-    # testing to see if row is none
-    if row is None:
-        print "Row is None but it should NOT be"
     while row is not None:
         dataList.append(row)
         row = cursor.fetchone()
@@ -213,6 +210,52 @@ def getMyListings(username):
 
     return dataList
 
+# this method takes a listingid and claimerid and adds them to our second table
+def claimListing(listingid, claimerid):
+    dataList = []
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'INSERT OR IGNORE INTO claims (listingid, claimerid) VALUES (?, ?)'
+    cursor.execute(stmtStr, [listingid, claimerid])
+    connection.commit()
+
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
+        row = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+# this returns a list of all the claims associated with a netid
+def getMyClaims(claimerid):
+    dataList = []
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price FROM listings, claims WHERE claims.claimerid = ? AND listings.listingid = claims.listingid'
+    cursor.execute(stmtStr, [claimerid])
+
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
+        row = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return dataList
 
 
 #------------------------------------------------------------------------------
@@ -359,7 +402,7 @@ def getCourseTitle(dept, coursenum):
     else:
         cursorReg.close()
         connectionReg.close()
-        raise Exception('Course title/num not found. Try different dept and coursenum')
+        raise Exception('Course title not found. Try different dept and coursenum')
 
 # This method accesses the current registrar; the dept and coursenum are passed to it
 def getCrsTitleJSON(dept, coursenum):
