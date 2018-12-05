@@ -49,7 +49,7 @@
     <head>
       <title>PawSwap</title>
    </head>
-   <body>
+   <body  onLoad="document.getElementById('area').focus(); getResults()">
     <div class= "header">
       <h1>Welcome To PAWSWAP</h1>
       <h2>Search Below to Find a Textbook for Sale</h2>
@@ -125,6 +125,101 @@
              %    end
              % end
        </table>
+       <div class="w3-container">
+        <p id="resultsParagraph"></p>
+      <!-- PUT RESULTS IN HERE -->
+
+    </div>
+       <script>
+       function createAjaxRequest()  // From Nixon book
+         {
+            console.log("in createAjaxRequest")
+            let req;
+                       
+            try  // Some browser other than Internet Explorer
+            {
+               req = new XMLHttpRequest();
+            }
+            catch (e1) 
+            {    
+               try  // Internet Explorer 6+
+               {
+                  req = new ActiveXObject("Msxml2.XMLHTTP");
+               }
+               catch (e2) 
+               {  
+                  try  // Internet Explorer 5
+                  { 
+                     req = new ActiveXObject("Microsoft.XMLHTTP"); 
+                  }
+                  catch (e3)
+                  {  
+                     req = false;
+                  }
+               }
+            }
+            return req;
+         }
+
+         function processReadyStateChange()
+         {
+            console.log("in pRSC")
+            const STATE_UNINITIALIZED = 0;
+            const STATE_LOADING       = 1;
+            const STATE_LOADED        = 2;
+            const STATE_INTERACTIVE   = 3;
+            const STATE_COMPLETED     = 4;
+            
+            if (this.readyState != STATE_COMPLETED)
+               return;
+            
+            if (this.status != 200)  // Request succeeded?
+            {  
+               //alert(
+               //   "AJAX error: Request failed: " + this.statusText);
+               return;
+            }
+            
+            if (this.responseText == null)  // Data received?
+            {  
+               alert("AJAX error: No data received");
+               return;
+            }
+             
+            console.log("after ifs")
+            let resultsParagraph = 
+               document.getElementById("resultsParagraph");
+            resultsParagraph.innerHTML = this.responseText;
+         }
+
+         let date = new Date();
+         let seed = date.getSeconds();
+         let request = null;
+         
+         function getResults()
+         {
+            console.log("in getResults")
+            let area = document.getElementById('area').value;
+            area = encodeURIComponent(area);
+            let coursenum = document.getElementById('coursenum').value;
+            coursenum = encodeURIComponent(coursenum);
+            let dept = document.getElementById('dept').value;
+            dept = encodeURIComponent(dept);
+            let title = document.getElementById('title').value;
+            title = encodeURIComponent(title);
+            let messageId = Math.floor(Math.random(seed) * 1000000) + 1;
+            let url = "/searchhtml?area=" + area + "&coursenum=" + coursenum + "&dept=" + dept + "&title=" + title + "&messageId=" + messageId;
+               
+            if (request != null)
+               request.abort();
+            
+            request = createAjaxRequest();
+            if (request == null) return;
+            request.onreadystatechange = processReadyStateChange;
+            request.open("GET", url);
+            request.send(null);
+         }
+       </script>
 
       <div class= "footer">
         <hr>
