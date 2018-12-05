@@ -27,7 +27,6 @@
        <div class= "title">
           <h1>My Listings</h1>
        </div>
-
         <table class="w3-table-all">
             <tr>
               <!-- new way to list out the mylistings -->
@@ -39,7 +38,7 @@
             </tr>
              % if len(listings) == 0:
             <!-- do something here? -->
-            <div align="center">There are no current listings.</div>
+            <div align="center">You have no current listings.</div>
                          % else:
                          %    for row in listings:
                                 <tr href="/accountlistingsdetails?listingid={{row[0]}}">
@@ -49,14 +48,39 @@
                                     <td>{{row[4]}}</td>
                                     <td>{{row[5]}}</td>
                                 </tr>
-                        
                          %    end
                          % end
             </table>
           </div>
-
-       <div class="w3-container">
-        <hr>
+        <div class="w3-container w3-padding-16">
+        <div class= "title">
+          <h1>My Claims</h1>
+        </div>
+        <table class="w3-table-all">
+            <tr>
+              <!-- new way to list out the mylistings -->
+                <th>Book Name</th>
+                <th>Department</th>
+                <th>Course Number</th>
+                <th>Course Name</th>
+                <th>Price</th>
+            </tr>
+            % if len(claims) == 0:
+            <div align="center">You have no current claims.</div>
+            % else:
+            % for row in claims:
+                          <tr href="/listingsdetails?listingid={{row[0]}}">
+                              <td><a href="/listingsdetails?listingid={{row[0]}}">{{row[1]}}</a></td>
+                              <td>{{row[2]}}</td>
+                              <td>{{row[3]}}</td>
+                              <td>{{row[4]}}</td>
+                              <td>{{row[5]}}</td>
+                          </tr>
+                      % end
+                    %end
+          </table>
+        </div>
+      <hr>
         
         <a href="/mainpage">Click here to go back to main page</a>.
 

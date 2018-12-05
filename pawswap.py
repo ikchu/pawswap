@@ -143,6 +143,8 @@ def account():
     # returns a list of a user's listings
     try: 
         listings = getMyListings(username)
+        # return all of the listings you've claimed
+        claims = getMyClaims(username)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
 
@@ -157,7 +159,8 @@ def account():
         # 'dept': dept,
         # 'title': title,
         'listings': listings,
-        'username': username
+        'username': username,
+        'claims': claims
     }
     return template('account.tpl', templateInfo)
 
@@ -426,7 +429,31 @@ def deleteThisListing():
         'username': username
         }
     return template('mainpage.tpl', templateInfo)
+
+# this links the claimerid and the listingid in a table
+@route('/claimlisting')
+def claimlisting():
+    session = request.environ.get('beaker.session')
     
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+
+    listingid = request.query.get('listingid')
+    try:
+        details = getDetails(listingid)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e })
+    
+    # call method in listings.py that adds the claimer netid to a table with
+    # this listingid
+    # newClaim(listingid, username)
+    
+    templateInfo = {
+        'listingid': listingid,
+        'details': details
+    }
+    return template('afterClaim.tpl', templateInfo)
+
 @error(404)
 def notFound(error):
     return 'Not found'

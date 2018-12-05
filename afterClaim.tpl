@@ -27,7 +27,9 @@
        </div>
       <div class="w3-container">
          <hr>
-           <h2>Listing Details</h2>
+            <h3>*This textbook has been added to your Claimed List*</h2>
+            <h3>Please contact the seller at {{details[1]}} to retrieve your book.</h2>
+            <h3>Listing Details</h3>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
                <strong> Textbook Name: </strong> {{details[2]}}<br>
@@ -38,10 +40,6 @@
                <strong> Condition: </strong> {{details[7]}}<br>
                <strong> Price Negotiable: </strong> {{details[8]}}<br>
                <br>
-            <form method="get" action="/claimlisting">
-               <input type="hidden" name="listingid" value={{listingid}} />
-               <button type="submit">Claim Listing</button>
-            </form>
          <hr>
          <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
          <a href="/mainpage">Click here to go back to the main page</a>.

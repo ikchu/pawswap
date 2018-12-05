@@ -9,6 +9,7 @@ import re
 from os import path
 from sys import argv, stderr, exit
 from sqlite3 import connect
+import requests
 import random
 
 #-----------------------------------------------------------------------
@@ -359,6 +360,11 @@ def getCourseTitle(dept, coursenum):
         cursorReg.close()
         connectionReg.close()
         raise Exception('Course title/num not found. Try different dept and coursenum')
+
+# This method accesses the current registrar; the dept and coursenum are passed to it
+def getCrsTitleJSON(dept, coursenum):
+    url = 'http://etcweb.princeton.edu/webfeeds/courseofferings/?term=all&subject=' + dept + '&catnum=' + coursenum + '&fmt=json&brief=yes'
+    resp = requests.get(url)
 
 def editListingStmtStr():
 
