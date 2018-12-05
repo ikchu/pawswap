@@ -101,7 +101,8 @@
       </form>
     <hr>
       <!-- PUT RESULTS IN HERE -->
-       <table class="w3-table-all">
+    <div class="w3-container w3-padding-16">
+        <table class="w3-table w3-striped w3-border">
             <tr>
                 <th>Book Name</th>
                 <th>Department</th>
@@ -125,7 +126,7 @@
              %    end
              % end
        </table>
-
+    </div>
       <div class= "footer">
         <hr>
           Created by

@@ -12,6 +12,9 @@
         background-color: #EE7F2D;
         text-align: center;
       }
+      .links {
+         margin-right:20px;
+      }
     </style>
 
    <head>  
@@ -22,7 +25,10 @@
        </div>
       <div class="w3-container">
          <hr>
-         <a href='/deletelisting?listingid={{listingid}}'>Click here to delete this listing.</a>
+         <div>
+            <a class="links" href='/goToEditListing?listingid={{listingid}}'>Edit listing</a>
+            <a class="links" href='/deletelisting?listingid={{listingid}}'>Delete listing</a>
+         </div>
            <h2>Listing Details</h2>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
