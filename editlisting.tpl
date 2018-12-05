@@ -3,15 +3,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
+        .footer {
+          color: black;
+          background-color: #EE7F2D;
+          text-align: center;
+        }
+        .title {
+            color: black;
+            background-color: #EE7F2D;
+            text-align: center;
+        } 
        td, th {
            text-align: left;
-       }   
+         }   
     </style>
     <head>
       <title>PawSwap</title>
     </head>
     <body>
-      <h1>Post New Textbook for Sale</h2>
+      <h1 class = title> Edit Your Listing</h1>
     <hr>
 
     %if ({errorBool}):
@@ -85,5 +95,10 @@
 <!-- do something here? -->
 
 Click here to <a href="/mainpage">go back to main page</a>.
-% include('footer.tpl')
+    <div class= "footer">
+        <hr>
+          Created by
+          Reece Schachne, David Bowman, and Ikaia Chu
+        <hr>
+    </div>
        

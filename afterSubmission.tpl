@@ -7,13 +7,20 @@
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
    <style>
-      h1{
-          font-family: "Arial Black", Gadget, sans-serif;
-          color: black;
-      } 
+      .footer {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
+       .title {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+      }
+
     </style>
    <body>
-       <h1>Your PawSwap Listing</h1>
+       <h1 class = title>Your PawSwap Listing</h1>
       <hr>
         <!-- if routing to goToEditListing, need to provide listingid and coursetitle -->
         <a href="/goToEditListing?listingid={{details[10]}}&coursetitle={{details[9]}}">Click here to edit your listing</a>
@@ -32,7 +39,12 @@
       <hr>
       <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
       Click here to do <a href='\mainpage'>another listing search</a>.
-      % include('footer.tpl')
+      <div class= "footer">
+        <hr>
+          Created by
+          Reece Schachne, David Bowman, and Ikaia Chu
+        <hr>
+      </div>
       <!-- PUT IN COOKIE STUFF LATER -->
    </body>
 </html>

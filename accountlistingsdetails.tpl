@@ -15,6 +15,11 @@
       .links {
          margin-right:20px;
       }
+      .footer {
+        color: black;
+        background-color: #EE7F2D;
+        text-align: center;
+       }
     </style>
 
    <head>  
@@ -36,13 +41,18 @@
                <strong> Department: </strong> {{details[3]}}<br>
                <strong> Course Number: </strong> {{details[4]}}<br>
                <strong> Course Title: </strong> {{details[5]}}<br>
-               <strong> Price: </strong> {{details[6]}}<br>
-               <strong> Condition: </strong> {{details[7]}}<br>
+               <strong> Condition: </strong> {{details[6]}}<br>
+               <strong> Price: </strong> {{details[7]}}<br>
                <strong> Price Negotiable: </strong> {{details[8]}}<br>
          <hr>
          <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
          Click here to go to <a href="/mainpage">main page</a>.
-         % include('footer.tpl')
+          <div class= "footer">
+            <hr>
+              Created by
+              Reece Schachne, David Bowman, and Ikaia Chu
+            <hr>
+        </div>
    </div>
       <!-- PUT IN COOKIE STUFF LATER -->
    </body>

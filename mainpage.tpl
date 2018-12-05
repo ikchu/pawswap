@@ -49,7 +49,7 @@
     <head>
       <title>PawSwap</title>
    </head>
-   <body  onLoad="document.getElementById('area').focus(); getResults()">
+   <body>
     <div class= "header">
       <h1>Welcome To PAWSWAP</h1>
       <h2>Search Below to Find a Textbook for Sale</h2>
@@ -64,42 +64,44 @@
       <a href="/account" class="button" style="float: right;">My Account</a>
     </div>
 
-    <form action="/mainpage" method="get">
-        <table class="w3-table-all">
-            <tr>
-                <td>Department: </td>
-                <td>   
-                    <input type="text" name="dept" value={{dept}}> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>Course Number: </td>
-                <td>
-                    <input type="text" name="coursenum" value={{coursenum}}>
-                </td>
-            </tr>
-            <tr>
-                <td>Title: </td>
-                <td>
-                    <input type="text" name="coursetitle" value={{title}}>
-                </td>
-            </tr>
-            <tr>
-                <td>Textbook Name: </td>
-                <td>
-                    <input type="text" name="bookname" value={{bookname}}>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Submit">
-          
-                </td>
-            </tr>
-        </table>
-      </form>
-    <hr>
+    <div class="w3-container w3-padding-16">
+      <form action="/mainpage" method="get">
+          <table class="w3-table-all">
+              <tr>
+                  <td>Department: </td>
+                  <td>   
+                      <input type="text" name="dept" value={{dept}}> <br>
+                  </td>
+              </tr>
+              <tr>
+                  <td>Course Number: </td>
+                  <td>
+                      <input type="text" name="coursenum" value={{coursenum}}>
+                  </td>
+              </tr>
+              <tr>
+                  <td>Title: </td>
+                  <td>
+                      <input type="text" name="coursetitle" value={{title}}>
+                  </td>
+              </tr>
+              <tr>
+                  <td>Textbook Name: </td>
+                  <td>
+                      <input type="text" name="bookname" value={{bookname}}>
+                  </td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td>
+                      <input type="submit" value="Submit">
+            
+                  </td>
+              </tr>
+          </table>
+        </form>
+      <hr>
+    </div>
       <!-- PUT RESULTS IN HERE -->
     <div class="w3-container w3-padding-16">
         <table class="w3-table w3-striped w3-border">
