@@ -101,7 +101,8 @@
       </form>
     <hr>
       <!-- PUT RESULTS IN HERE -->
-       <table class="w3-table-all">
+    <div class="w3-container w3-padding-16">
+        <table class="w3-table w3-striped w3-border">
             <tr>
                 <th>Book Name</th>
                 <th>Department</th>
@@ -125,6 +126,7 @@
              %    end
              % end
        </table>
+<<<<<<< HEAD
        <div class="w3-container">
         <p id="resultsParagraph"></p>
       <!-- PUT RESULTS IN HERE -->
@@ -221,6 +223,9 @@
          }
        </script>
 
+=======
+    </div>
+>>>>>>> 4ee589bcb6c9cb64f6fdc8b10b7e89093b0dab87
       <div class= "footer">
         <hr>
           Created by
