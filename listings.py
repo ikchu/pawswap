@@ -9,7 +9,7 @@ import re
 from os import path
 from sys import argv, stderr, exit
 from sqlite3 import connect
-import requests
+import request
 import random
 
 #-----------------------------------------------------------------------
