@@ -83,24 +83,37 @@
                   <td>{{row[4]}}</td>
                   <td>{{row[5]}}</td>
                 </tr>
-                <table class="table table-hover table-striped" width="80%" align="right">
-                  <tr>
-                    <!-- new way to list out the mylistings -->
-                      <th>Netid</th>
-                      <th>Amount Offered</th>
-                      <th>Accept or Reject</th>
-                  </tr>
-                % for claim in claims:
-                  <tr>
-                    <td>claim[1]</td>
-                    <td>claim
-                  </tr>
+                % if (claimOrOff[row[0]] == []):
+                    <tr>
+                      <td>No current offers or claims.</td>
+                    </tr>
+                % else:
+                    <tr>
+                      <!-- new way to list out the mylistings -->
+                        <th></th>
+                        <th>Claim/Offer</th>
+                        <th>Netid</th>
+                        <th>Amount Offered</th>
+                        <th>Accept, Reject, Decline</th>
+                    </tr>
+                
+                    % for claimOff in claimOrOff[row[0]]:
+                    <tr>
+                      <td></td>
+                      <td>{{claimOff[2]}}</td>
+                      <td>{{claimOff[0]}}</td>
+                      <td>{{claimOff[1]}}</td>
+                      <td>
+                        <form method="get" action="/acceptoffer">
+                            <input type="hidden" name="listingid" value={{listings[0]}} />
+                            <input type="hidden" name="offererid" value={{claimOff[0]}} />
+                            <button class = "btn btn-default" type="submit">Accept Offer</button>
+                        </form>
+                      </td>
+                    </tr>
+                    % end
                 % end
-                % for offer in offers:
-
-                % end
-
-            %    end
+              % end
             % end
             </table>
           </div>
@@ -118,7 +131,7 @@
                 <th>Listed Price $</th>
                 <th>Claimed Price $</th>
             </tr>
-            % if len(claims) == 0:
+            % if len(myClaims) == 0:
             <div align="center">You have no current claims.</div>
             % else:
               % for row in myClaims:
@@ -148,7 +161,7 @@
                 <th>Listed Price $</th>
                 <th>Your Offer $</th>
             </tr>
-            % if len(offers) == 0:
+            % if len(myOffers) == 0:
             <div align="center">You have no current offers.</div>
             % else:
               % for row in myOffers:

@@ -14,7 +14,7 @@ from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
 from listings import getListings, getDetails, createListing, editListing, deleteListing, unclaimListing
-from listings import getMyListings, claimListing, getMyClaims, makeOffer, getMyOffers
+from listings import getMyListings, claimListing, getMyClaims, makeOffer, getMyOffers, getClaimsToMe, getOffersToMe
 TEMPLATE_PATH.insert(0, '')
 
 # CAS things
@@ -169,19 +169,20 @@ def account():
         
         listingsClaimOrOff = {}
         for listing in listings:
-            isClaim = True
+            print 'pawswap.py > account : within my listing ', listing[0]
+            # isClaim = 'Claim'
             claimOrOfferList = []
             # call a getClaimsOfMine()
-            claimOrOfferList = getClaimsToMe(listing[0])
-           
+            claimOrOfferList = getClaimsToMe(username, listing[0])
             # if this method returns empty list then:
             if claimOrOfferList == []:
-                isClaim = False
-                # getOffersToMe()
-                claimOrOfferList = getOffersToMe(listing[0])
-            claimOrOfferList.append(isClaim)
+                # isClaim = 'Offer'
+                # call getOffersToMe() only if there were no claims
+                claimOrOfferList = getOffersToMe(username, listing[0])
+            # if (claimOrOfferList != []):
+            #     claimOrOfferList.append(isClaim)
+            
             listingsClaimOrOff[listing[0]] = claimOrOfferList
-    
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
 
@@ -200,7 +201,6 @@ def account():
         'myClaims': claims,
         'myOffers': offers,
         'claimOrOff': listingsClaimOrOff,
-        'claimBool': claimBool
     }
     return template('account.tpl', templateInfo)
 
@@ -334,7 +334,6 @@ def goToEditListing():
     # get current url to pass in case it goes back
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
-    print 'details[3]', detailsList[3]
     templateInfo = {
         'listingid': listingid,
         'coursetitle': coursetitle,
@@ -526,11 +525,11 @@ def makeoffer():
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
     listingid = request.query.get('listingid')
-    print 'LISTINGID', listingid
+    # print 'LISTINGID', listingid
     details = getDetails(listingid)
     
     offerprice = request.query.get('offerprice')
-    print 'PRICE', offerprice
+    # print 'PRICE', offerprice
     templateInfo = {
         'listingid': listingid,
         'details': details,
@@ -542,6 +541,21 @@ def makeoffer():
         return template('afterOffer.tpl', templateInfo)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
+
+@route('/acceptoffer')
+def acceptoffer():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+
+    offererid = request.query.get('offererid')
+    listingid = request.query.get('listingid')
+
+    # calls a listings.py function to change the offers table 'accept' column to accepted
+    acceptOffer(listingid, offererid)
+
+    # return account page
 
 @error(404)
 def notFound(error):

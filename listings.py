@@ -328,7 +328,7 @@ def getMyOffers(claimerid):
     
     return dataList
 
-def getOffersToMe(listingid):
+def getOffersToMe(claimerid, listingid):
     dataList = []
     DATABASE_NAME = 'listings.sqlite'
 
@@ -338,12 +338,14 @@ def getOffersToMe(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer FROM listing, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
-    cursor.execute(stmtStr, [claimerid, '0'])
+    stmtStr = 'SELECT offererid, offer FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    cursor.execute(stmtStr, [listingid, '0'])
 
     row = cursor.fetchone()
     while row is not None:
-        dataList.append(row)
+        tmp = list(row)
+        tmp.append('Offer')
+        dataList.append(tmp)
         row = cursor.fetchone()
 
     cursor.close()
@@ -351,7 +353,7 @@ def getOffersToMe(listingid):
     
     return dataList
     
-def getClaimsToMe(listingid):
+def getClaimsToMe(claimerid, listingid):
     dataList = []
     DATABASE_NAME = 'listings.sqlite'
 
@@ -361,12 +363,14 @@ def getClaimsToMe(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer FROM listing, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
-    cursor.execute(stmtStr, [claimerid, '1'])
+    stmtStr = 'SELECT offererid, offer FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    cursor.execute(stmtStr, [listingid, '1'])
 
     row = cursor.fetchone()
     while row is not None:
-        dataList.append(row)
+        tmp = list(row)
+        tmp.append('Claim')
+        dataList.append(tmp)
         row = cursor.fetchone()
 
     cursor.close()
