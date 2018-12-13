@@ -104,7 +104,7 @@
                       % else:
                           <td colspan="1"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
                           </td>
-                      %ends
+                      %end
                       <td>
                         <form method="get" action="/acceptoffer">
                             <input type="hidden" name="listingid" value={{listings[0]}} />
