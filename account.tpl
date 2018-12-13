@@ -99,7 +99,12 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                        <td colspan="1"><strong>{{claimOff[0]}} made a {{claimOff[2]}} of ${{claimOff[1]}}.</strong></td>
+                      % if claimOff[2] == "Offer":
+                          <td colspan="1"><strong>{{claimOff[0]}} made an offer of ${{claimOff[1]}}.</strong></td>
+                      % else:
+                          <td colspan="1"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
+                          </td>
+                      %ends
                       <td>
                         <form method="get" action="/acceptoffer">
                             <input type="hidden" name="listingid" value={{listings[0]}} />
@@ -109,6 +114,7 @@
                       </td>
                     </tr>
                     % end
+
                 % end
               % end
             % end
