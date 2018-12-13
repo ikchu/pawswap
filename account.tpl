@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PawSwap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <head>
       <title>My Account</title>
    </head>
+
    <style>
       h1{
           color: black;
@@ -16,17 +34,27 @@
       }
       .footer {
         color: black;
-        background-color: #EE7F2D;
+        background-color: ##555555;
         text-align: center;
 
+       }
+       .navbar {
+        color: white;
+        text-align: center;
        }
     </style>
 
    <body>
+    <!-- Pawswap nav bar to go home -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/mainpage">PawSwap</a>
+      <a class="navbar-brand" href="/account">My Account</a>
+    </nav>
+
     <div class="w3-container w3-padding-16">
-       <div class= "title">
-          <h1>My Listings</h1>
-       </div>
+       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          My Listings
+       </nav>
         <table class="w3-table-all">
             <tr>
               <!-- new way to list out the mylistings -->
@@ -53,9 +81,9 @@
             </table>
           </div>
         <div class="w3-container w3-padding-16">
-        <div class= "title">
-          <h1>My Claims</h1>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          My Claims
+       </nav>
         <table class="w3-table-all">
             <tr>
               <!-- new way to list out the mylistings -->
@@ -81,15 +109,6 @@
           </table>
         </div>
       <hr>
-        
-        <a href="/mainpage">Click here to go back to main page</a>.
-
-        <div class= "footer">
-          <hr>
-            Created by
-            Reece Schachne, David Bowman, and Ikaia Chu
-          <hr>
-        </div>
     
    </body>
 </html>

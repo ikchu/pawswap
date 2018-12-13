@@ -28,6 +28,21 @@ sessionOptions = {
 pawswapApp = beaker.middleware.SessionMiddleware(app(), sessionOptions)
 
 @route('/')
+@route('/landingpage')
+def landingpage():
+    
+    errorMsg = request.query.get('errorMsg')
+    if errorMsg is None:
+        errorMsg = ''   
+
+    url = request.get_cookie('url')
+    response.set_cookie('url', request.url)
+     
+    templateInfo = {
+        'url': url,
+    }
+    return template('landingpage.html', templateInfo)
+
 @route('/mainpage')
 def mainpage():
     session = request.environ.get('beaker.session')
