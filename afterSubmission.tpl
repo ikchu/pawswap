@@ -25,29 +25,42 @@
 
    <style>
       .footer {
-        color: black;
-        background-color: #EE7F2D;
+        color: white;
+        background-color: #343a40;
         text-align: center;
+        padding: 0px;
        }
        .title {
         color: black;
         background-color: #EE7F2D;
         text-align: center;
       }
-
+      .btn {
+        background-color: #343a40;
+        color: white;
+       }
+       .container{
+        padding: 0;
+       }
+       .navbar{
+        color: white;
+       }
     </style>
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
     </nav>
-    
-       <h1 class = title>Your PawSwap Listing</h1>
+    <br>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        Your PawSwap Listing    
+    </nav>
       <hr>
         <!-- if routing to goToEditListing, need to provide listingid and coursetitle -->
-        <a href="/goToEditListing?listingid={{details[10]}}&coursetitle={{details[9]}}">Click here to edit your listing</a>
+        <div>
+            <a class="btn" href="/goToEditListing?listingid={{details[10]}}&coursetitle={{details[9]}}">Edit Your Listing</a>
+         </div>
         <br>
-        <h2>Listing Details</h2>
             <strong> Name: </strong> {{details[1]}}<br>
             <strong> Email: </strong> {{details[2]}}<br>
             <strong> Textbook Name: </strong> {{details[3]}}<br>
@@ -59,14 +72,13 @@
             <strong> Price Negotiable: </strong> {{details[8]}}<br>
       <hr>
       <hr>
-      <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
-      Click here to do <a href='\mainpage'>another listing search</a>.
-      <div class= "footer">
-        <hr>
-          Created by
-          Reece Schachne, David Bowman, and Ikaia Chu
-        <hr>
-      </div>
+        <!-- Copyright -->
+       <footer class="footer">
+          <div class="footer-copyright text-center py-3">
+            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            Please email pawswappu@gmail.com with questions, comments, or known bugs.
+          </div>
+       </footer>
       <!-- PUT IN COOKIE STUFF LATER -->
    </body>
 </html>

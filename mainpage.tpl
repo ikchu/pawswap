@@ -33,6 +33,14 @@
        .header {
         font-family: "Verdana", Geneva, sans-serif;
        }
+       .container{
+        padding: 0;
+       }
+       .input:focus {
+        outline:none;
+        border:0;
+        box-shadow:none;
+        }
        .newlistingbutton {
         background-color: #EE7F2D;
         border: none;
@@ -62,9 +70,10 @@
         text-align: center;
        }
        .footer {
-        color: black;
-        background-color: #EE7F2D;
+        color: white;
+        background-color: #343a40;
         text-align: center;
+        padding: 0px;
        }
        .center {
         background-color: #EE7F2D;
@@ -77,13 +86,25 @@
         color: white;
         background-color: #343a40;
        }
+       .no-border {
+          border: 0;
+          box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+        }
+        .form-control {
+          border: 0;
+        }
+        .navbar {
+          display: flex;
+          flex-direction: row
+          margin-left: 150px;
+        }
    </style>
     <head>
       <title>PawSwap</title>
    </head>
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
@@ -91,29 +112,21 @@
 
     <div class="container">
       <form action="/mainpage" method="get">
-          <table class="table">
-              <tr>
-                  <td>   
-                      <input type="text" placeholder="Department" name="dept" value={{dept}} > <br>
+                      <br>
+                      <input type="text" class="input form-control no-border" placeholder="Department" name="dept" value={{dept}} >
+                      <hr>
+                      <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" value={{coursenum}}>
+                      <hr>
+                      <input type="text" class="input form-control no-border" placeholder="Course Title" name="coursetitle" value={{title}}>
+                      <hr>
+                      <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" value={{bookname}}>
+                      <hr>
                   </td>
               </tr>
-              <tr>
-                  <td>
-                      <input type="text" placeholder="Course Number" name="coursenum" value={{coursenum}}>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <input type="text" placeholder="Course Title" name="coursetitle" value={{title}}>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <input type="text" placeholder="Textbook Name" name="bookname" value={{bookname}}>
-                      
-                  </td>
-              </tr>
+          
+
           </table>
+
           <input class = "btn" type="submit" value="Search">
         </form>
       <hr>
@@ -130,7 +143,7 @@
             </tr>
              % if len(listings) == 0:
 <!-- do something here? -->
-<div align="center">There are no current listings.</div>
+<div align="center">There are no current listings.>
              % else:
              %    for row in listings:
                     <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}&mpHotFix=True">
@@ -144,6 +157,15 @@
              %    end
              % end
        </table>
+     </div>
+
+       <!-- Copyright -->
+       <footer class="footer">
+          <div class="footer-copyright text-center py-3">
+            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            Please email pawswappu@gmail.com with questions, comments, or known bugs.
+          </div>
+       </footer>
     
     
       <script>
@@ -159,5 +181,7 @@
           document.querySelector('.Navbar__Link-toggle')
             .addEventListener('click', classToggle);
       </script> 
+
    </body>
+
 </html>

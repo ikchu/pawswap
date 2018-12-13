@@ -29,15 +29,19 @@
        td, th {
            text-align: left;
        }   
+       .container{
+        padding: 0;
+       }
        .top {
         color: black;
         background-color: #EE7F2D;
         text-align: center;
        }
        .footer {
-        color: black;
-        background-color: #EE7F2D;
+        color: white;
+        background-color: #343a40;
         text-align: center;
+        padding: 0px;
        }
        .navbar {
         color: white;
@@ -47,13 +51,28 @@
         color:white;
         background-color: #343a40;
        }
+       .no-border {
+          border: 0;
+          box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+        }
+        .form-control {
+          border: 0;
+        }
+        .input:focus {
+        outline:none;
+        border:0;
+        box-shadow:none;
+        }
+        .nego{
+            color:grey;
+        }
     </style>
     <head>
       <title>PawSwap</title>
     </head>
     <body>
         <!-- Pawswap nav bar to go home -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-dark bg-dark">
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
         </nav>
@@ -67,55 +86,45 @@
     %end
         
         <form class=container action="/createlisting" method="get">
-        <table>
-            <tr>
-                <td>
-                        <input type="text" placeholder="Your Name" name="name" value="{{details[1]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                        <input type="text" placeholder="Email" name="email" value="{{details[2]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                        <input type="text" placeholder="Textbook Name" name="bookname" value="{{details[3]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>   
-                    <input type="text" placeholder="Department" name="dept" value="{{details[4]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>   
-                    <input type="text" placeholder="Course Number" name="coursenum" value="{{details[5]}}" required> <br>
-                </td>
-            </tr>
-            <tr> <!-- ?? We want this to be not text input -->
-                <td>   
-                    <input type="text" placeholder="Condition" name="condition" value="{{details[6]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                        <input type="text" placeholder="Price" name="price" value="{{details[7]}}" required>
-                </td>
-            </tr>
-            <tr> <!-- ?? We want this to be not text input -->
-                <td>Is the price negotiable?: </td>
-                <td>
+       
+                    <input type="text" class="input form-control no-border" placeholder="Your Name" name="name" value="{{details[1]}}" required> 
+                    <hr>
+          
+                    <input type="text" class="input form-control no-border" placeholder="Email" name="email" value="{{details[2]}}" required> 
+                    <hr>
+        
+                    <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" value="{{details[3]}}" required> 
+                    <hr>
+         
+                    <input type="text" class="input form-control no-border" placeholder="Department" name="dept" value="{{details[4]}}" required> 
+                    <hr>
+             
+                    <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" value="{{details[5]}}" required>
+                    <hr> <!-- ?? We want this to be not text input -->
+                
+                    <input type="text" class="input form-control no-border" placeholder="Condition" name="condition" value="{{details[6]}}" required> 
+                    <hr>
+             
+                    <input type="text" class="input form-control no-border" placeholder="Price" name="price" value="{{details[7]}}" required>
+                    <hr>
+
+                    <div class= "nego"><!-- ?? We want this to be not text input -->
+                      Is the price negotiable?
+               
                         <input type="radio" placeholder="Negotiable?" name="negotiable" value="Yes" checked="checked" required> Yes
-                        <input type="radio" placeholder="Negotiable?" name="negotiable" value="No"> No<br>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>
+                        <input type="radio" placeholder="Negotiable?" name="negotiable" value="No"> No
+                    </div>
+                    <hr>
+              
                     <input class = "btn" type="submit" value="Submit">
-                </td>
-            </tr>
-        </table>
+               
       </form>
+      <br>
+        <!-- Copyright -->
+       <footer class="footer">
+          <div class="footer-copyright text-center py-3">
+            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            Please email pawswappu@gmail.com with questions, comments, or known bugs.
+          </div>
+       </footer>
     <hr>      

@@ -175,7 +175,7 @@ def account():
             claimOrOfferList = getClaimsToMe(listing[0])
            
             # if this method returns empty list then:
-            if claimOrOfferList == []
+            if claimOrOfferList == []:
                 isClaim = False
                 # getOffersToMe()
                 claimOrOfferList = getOffersToMe(listing[0])
@@ -199,7 +199,7 @@ def account():
         'username': username,
         'myClaims': claims,
         'myOffers': offers,
-        'claimOrOff': listingsClaimOrOff
+        'claimOrOff': listingsClaimOrOff,
         'claimBool': claimBool
     }
     return template('account.tpl', templateInfo)

@@ -25,10 +25,14 @@
 
    <style>
         .footer {
-          color: black;
-          background-color: #EE7F2D;
+          color: white;
+          background-color: #343a40;
           text-align: center;
-        }
+          padding: 0px;
+       }
+       .container{
+        padding: 0;
+       }
         .title {
         color: black;
         background-color: #EE7F2D;
@@ -44,7 +48,7 @@
     </style>
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
@@ -67,5 +71,12 @@
             <strong> Price Negotiable: </strong> {{details[8]}}<br>
       <hr>
       <hr>
+        <!-- Copyright -->
+       <footer class="footer">
+          <div class="footer-copyright text-center py-3">
+            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            Please email pawswappu@gmail.com with questions, comments, or known bugs.
+          </div>
+       </footer>
    </body>
 </html>
