@@ -70,43 +70,44 @@
         <table>
             <tr>
                 <td>
-                        <input type="text" placeholder="Your Name" name="name" value={{details[1]}} required> <br>
-                </td>
-            </tr>
-             <tr>
-                <td>
-                        <input type="text" placeholder="Email" name="email" value={{details[2]}} required> <br>
+                        <input type="text" placeholder="Your Name" name="name" value="{{details[1]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>
-                        <input type="text" placeholder="Textbook Name" name="bookname" value={{details[3]}} required> <br>
+                        <input type="text" placeholder="Email" name="email" value="{{details[2]}}" required> <br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                        <input type="text" placeholder="Textbook Name" name="bookname" value="{{details[3]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>   
-                    <input type="text" placeholder="Department"name="dept" value={{details[4]}} required> <br>
+                    <input type="text" placeholder="Department" name="dept" value="{{details[4]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>   
-                    <input type="text" placeholder="Course Number" name="coursenum" value={{details[5]}} required> <br>
+                    <input type="text" placeholder="Course Number" name="coursenum" value="{{details[5]}}" required> <br>
                 </td>
             </tr>
             <tr> <!-- ?? We want this to be not text input -->
                 <td>   
-                    <input type="text" placeholder="Condition" name="condition" value={{details[6]}} required> <br>
+                    <input type="text" placeholder="Condition" name="condition" value="{{details[6]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>
-                        <input type="text" placeholder="Price" name="price" value={{details[7]}} required>
+                        <input type="text" placeholder="Price" name="price" value="{{details[7]}}" required>
                 </td>
             </tr>
             <tr> <!-- ?? We want this to be not text input -->
+                <td>Is the price negotiable?: </td>
                 <td>
-                        <input type="radio" placeholder="Negotiable?" name="negotiable" value="Yes" checked="checked" required>
-                        <input type="radio" placeholder="Negotiable?" name="negotiable" value="No"><br>
+                        <input type="radio" placeholder="Negotiable?" name="negotiable" value="Yes" checked="checked" required> Yes
+                        <input type="radio" placeholder="Negotiable?" name="negotiable" value="No"> No<br>
                 </td>
             </tr>
             
