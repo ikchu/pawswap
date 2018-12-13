@@ -89,10 +89,8 @@
        
                     <input type="text" class="input form-control no-border" placeholder="Your Name" name="name" value="{{details[1]}}" required> 
                     <hr>
-          
                     <input type="text" class="input form-control no-border" placeholder="Email" name="email" value="{{details[2]}}" required> 
                     <hr>
-        
                     <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" value="{{details[3]}}" required> 
                     <hr>
          

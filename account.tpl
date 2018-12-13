@@ -49,6 +49,10 @@
         color: white;
         text-align: center;
        }
+       .sentence{
+        text-align: right;
+        float: right;
+       }
     </style>
 
    <body>
@@ -83,31 +87,24 @@
                   <td>{{row[4]}}</td>
                   <td>{{row[5]}}</td>
                 </tr>
+
                 % if (claimOrOff[row[0]] == []):
                     <tr>
                       <td>No current offers or claims.</td>
                     </tr>
                 % else:
-                    <tr>
-                      <!-- new way to list out the mylistings -->
-                        <th></th>
-                        <th>Claim/Offer</th>
-                        <th>Netid</th>
-                        <th>Amount Offered</th>
-                        <th>Accept, Reject, Decline</th>
-                    </tr>
                 
                     % for claimOff in claimOrOff[row[0]]:
                     <tr>
                       <td></td>
-                      <td>{{claimOff[2]}}</td>
-                      <td>{{claimOff[0]}}</td>
-                      <td>{{claimOff[1]}}</td>
+                      <td></td>
+                      <td></td>
+                        <td colspan="1"><strong>{{claimOff[0]}} made a {{claimOff[2]}} of ${{claimOff[1]}}.</strong></td>
                       <td>
                         <form method="get" action="/acceptoffer">
                             <input type="hidden" name="listingid" value={{listings[0]}} />
                             <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                            <button class = "btn btn-default" type="submit">Accept Offer</button>
+                            <button class = "btn btn-default" type="submit"><strong>Accept Offer</strong></button>
                         </form>
                       </td>
                     </tr>
