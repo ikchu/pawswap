@@ -293,8 +293,30 @@ def getMyClaims(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid'
-    cursor.execute(stmtStr, [claimerid])
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND claimed = ?'
+    cursor.execute(stmtStr, [claimerid, '1'])
+
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
+        row = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return dataList
+def getMyOffers(claimerid):
+    dataList = []
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND claimed = ?'
+    cursor.execute(stmtStr, [claimerid, '0'])
 
     row = cursor.fetchone()
     while row is not None:
@@ -306,7 +328,51 @@ def getMyClaims(claimerid):
     
     return dataList
 
+def getOffersToMe(listingid):
+    dataList = []
+    DATABASE_NAME = 'listings.sqlite'
 
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'SELECT offererid, offer FROM listing, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    cursor.execute(stmtStr, [claimerid, '0'])
+
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
+        row = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return dataList
+    
+def getClaimsToMe(listingid):
+    dataList = []
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'SELECT offererid, offer FROM listing, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    cursor.execute(stmtStr, [claimerid, '1'])
+
+    row = cursor.fetchone()
+    while row is not None:
+        dataList.append(row)
+        row = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    
+    return dataList
 #------------------------------------------------------------------------------
 # 'Private' Helper Functions
 #

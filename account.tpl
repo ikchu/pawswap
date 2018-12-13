@@ -75,21 +75,38 @@
               <!-- do something here? -->
               <div align="center">You have no current listings.</div>
             % else:
-            %    for row in listings:
-                  <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
-                      <td>{{row[1]}}</td>
-                      <td>{{row[2]}}</td>
-                      <td>{{row[3]}}</td>
-                      <td>{{row[4]}}</td>
-                      <td>{{row[5]}}</td>
+              % for row in listings:
+                <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
+                  <td>{{row[1]}}</td>
+                  <td>{{row[2]}}</td>
+                  <td>{{row[3]}}</td>
+                  <td>{{row[4]}}</td>
+                  <td>{{row[5]}}</td>
+                </tr>
+                <table class="table table-hover table-striped" width="80%" align="right">
+                  <tr>
+                    <!-- new way to list out the mylistings -->
+                      <th>Netid</th>
+                      <th>Amount Offered</th>
+                      <th>Accept or Reject</th>
                   </tr>
+                % for claim in claims:
+                  <tr>
+                    <td>claim[1]</td>
+                    <td>claim
+                  </tr>
+                % end
+                % for offer in offers:
+
+                % end
+
             %    end
             % end
             </table>
           </div>
         <div class="w3-container w3-padding-16">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          My Claims
+          Claims I've Made
        </nav>
         <table class="table table-hover table-striped">
             <tr>
@@ -98,18 +115,50 @@
                 <th>Department</th>
                 <th>Course Number</th>
                 <th>Course Name</th>
-                <th>Price $</th>
+                <th>Listed Price $</th>
+                <th>Claimed Price $</th>
             </tr>
             % if len(claims) == 0:
             <div align="center">You have no current claims.</div>
             % else:
-              % for row in claims:
+              % for row in myClaims:
                   <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
                       <td>{{row[1]}}</td>
                       <td>{{row[2]}}</td>
                       <td>{{row[3]}}</td>
                       <td>{{row[4]}}</td>
                       <td>{{row[5]}}</td>
+                      <td>{{row[6]}}</td>
+                  </tr>
+                % end
+              %end
+          </table>
+        </div>
+        <div class="w3-container w3-padding-16">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          Offers I've Made
+       </nav>
+        <table class="table table-hover table-striped">
+            <tr>
+              <!-- new way to list out the mylistings -->
+                <th>Book Name</th>
+                <th>Department</th>
+                <th>Course Number</th>
+                <th>Course Name</th>
+                <th>Listed Price $</th>
+                <th>Your Offer $</th>
+            </tr>
+            % if len(offers) == 0:
+            <div align="center">You have no current offers.</div>
+            % else:
+              % for row in myOffers:
+                  <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
+                      <td>{{row[1]}}</td>
+                      <td>{{row[2]}}</td>
+                      <td>{{row[3]}}</td>
+                      <td>{{row[4]}}</td>
+                      <td>{{row[5]}}</td>
+                      <td>{{row[6]}}</td>
                   </tr>
                 % end
               %end

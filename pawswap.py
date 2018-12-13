@@ -14,7 +14,7 @@ from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
 from listings import getListings, getDetails, createListing, editListing, deleteListing, unclaimListing
-from listings import getMyListings, claimListing, getMyClaims, makeOffer
+from listings import getMyListings, claimListing, getMyClaims, makeOffer, getMyOffers
 TEMPLATE_PATH.insert(0, '')
 
 # CAS things
@@ -97,7 +97,7 @@ def listingsdetails():
     
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
-
+    hotfix = request.query.get('mpHotFix')
     listingid = request.query.get('listingid')
 
     try: 
@@ -108,22 +108,13 @@ def listingsdetails():
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
 
-    print details[9]
-
-    if details[9] == 1:
-        claimedBool = True
-    else:
-        claimedBool = False
-
     templateInfo = {
         'listingid': listingid,
         'details': details,
         'url': url,
         'username': username,
-        'claimed': claimedBool
+        'claimed': details[9]
     }
-
-    print claimedBool
 
     return template('listingsdetails.tpl', templateInfo)
 # same as listing deets except it returns accountlistingdetails.tpl which
@@ -168,8 +159,29 @@ def account():
     # returns a list of a user's listings
     try: 
         listings = getMyListings(username)
-        # return all of the listings you've claimed
+        # return all of the listings you've claimed UPDATE to return claimed price
         claims = getMyClaims(username)
+        print 'Claims', claims
+        # return all of the offers with typical details and current offerprice
+        offers = getMyOffers(username)
+        print 'Offers', offers
+
+        
+        listingsClaimOrOff = {}
+        for listing in listings:
+            isClaim = True
+            claimOrOfferList = []
+            # call a getClaimsOfMine()
+            claimOrOfferList = getClaimsToMe(listing[0])
+           
+            # if this method returns empty list then:
+            if claimOrOfferList == []
+                isClaim = False
+                # getOffersToMe()
+                claimOrOfferList = getOffersToMe(listing[0])
+            claimOrOfferList.append(isClaim)
+            listingsClaimOrOff[listing[0]] = claimOrOfferList
+    
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
 
@@ -185,7 +197,10 @@ def account():
         # 'title': title,
         'listings': listings,
         'username': username,
-        'claims': claims
+        'myClaims': claims,
+        'myOffers': offers,
+        'claimOrOff': listingsClaimOrOff
+        'claimBool': claimBool
     }
     return template('account.tpl', templateInfo)
 
@@ -518,7 +533,8 @@ def makeoffer():
     print 'PRICE', offerprice
     templateInfo = {
         'listingid': listingid,
-        'details': details
+        'details': details,
+        'offerprice': offerprice
     }
 
     try:
@@ -526,8 +542,6 @@ def makeoffer():
         return template('afterOffer.tpl', templateInfo)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
-
-    
 
 @error(404)
 def notFound(error):

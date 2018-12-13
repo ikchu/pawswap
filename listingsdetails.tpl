@@ -72,8 +72,7 @@
                <strong> Price Negotiable: </strong> {{details[8]}}<br>
                <br>
             <!-- if claimed then give option to unclaim (details[9] is 'claimed')-->
-            % if not ({claimed}):
-               <strong> claimedBool == {{claimed}}, but claimed should be False for this page to show </strong>  
+            % if claimed==0:
                <form method="get" action="/claimlisting">
                   <input type="hidden" name="listingid" value={{listingid}} />
                   <input type="hidden" name="price" value={{details[7]}} />
@@ -86,11 +85,10 @@
                <form method="get" action="/makeoffer">
                   <input type="hidden" name="listingid" value={{listingid}} />
                   <button class = "btn btn-default" type="submit">Make Offer</button>
-                  &nbsp; $ <input type="text" placeholder="Offer" name="offerprice" required />
+                  &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
                </form>
             % end
-            % if ({claimed}):
-               <strong> claimedBool == {{claimed}}, but claimed should be True for this page to show </strong>
+            % if claimed==1:
                <form method="get" action="/unclaimlisting">
                   <input type="hidden" name="listingid" value={{listingid}} />
                   <button class = "btn btn-default" type="submit">Unclaim Listing</button>

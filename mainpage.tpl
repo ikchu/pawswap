@@ -133,7 +133,7 @@
 <div align="center">There are no current listings.</div>
              % else:
              %    for row in listings:
-                    <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
+                    <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}&mpHotFix=True">
                         <td>{{row[1]}}</td>
                         <td>{{row[2]}}</td>
                         <td>{{row[3]}}</td>
