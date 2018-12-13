@@ -111,7 +111,7 @@ def createListing(fieldList):
     # using .values instead of createValList() because we don't want to format what the user inputs when creating a post
     listingid = newListingID(cursor)
     # fieldList[3], fieldList[4] = dept, coursenum
-    coursetitle = getCourseTitle(fieldList[4], fieldList[5])
+    coursetitle = getCrsTitleJSON(fieldList[4], fieldList[5])
 
     # adding these into the list before creating the new row in the db
     # these weren't in the user input 'fieldDict', but they need to be in the db row
@@ -143,7 +143,7 @@ def editListing(listingid, fieldList):
 
     # getting new coursetitle in case the user edited dept or coursenum
     # fieldList[4] is dept, fieldList[5] is coursenum
-    coursetitle = getCourseTitle(fieldList[4], fieldList[5])
+    coursetitle = getCrsTitleJSON(fieldList[4], fieldList[5])
 
     stmtStr = editListingStmtStr()
 
@@ -406,8 +406,16 @@ def getCourseTitle(dept, coursenum):
 
 # This method accesses the current registrar; the dept and coursenum are passed to it
 def getCrsTitleJSON(dept, coursenum):
-    url = 'http://etcweb.princeton.edu/webfeeds/courseofferings/?term=all&subject=' + dept + '&catnum=' + coursenum + '&fmt=json&brief=yes'
-    resp = requests.get(url)
+    url = 'http://etcweb.princeton.edu/webfeeds/courseofferings/?term=all&subject=' + dept + '&catnum=' + coursenum + '&fmt=json&brief=yes'
+    resp = requests.get(url)
+    crsData = resp.json()
+    try:
+        # indexing into the JSON response which is a dictionary of lists (hence the weird code)
+        title = (((((crsData['term'])[0])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
+        # this will mean that the title was not found
+        raise Exception('This course was not found. Please try a different Department and Course Number.')
 
 def editListingStmtStr():
 

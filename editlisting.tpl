@@ -71,50 +71,51 @@
             <tr>
                 <td>Your Name: </td>
                 <td>
-                        <input type="text" name="name" value="{{details[1]}}"> <br>
+                        <input type="text" name="name" value="{{details[1]}}" required> <br>
                 </td>
             </tr>
              <tr>
                 <td>Email: </td>
                 <td>
-                        <input type="text" name="email" value="{{details[2]}}"> <br>
+                        <input type="text" name="email" value="{{details[2]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>Textbook Name: </td>
                 <td>
-                        <input type="text" name="bookname" value="{{details[3]}}"> <br>
+                        <input type="text" name="bookname" value="{{details[3]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>Department (3 Letter Abbreviation): </td>
                 <td>   
-                    <input type="text" name="dept" value="{{details[4]}}"> <br>
+                    <input type="text" name="dept" value="{{details[4]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>Course Number: </td>
                 <td>   
-                    <input type="text" name="coursenum" value="{{details[5]}}"> <br>
+                    <input type="text" name="coursenum" value="{{details[5]}}" required> <br>
                 </td>
             </tr>
              <!-- Skipping over details[5] which is coursetitle -->
             <tr>
                 <td>Condition (New, Good, Fair, or Poor): </td>
                 <td>   
-                    <input type="text" name="condition" value="{{details[6]}}"> <br>
+                    <input type="text" name="condition" value="{{details[6]}}" required> <br>
                 </td>
             </tr>
             <tr>
                 <td>Price: </td>
                 <td>
-                        <input type="text" name="price" value="{{details[7]}}">
+                        <input type="text" name="price" value="{{details[7]}}" required>
                 </td>
             </tr>
             <tr> <!-- ?? We want this to be not text input -->
                 <td>Is the Price Negotiable? (Yes or No): </td>
                 <td>
-                        <input type="text" name="negotiable" value="{{details[8]}}"> <br>
+                    <input type="radio" placeholder="Negotiable?" name="negotiable" value="Yes" checked="checked" required>
+                    <input type="radio" placeholder="Negotiable?" name="negotiable" value="No"><br>
                 </td>
             </tr>
             

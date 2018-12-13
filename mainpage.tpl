@@ -73,6 +73,10 @@
         text-align: center;
 
        }
+       .btn {
+        color: white;
+        background-color: #343a40;
+       }
    </style>
     <head>
       <title>PawSwap</title>
@@ -110,7 +114,7 @@
                   </td>
               </tr>
           </table>
-          <input type="submit" value="Submit">
+          <input class = "btn" type="submit" value="Search">
         </form>
       <hr>
     </div>

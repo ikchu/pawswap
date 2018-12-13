@@ -57,6 +57,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         Listing Details
       </nav>
+      
 
       <div class="container">
          <hr>
