@@ -39,6 +39,10 @@
         background-color: #EE7F2D;
         text-align: center;
        }
+       .navbar {
+        color: white;
+        text-align: center;
+       }
     </style>
     <head>
       <title>PawSwap</title>
@@ -49,82 +53,63 @@
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
         </nav>
-
-        <div class= "top">
-            <h2>Post New Textbook for Sale</h2>
-        </div>
+        <br>
+       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          Post New Textbook For Sale
+       </nav>
     <hr>
     %if ({errorBool}):
         <strong>{{e}}</strong>
     %end
-    
-        <form action="/createlisting" method="get">
+        
+        <form class=container action="/createlisting" method="get">
         <table>
             <tr>
-                <td>Your Name: </td>
                 <td>
-                        <input type="text" name="name" value={{details[1]}}> <br>
+                        <input type="text" placeholder="Your Name" name="name" value={{details[1]}}> <br>
                 </td>
             </tr>
              <tr>
-                <td>Email: </td>
                 <td>
-                        <input type="text" name="email" value={{details[2]}}> <br>
+                        <input type="text" placeholder="Email" name="email" value={{details[2]}}> <br>
                 </td>
             </tr>
             <tr>
-                <td>Textbook Name: </td>
                 <td>
-                        <input type="text" name="bookname" value={{details[3]}}> <br>
+                        <input type="text" placeholder="Textbook Name" name="bookname" value={{details[3]}}> <br>
                 </td>
             </tr>
             <tr>
-                <td>Department (3 Letter Abbreviation): </td>
                 <td>   
-                    <input type="text" name="dept" value={{details[4]}}> <br>
+                    <input type="text" placeholder="Department"name="dept" value={{details[4]}}> <br>
                 </td>
             </tr>
             <tr>
-                <td>Course Number: </td>
                 <td>   
-                    <input type="text" name="coursenum" value={{details[5]}}> <br>
+                    <input type="text" placeholder="Course Number" name="coursenum" value={{details[5]}}> <br>
                 </td>
             </tr>
             <tr> <!-- ?? We want this to be not text input -->
-                <td>Condition (New, Good, Fair, or Poor): </td>
                 <td>   
-                    <input type="text" name="condition" value={{details[6]}}> <br>
+                    <input type="text" placeholder="Condition" name="condition" value={{details[6]}}> <br>
                 </td>
             </tr>
             <tr>
-                <td>Price: </td>
                 <td>
-                        <input type="text" name="price" value={{details[7]}}>
+                        <input type="text" placeholder="Price" name="price" value={{details[7]}}>
                 </td>
             </tr>
             <tr> <!-- ?? We want this to be not text input -->
-                <td>Is the Price Negotiable? (Yes or No): </td>
                 <td>
-                        <input type="text" name="negotiable" value={{details[8]}}> <br>
+                        <input type="text" placeholder="Negotiable?" name="negotiable" value={{details[8]}}> <br>
                 </td>
             </tr>
             
             <tr>
-                <td></td>
                 <td>
                     <input type="submit" value="Submit">
                 </td>
             </tr>
         </table>
       </form>
-    <hr>
-<!-- do something here? -->
-
-Click here to <a href="/mainpage">go back to main page</a>.
-    <div class= "footer">
-        <hr>
-          Created by
-          Reece Schachne, David Bowman, and Ikaia Chu
-        <hr>
-    </div>
-       
+    <hr>      

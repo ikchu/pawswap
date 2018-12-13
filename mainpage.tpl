@@ -69,6 +69,10 @@
        .center {
         background-color: #EE7F2D;
        }
+       .container {
+        text-align: center;
+
+       }
    </style>
     <head>
       <title>PawSwap</title>
@@ -81,47 +85,38 @@
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
 
-    <div class="w3-container w3-padding-16">
+    <div class="container">
       <form action="/mainpage" method="get">
-          <table class="w3-table-all">
+          <table class="table">
               <tr>
-                  <td>Department: </td>
                   <td>   
-                      <input type="text" name="dept" value={{dept}}> <br>
+                      <input type="text" placeholder="Department" name="dept" value={{dept}} > <br>
                   </td>
               </tr>
               <tr>
-                  <td>Course Number: </td>
                   <td>
-                      <input type="text" name="coursenum" value={{coursenum}}>
+                      <input type="text" placeholder="Course Number" name="coursenum" value={{coursenum}}>
                   </td>
               </tr>
               <tr>
-                  <td>Title: </td>
                   <td>
-                      <input type="text" name="coursetitle" value={{title}}>
+                      <input type="text" placeholder="Course Title" name="coursetitle" value={{title}}>
                   </td>
               </tr>
               <tr>
-                  <td>Textbook Name: </td>
                   <td>
-                      <input type="text" name="bookname" value={{bookname}}>
-                  </td>
-              </tr>
-              <tr>
-                  <td></td>
-                  <td>
-                      <input type="submit" value="Submit">
-            
+                      <input type="text" placeholder="Textbook Name" name="bookname" value={{bookname}}>
+                      
                   </td>
               </tr>
           </table>
+          <input type="submit" value="Submit">
         </form>
       <hr>
     </div>
       <!-- PUT RESULTS IN HERE -->
-    <div class="w3-container w3-padding-16">
-        <table class="w3-table w3-striped w3-border">
+    <div class="container">
+        <table class="table table-hover table-striped">
             <tr>
                 <th>Book Name</th>
                 <th>Department</th>
@@ -134,8 +129,8 @@
 <div align="center">There are no current listings.</div>
              % else:
              %    for row in listings:
-                    <tr href="/listingsdetails?listingid={{row[0]}}">
-                        <td><a href="/listingsdetails?listingid={{row[0]}}">{{row[1]}}</a></td>
+                    <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
+                        <td>{{row[1]}}</td>
                         <td>{{row[2]}}</td>
                         <td>{{row[3]}}</td>
                         <td>{{row[4]}}</td>
@@ -145,7 +140,14 @@
              %    end
              % end
        </table>
+    
+    
       <script>
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+            });
+        });
           function classToggle() {
             const navs = document.querySelectorAll('.Navbar__Items')
             navs.forEach(nav => nav.classList.toggle('Navbar__ToggleShow'));

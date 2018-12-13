@@ -34,6 +34,13 @@
         background-color: #EE7F2D;
         text-align: center;
         } 
+        .btn {
+        background-color: #343a40;
+        color: white;
+       }
+       .navbar {
+        color: white;
+       }
     </style>
    <body>
     <!-- Pawswap nav bar to go home -->
@@ -41,13 +48,14 @@
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
-
-       <h1 class = title>Your PawSwap Listing</h1>
+    <br>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     Your Listing
+    </nav>
       <hr>
         <!-- I don't think this is necessary % courseid, days, starttime, endtime, bldg, roomnum = details[0] -->
-        <a href="/goToEditListing?listingid={{details[10]}}">Click here to edit your listing</a>
+        <a class = "btn" href="/goToEditListing?listingid={{details[10]}}">Click here to edit your listing</a>
         <br>
-        <h2>Listing Details</h2>
             <strong> Name: </strong> {{details[1]}}<br>
             <strong> Email: </strong> {{details[2]}}<br>
             <strong> Textbook Name: </strong> {{details[3]}}<br>
@@ -59,14 +67,5 @@
             <strong> Price Negotiable: </strong> {{details[8]}}<br>
       <hr>
       <hr>
-      <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
-      Click here to do <a href='\mainpage'>another listing search</a>.
-      <div class= "footer">
-        <hr>
-          Created by
-          Reece Schachne, David Bowman, and Ikaia Chu
-        <hr>
-      </div>
-      <!-- PUT IN COOKIE STUFF LATER -->
    </body>
 </html>

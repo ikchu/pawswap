@@ -39,6 +39,13 @@
         background-color: #EE7F2D;
         text-align: center;
        }
+       .navbar {
+        color: white;
+       }
+       .btn {
+        background-color: #343a40;
+        color: white;
+       }
     </style>
 
    <head>  
@@ -50,16 +57,21 @@
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
 
-      <div class= "title">
-         <h1>PawSwap Listing</h1>
-       </div>
-      <div class="w3-container">
+    <br>
+
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      Your Listing
+    </nav>
+
+      
+      <div class="container">
          <hr>
          <div>
-            <a class="links" href='/goToEditListing?listingid={{listingid}}'>Edit listing</a>
-            <a class="links" href='/deletelisting?listingid={{listingid}}'>Delete listing</a>
+            <a class="btn" href='/goToEditListing?listingid={{listingid}}'>Edit listing</a>
+            <a class="btn" href='/deletelisting?listingid={{listingid}}'>Delete listing</a>
+
          </div>
-           <h2>Listing Details</h2>
+         <br>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
                <strong> Textbook Name: </strong> {{details[2]}}<br>
@@ -70,14 +82,7 @@
                <strong> Price: </strong> {{details[7]}}<br>
                <strong> Price Negotiable: </strong> {{details[8]}}<br>
          <hr>
-         <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
-         Click here to go to <a href="/mainpage">main page</a>.
-          <div class= "footer">
-            <hr>
-              Created by
-              Reece Schachne, David Bowman, and Ikaia Chu
-            <hr>
-        </div>
+         
    </div>
       <!-- PUT IN COOKIE STUFF LATER -->
    </body>
