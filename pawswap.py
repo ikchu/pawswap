@@ -13,8 +13,8 @@ from CASClient import CASClient
 from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
-from listings import getListings, getDetails, createListing, editListing, deleteListing
-from listings import getMyListings, claimListing, getMyClaims
+from listings import getListings, getDetails, createListing, editListing, deleteListing, unclaimListing
+from listings import getMyListings, claimListing, getMyClaims, makeOffer
 TEMPLATE_PATH.insert(0, '')
 
 # CAS things
@@ -104,17 +104,27 @@ def listingsdetails():
         details = getDetails(listingid)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
-
     # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
     url = request.get_cookie('url')
     response.set_cookie('url', request.url)
+
+    print details[9]
+
+    if details[9] == 1:
+        claimedBool = True
+    else:
+        claimedBool = False
 
     templateInfo = {
         'listingid': listingid,
         'details': details,
         'url': url,
-        'username': username
+        'username': username,
+        'claimed': claimedBool
     }
+
+    print claimedBool
+
     return template('listingsdetails.tpl', templateInfo)
 # same as listing deets except it returns accountlistingdetails.tpl which
 # has delete functionality; regular listingdetails does not
@@ -455,11 +465,10 @@ def claimlisting():
 
     listingid = request.query.get('listingid')
     details = getDetails(listingid)
-
-    print 'Details is: ', details
+    claimPrice = request.query.get('price')
 
     try:
-        claimListing(listingid, username)
+        claimListing(listingid, username, claimPrice)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
     
@@ -469,9 +478,56 @@ def claimlisting():
     
     templateInfo = {
         'listingid': listingid,
-        'details': details
+        'details': details,
+        'claimprice': claimPrice
     }
     return template('afterClaim.tpl', templateInfo)
+
+@route('/unclaimlisting')
+def unclaimlisting():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+
+    listingid = request.query.get('listingid')
+    details = getDetails(listingid)
+
+    try:
+        unclaimListing(listingid, username)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e })
+    
+    templateInfo = {
+        'listingid': listingid,
+        'details': details,
+    }
+    return template('afterUnclaim.tpl', templateInfo)
+
+@route('/makeoffer')
+def makeoffer():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+    listingid = request.query.get('listingid')
+    print 'LISTINGID', listingid
+    details = getDetails(listingid)
+    
+    offerprice = request.query.get('offerprice')
+    print 'PRICE', offerprice
+    templateInfo = {
+        'listingid': listingid,
+        'details': details
+    }
+
+    try:
+        makeOffer(listingid, username, offerprice)
+        return template('afterOffer.tpl', templateInfo)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e })
+
+    
 
 @error(404)
 def notFound(error):

@@ -71,20 +71,20 @@
                 <th>Course Name</th>
                 <th>Price $</th>
             </tr>
-             % if len(listings) == 0:
-            <!-- do something here? -->
-            <div align="center">You have no current listings.</div>
-                         % else:
-                         %    for row in listings:
-                                <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
-                                    <td>{{row[1]}}</td>
-                                    <td>{{row[2]}}</td>
-                                    <td>{{row[3]}}</td>
-                                    <td>{{row[4]}}</td>
-                                    <td>{{row[5]}}</td>
-                                </tr>
-                         %    end
-                         % end
+            % if len(listings) == 0:
+              <!-- do something here? -->
+              <div align="center">You have no current listings.</div>
+            % else:
+            %    for row in listings:
+                  <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
+                      <td>{{row[1]}}</td>
+                      <td>{{row[2]}}</td>
+                      <td>{{row[3]}}</td>
+                      <td>{{row[4]}}</td>
+                      <td>{{row[5]}}</td>
+                  </tr>
+            %    end
+            % end
             </table>
           </div>
         <div class="w3-container w3-padding-16">
@@ -98,13 +98,13 @@
                 <th>Department</th>
                 <th>Course Number</th>
                 <th>Course Name</th>
-                <th>Price</th>
+                <th>Price $</th>
             </tr>
             % if len(claims) == 0:
             <div align="center">You have no current claims.</div>
             % else:
               % for row in claims:
-                  <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
+                  <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
                       <td>{{row[1]}}</td>
                       <td>{{row[2]}}</td>
                       <td>{{row[3]}}</td>

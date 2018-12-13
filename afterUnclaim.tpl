@@ -53,13 +53,12 @@
         </nav>
         <br>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Claimed Listing
+          Unclaimed Listing
        </nav>
   
       <div class="container">
          <hr>
-            <strong>*You've claimed this listing for ${{claimprice}}. This textbook has been added to your Claimed List*</strong>
-            <p>Please contact the seller at <strong>{{details[1]}}</strong> to pay and retrieve your book.</p>
+            <strong>*You've unclaimed this listing. This textbook has been removed from your Claimed List*</strong><br>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
                <strong> Textbook Name: </strong> {{details[2]}}<br>

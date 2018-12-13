@@ -83,16 +83,15 @@ def getDetails(listingid):
 
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
-
+    
     stmtStr = getdetailsStmtStr()
     cursor.execute(stmtStr, [listingid])
 
     row = cursor.fetchone()
-
     cursor.close()
     connection.close()
-
-    return row
+    
+    return list(row)
 
 # Takes in dictionary containing search fields
 # Returns listings list of tuples (containing all the fields)
@@ -119,7 +118,9 @@ def createListing(fieldList):
     listingFields.append(coursetitle)
     listingFields.append(listingid)
 
-    newList = [listingid, listingFields[0], listingFields[1], listingFields[2], listingFields[3], listingFields[4], listingFields[5], coursetitle, listingFields[6], listingFields[7], listingFields[8]]
+    # make sure that listings are initially 'unclaimed'
+    claimedStatus = '0'
+    newList = [listingid, listingFields[0], listingFields[1], listingFields[2], listingFields[3], listingFields[4], listingFields[5], coursetitle, listingFields[6], listingFields[7], listingFields[8], claimedStatus]
     cursor.execute(stmtStr, newList)
     connection.commit()
 
@@ -211,8 +212,7 @@ def getMyListings(username):
     return dataList
 
 # this method takes a listingid and claimerid and adds them to our second table
-def claimListing(listingid, claimerid):
-    dataList = []
+def claimListing(listingid, claimerid, price):
     DATABASE_NAME = 'listings.sqlite'
 
     if not path.isfile(DATABASE_NAME):
@@ -221,15 +221,64 @@ def claimListing(listingid, claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'INSERT OR IGNORE INTO claims (listingid, claimerid) VALUES (?, ?)'
-    cursor.execute(stmtStr, [listingid, claimerid])
+    stmtStr1 = makeOfferStmtStr(listingid, claimerid, cursor)
+    # be careful to pass fields in this order when executing
+    cursor.execute(stmtStr1, [price, listingid, claimerid])
+
+    # update table 1 (listings) so that claimed col is '1'
+    stmtStr3 = 'UPDATE listings SET claimed=1 WHERE listingid=?'
+    cursor.execute(stmtStr3, [listingid])
+
     connection.commit()
 
-    row = cursor.fetchone()
-    while row is not None:
-        dataList.append(row)
-        row = cursor.fetchone()
+    cursor.close()
+    connection.close()
 
+def unclaimListing(listingid, claimerid):
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr1 = 'DELETE FROM offers WHERE listingid=? AND offererid=?'
+    # be careful to pass fields in this order when executing
+    cursor.execute(stmtStr1, [listingid, claimerid])
+
+    print stmtStr1
+
+    # update table 1 (listings) so that claimed col is '1'
+    stmtStr2 = 'UPDATE listings SET claimed=0 WHERE listingid=?'
+    cursor.execute(stmtStr2, [listingid])
+
+    print stmtStr2
+
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+def makeOffer(listingid, offererid, offerprice):
+    print 'listings.py > makeOffer called'
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = makeOfferStmtStr(listingid, offererid, cursor)
+    print 'stmtStr                !!!!!!!!!!!!', stmtStr
+    cursor.execute(stmtStr, [offerprice, listingid, offererid])
+    print offerprice, listingid, offererid
+    connection.commit()
+
+    #-----------------------------------------------------------------
+    # ideally, here we send notification to seller that offer was made
+    #-----------------------------------------------------------------
     cursor.close()
     connection.close()
 
@@ -244,7 +293,7 @@ def getMyClaims(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price FROM listings, claims WHERE claims.claimerid = ? AND listings.listingid = claims.listingid'
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid'
     cursor.execute(stmtStr, [claimerid])
 
     row = cursor.fetchone()
@@ -289,7 +338,8 @@ def getListingsStmtStr(searchDict):
         'dept'       : 'dept LIKE ?',
         'coursenum'  : 'coursenum LIKE ?',
         'coursetitle': 'coursetitle LIKE ?',
-        'bookname'  : 'bookname LIKE ?'
+        'bookname'  : 'bookname LIKE ?',
+        'claimed'   : 'claimed = ?'
     }
     
     stmtStr = stmtStrBase
@@ -298,6 +348,7 @@ def getListingsStmtStr(searchDict):
     stmtStr += ' AND ' + keyStmtDict['coursenum']
     stmtStr += ' AND ' + keyStmtDict['coursetitle']
     stmtStr += ' AND ' + keyStmtDict['bookname']
+    stmtStr += ' AND ' + keyStmtDict['claimed']
 
     stmtStrEnd = stmtStrEsc + stmtStrEnd
 
@@ -340,6 +391,9 @@ def createValList(searchDict):
     literalVal = re.sub(r'_', r'\\_', literalVal)
     valList.append('%' + literalVal + '%')
 
+    # adding the claimed stipulation (claimed must be '0' to be shown on mainpage)
+    valList.append('0')
+
     # for key in searchDict:
     #     # re.sub replaces all occurances of % and _ with \% and \_ respectively
     #     # our SELECT statement later uses ESCAPE '\' which takes any character
@@ -351,7 +405,7 @@ def createValList(searchDict):
     return valList
 
 def getdetailsStmtStr():
-    return 'SELECT name, email, bookname, dept, coursenum, coursetitle, condition, price, negotiable ' + \
+    return 'SELECT name, email, bookname, dept, coursenum, coursetitle, condition, price, negotiable, claimed ' + \
         'FROM listings ' + \
         'WHERE listingid = ?'
 
@@ -370,7 +424,7 @@ def newListingID(cursor):
     
 
 def createListingStmtStr():
-    return 'INSERT INTO listings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    return 'INSERT INTO listings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
 
 # returns the course title when given dept and coursenum
 def getCourseTitle(dept, coursenum):
@@ -418,42 +472,25 @@ def getCrsTitleJSON(dept, coursenum):
         raise Exception('This course was not found. Please try a different Department and Course Number.')
 
 def editListingStmtStr():
-
-    # stmtStrBase = 'UPDATE listings SET '
-
-    # # specifies sort order - eventually have user select the 'sort by' method and adjust this accordingly
-    # stmtStrEnd = 'WHERE listingid = ?'
-
-    # # for each valid key (ex. '-dept'), the value is the string that will be appended to stmtStr (ex. ' AND dept = \'COS\'')
-    # # using 'LIKE' will take care of caps/lower issue. 
-    # keyStmtDict = {
-    #     'name'       : 'name=? ',
-    #     'email'      : 'email=? ',
-    #     'bookname'   : 'bookname=? ',
-    #     'dept'       : 'dept=?',
-    #     'coursenum'  : 'coursenum=? ',
-    #     'condition'  : 'condition=? ',
-    #     'price'      : 'price=? ',
-    #     'negotiable' : 'negotiable=? '
-    # }
-
-    # stmtStr = stmtStrBase
-
-    # # adding key/value conditions to stmtStr
-    # for index, key in enumerate(fieldDict):
-    #     if index == 0: 
-    #         stmtStr += keyStmtDict[key]
-    #     else:
-    #         stmtStr += ', ' + keyStmtDict[key]
-
-    # stmtStr += stmtStrEnd
-
     stmtStr = 'UPDATE listings SET sellerid=?, name=?, email=?, bookname=?, dept=?, coursenum=?, condition=?, price=?, negotiable=?, coursetitle=? WHERE listingid=?'
-
     return stmtStr
 
 def deleteListingStmtStr():
     return 'DELETE FROM listings WHERE listingid = ?'
+
+def makeOfferStmtStr(listingid, offererid, cursor):
+    # checking to see if the offerer has already made an offer for this listing. 
+    # if so, then we want to update that row in offers table. Otherwise create new row
+    tmpStr = 'SELECT * FROM offers WHERE listingid LIKE ? AND offererid LIKE ?'
+    cursor.execute(tmpStr, [listingid, offererid])
+    offerAlreadyExists = (cursor.fetchone() is not None)
+    
+    if offerAlreadyExists:
+        stmtStr = 'UPDATE offers SET offer=? WHERE listingid=? AND offererid=?'
+    else:
+        stmtStr = 'INSERT INTO offers (offer, listingid, offererid) VALUES (?,?,?)'
+
+    return stmtStr 
 
 
     
