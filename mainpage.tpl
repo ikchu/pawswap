@@ -139,7 +139,7 @@
                 <th>Department</th>
                 <th>Course Number</th>
                 <th>Course Name</th>
-                <th>Price $</th>
+                <th>Price</th>
             </tr>
              % if len(listings) == 0:
 <!-- do something here? -->
@@ -151,7 +151,7 @@
                         <td>{{row[2]}}</td>
                         <td>{{row[3]}}</td>
                         <td>{{row[4]}}</td>
-                        <td>{{row[5]}}</td>
+                        <td>$ {{row[5]}}</td>
                     </tr>
             
              %    end

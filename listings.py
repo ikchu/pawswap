@@ -177,7 +177,11 @@ def deleteListing(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = deleteListingStmtStr()
+    stmtStr = 'DELETE FROM listings WHERE listingid = ?'
+    cursor.execute(stmtStr, [listingid])
+    connection.commit()
+
+    stmtStr = 'DELETE FROM offers WHERE listingid = ?'
     cursor.execute(stmtStr, [listingid])
     connection.commit()
 
@@ -221,13 +225,15 @@ def claimListing(listingid, claimerid, price):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr1 = makeOfferStmtStr(listingid, claimerid, cursor)
-    # be careful to pass fields in this order when executing
-    cursor.execute(stmtStr1, [price, listingid, claimerid])
+    stmtStr = makeOfferStmtStr(listingid, claimerid, cursor)
+    cursor.execute(stmtStr, [price, 'Claimed', listingid, claimerid])
 
     # update table 1 (listings) so that claimed col is '1'
-    stmtStr3 = 'UPDATE listings SET claimed=1 WHERE listingid=?'
-    cursor.execute(stmtStr3, [listingid])
+    stmtStr = 'UPDATE listings SET claimed=1 WHERE listingid=?'
+    cursor.execute(stmtStr, [listingid])
+
+    # maybe here I should also have it change any offer statuses on this listing to be something like 'This listing has been claimed'
+    # if I do that, make sure that unclaimListing reverts the offer statuses to 'Pending'
 
     connection.commit()
 
@@ -243,17 +249,13 @@ def unclaimListing(listingid, claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr1 = 'DELETE FROM offers WHERE listingid=? AND offererid=?'
+    stmtStr = 'DELETE FROM offers WHERE listingid=? AND offererid=?'
     # be careful to pass fields in this order when executing
-    cursor.execute(stmtStr1, [listingid, claimerid])
-
-    print stmtStr1
+    cursor.execute(stmtStr, [listingid, claimerid])
 
     # update table 1 (listings) so that claimed col is '1'
-    stmtStr2 = 'UPDATE listings SET claimed=0 WHERE listingid=?'
-    cursor.execute(stmtStr2, [listingid])
-
-    print stmtStr2
+    stmtStr = 'UPDATE listings SET claimed=0 WHERE listingid=?'
+    cursor.execute(stmtStr, [listingid])
 
     connection.commit()
 
@@ -261,7 +263,6 @@ def unclaimListing(listingid, claimerid):
     connection.close()
 
 def makeOffer(listingid, offererid, offerprice):
-    print 'listings.py > makeOffer called'
     DATABASE_NAME = 'listings.sqlite'
 
     if not path.isfile(DATABASE_NAME):
@@ -271,9 +272,8 @@ def makeOffer(listingid, offererid, offerprice):
     cursor = connection.cursor()
 
     stmtStr = makeOfferStmtStr(listingid, offererid, cursor)
-    print 'stmtStr                !!!!!!!!!!!!', stmtStr
-    cursor.execute(stmtStr, [offerprice, listingid, offererid])
-    print offerprice, listingid, offererid
+    cursor.execute(stmtStr, [offerprice, 'Pending', listingid, offererid])
+
     connection.commit()
 
     #-----------------------------------------------------------------
@@ -293,8 +293,8 @@ def getMyClaims(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND claimed = ?'
-    cursor.execute(stmtStr, [claimerid, '1'])
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND status = ?'
+    cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
     row = cursor.fetchone()
     while row is not None:
@@ -315,8 +315,8 @@ def getMyOffers(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND claimed = ?'
-    cursor.execute(stmtStr, [claimerid, '0'])
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer, status FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND status != ?'
+    cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
     row = cursor.fetchone()
     while row is not None:
@@ -328,7 +328,8 @@ def getMyOffers(claimerid):
     
     return dataList
 
-def getOffersToMe(claimerid, listingid):
+# returns offers on the listing with listingid
+def getOffersToMe(listingid):
     dataList = []
     DATABASE_NAME = 'listings.sqlite'
 
@@ -338,7 +339,7 @@ def getOffersToMe(claimerid, listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    stmtStr = 'SELECT offererid, offer, status FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
     cursor.execute(stmtStr, [listingid, '0'])
 
     row = cursor.fetchone()
@@ -353,7 +354,9 @@ def getOffersToMe(claimerid, listingid):
     
     return dataList
     
-def getClaimsToMe(claimerid, listingid):
+# gets claims on a Listing at listingid
+# should only ever return one claim, since we only allow one claim per listing
+def getClaimsToMe(listingid):
     dataList = []
     DATABASE_NAME = 'listings.sqlite'
 
@@ -363,8 +366,8 @@ def getClaimsToMe(claimerid, listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
-    cursor.execute(stmtStr, [listingid, '1'])
+    stmtStr = 'SELECT offererid, offer, status FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND status = ?'
+    cursor.execute(stmtStr, [listingid, 'Claimed'])
 
     row = cursor.fetchone()
     while row is not None:
@@ -377,6 +380,55 @@ def getClaimsToMe(claimerid, listingid):
     connection.close()
     
     return dataList
+
+def acceptOffer(listingid, offererid):
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'UPDATE offers SET status=? WHERE listingid=? AND offererid=?'
+    cursor.execute(stmtStr, ['Accepted',listingid,offererid])
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+def unacceptOffer(listingid, offererid):
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'UPDATE offers SET status=? WHERE listingid=? AND offererid=?'
+    cursor.execute(stmtStr, ['Pending',listingid,offererid])
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+def rejectOffer(listingid, offererid):
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'UPDATE offers SET status=? WHERE listingid=? AND offererid=?'
+    cursor.execute(stmtStr, ['Rejected',listingid,offererid])
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
 #------------------------------------------------------------------------------
 # 'Private' Helper Functions
 #
@@ -387,7 +439,6 @@ def getClaimsToMe(claimerid, listingid):
 #   - createListingStmtStr()
 #   - getCourseTitle(dept, coursenum)
 #   - editListingStmtStr()
-#   - deleteListingStmtStr()
 #------------------------------------------------------------------------------
 
 def getListingsStmtStr(searchDict):
@@ -545,9 +596,6 @@ def editListingStmtStr():
     stmtStr = 'UPDATE listings SET sellerid=?, name=?, email=?, bookname=?, dept=?, coursenum=?, condition=?, price=?, negotiable=?, coursetitle=? WHERE listingid=?'
     return stmtStr
 
-def deleteListingStmtStr():
-    return 'DELETE FROM listings WHERE listingid = ?'
-
 def makeOfferStmtStr(listingid, offererid, cursor):
     # checking to see if the offerer has already made an offer for this listing. 
     # if so, then we want to update that row in offers table. Otherwise create new row
@@ -556,9 +604,9 @@ def makeOfferStmtStr(listingid, offererid, cursor):
     offerAlreadyExists = (cursor.fetchone() is not None)
     
     if offerAlreadyExists:
-        stmtStr = 'UPDATE offers SET offer=? WHERE listingid=? AND offererid=?'
+        stmtStr = 'UPDATE offers SET offer=?, status=? WHERE listingid=? AND offererid=?'
     else:
-        stmtStr = 'INSERT INTO offers (offer, listingid, offererid) VALUES (?,?,?)'
+        stmtStr = 'INSERT INTO offers (offer, status, listingid, offererid) VALUES (?,?,?,?)'
 
     return stmtStr 
 

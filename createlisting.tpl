@@ -94,16 +94,16 @@
                     <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" value="{{details[3]}}" required> 
                     <hr>
          
-                    <input type="text" class="input form-control no-border" placeholder="Department" name="dept" value="{{details[4]}}" required> 
+                    <input type="text" class="input form-control no-border" placeholder="Department (ex. COS)" name="dept" value="{{details[4]}}" required> 
                     <hr>
              
-                    <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" value="{{details[5]}}" required>
+                    <input type="text" class="input form-control no-border" placeholder="Course Number (ex. 126)" name="coursenum" value="{{details[5]}}" required>
                     <hr> <!-- ?? We want this to be not text input -->
                 
                     <input type="text" class="input form-control no-border" placeholder="Condition" name="condition" value="{{details[6]}}" required> 
                     <hr>
              
-                    <input type="text" class="input form-control no-border" placeholder="Price" name="price" value="{{details[7]}}" required>
+                    <input type="text" class="input form-control no-border" placeholder="Price (ex. 100)" name="price" value="{{details[7]}}" required>
                     <hr>
 
                     <div class= "nego"><!-- ?? We want this to be not text input -->

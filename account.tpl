@@ -64,7 +64,7 @@
 
     <div class="w3-container w3-padding-16">
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          My Listings
+          Books I'm Selling
        </nav>
         <table class="table table-hover table-striped">
             <tr>
@@ -72,12 +72,13 @@
                 <th>Book Name</th>
                 <th>Department</th>
                 <th>Course Number</th>
-                <th>Course Name</th>
-                <th>Price $</th>
+                <th>Course Title</th>
+                <th>Listed Price</th>
             </tr>
             % if len(listings) == 0:
-              <!-- do something here? -->
-              <div align="center">You have no current listings.</div>
+              <tr>
+                <td colspan="5">You are not selling any books</td>
+              </tr>
             % else:
               % for row in listings:
                 <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
@@ -85,36 +86,63 @@
                   <td>{{row[2]}}</td>
                   <td>{{row[3]}}</td>
                   <td>{{row[4]}}</td>
-                  <td>{{row[5]}}</td>
+                  <td>${{row[5]}}</td>
                 </tr>
 
-                % if (claimOrOff[row[0]] == []):
+                <!-- If there are no claims or offers on this listing -->
+                % if (claimsAndOffs[row[0]] == []):
                     <tr>
-                      <td>No current offers or claims.</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td colspan="2">No current offers or claims.</td>
                     </tr>
+                <!-- If there are claims or offers on the listing -->
                 % else:
-                
-                    % for claimOff in claimOrOff[row[0]]:
+                  <!-- For each claim and/or offer -->
+                  % for claimOff in claimsAndOffs[row[0]]:
                     <tr>
                       <td></td>
                       <td></td>
                       <td></td>
-                      % if claimOff[2] == "Offer":
-                          <td colspan="1"><strong>{{claimOff[0]}} made an offer of ${{claimOff[1]}}.</strong></td>
-                      % else:
-                          <td colspan="1"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
+                      % if claimOff[3] == "Offer":
+                        <!-- if this offer has not been accepted --> 
+                        % if claimOff[2] == "Pending":
+                          <td><strong>{{claimOff[0]}} made an offer of ${{claimOff[1]}}.</strong></td>
+                          <td>
+                            <form method="get" action="/acceptoffer">
+                              <input type="hidden" name="listingid" value={{row[0]}} />
+                              <input type="hidden" name="offererid" value={{claimOff[0]}} />
+                              <button class = "btn btn-default" type="submit"><strong>Accept Offer</strong></button>
+                            </form>
+                            <form method="get" action="/rejectoffer">
+                              <input type="hidden" name="listingid" value={{row[0]}} />
+                              <input type="hidden" name="offererid" value={{claimOff[0]}} />
+                              <button class = "btn btn-default" type="submit"><strong>Reject Offer</strong></button>
+                            </form>
                           </td>
-                      %end
-                      <td>
-                        <form method="get" action="/acceptoffer">
-                            <input type="hidden" name="listingid" value={{listings[0]}} />
-                            <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                            <button class = "btn btn-default" type="submit"><strong>Accept Offer</strong></button>
-                        </form>
-                      </td>
+                        % end
+                        <!-- if this offer has been accepted --> 
+                        % if claimOff[2] == "Accepted":
+                          <td><strong>You have accepted {{claimOff[0]}}'s offer of ${{claimOff[1]}}.</strong></td>
+                          <td>
+                            <form method="get" action="/unacceptoffer">
+                              <input type="hidden" name="listingid" value={{row[0]}} />
+                              <input type="hidden" name="offererid" value={{claimOff[0]}} />
+                              <button class = "btn btn-default" type="submit"><strong>Un-Accept Offer</strong></button>
+                            </form>
+                          </td>
+                        % end
+                        % if claimOff[2] == "Rejected":
+                          <td colspan="2"><strong>You have rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}}.</strong></td>
+                        % end
+                      <!-- If it's a claim -->
+                      % else:
+                        <td colspan="2"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
+                        </td>
+                      % end
                     </tr>
-                    % end
-
+                  % end
                 % end
               % end
             % end
@@ -122,7 +150,7 @@
           </div>
         <div class="w3-container w3-padding-16">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Claims I've Made
+          Books I've Claimed
        </nav>
         <table class="table table-hover table-striped">
             <tr>
@@ -130,12 +158,14 @@
                 <th>Book Name</th>
                 <th>Department</th>
                 <th>Course Number</th>
-                <th>Course Name</th>
-                <th>Listed Price $</th>
-                <th>Claimed Price $</th>
+                <th>Course Title</th>
+                <th>Listed Price</th>
+                <th>Claimed Price</th>
             </tr>
             % if len(myClaims) == 0:
-            <div align="center">You have no current claims.</div>
+              <tr>
+                <td colspan="6">You have not claimed any books</td>
+              </tr>
             % else:
               % for row in myClaims:
                   <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
@@ -143,8 +173,8 @@
                       <td>{{row[2]}}</td>
                       <td>{{row[3]}}</td>
                       <td>{{row[4]}}</td>
-                      <td>{{row[5]}}</td>
-                      <td>{{row[6]}}</td>
+                      <td>${{row[5]}}</td>
+                      <td>${{row[6]}}</td>
                   </tr>
                 % end
               %end
@@ -160,24 +190,55 @@
                 <th>Book Name</th>
                 <th>Department</th>
                 <th>Course Number</th>
-                <th>Course Name</th>
-                <th>Listed Price $</th>
-                <th>Your Offer $</th>
+                <th>Course Title</th>
+                <th>Listed Price</th>
+                <th>Your Offer</th>
+                <th>Status</th>
             </tr>
             % if len(myOffers) == 0:
-            <div align="center">You have no current offers.</div>
+              <tr>
+                <td colspan="7">You have not made any offers</td>
+              </tr>
             % else:
               % for row in myOffers:
-                  <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
-                      <td>{{row[1]}}</td>
-                      <td>{{row[2]}}</td>
-                      <td>{{row[3]}}</td>
-                      <td>{{row[4]}}</td>
-                      <td>{{row[5]}}</td>
-                      <td>{{row[6]}}</td>
-                  </tr>
+                <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
+                  <td>{{row[1]}}</td>
+                  <td>{{row[2]}}</td>
+                  <td>{{row[3]}}</td>
+                  <td>{{row[4]}}</td>
+                  <td>${{row[5]}}</td>
+                  <td>${{row[6]}}</td>
+                  <td>{{row[7]}}</td>
+                </tr>
+                <!-- If this offer was accepted, display an option to claim at the accepted offer price -->
+                % if row[7] == "Accepted":
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td colspan="3"><strong>The seller has accepted your offer</strong></td>
+                  <td>
+                    <form method="get" action="/claimlisting">
+                      <input type="hidden" name="listingid" value={{row[0]}} />
+                      <input type="hidden" name="price" value={{row[6]}} />
+                      <button class = "btn btn-default" type="submit">Claim for ${{row[6]}}</button>
+                    </form>
+                  </td>
                 % end
-              %end
+                % if row[7] == "Rejected":
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td colspan="2"><strong>The seller has rejected your offer. Would you like to make another offer?</strong></td>
+                  <td colspan="2">
+                    <form method="get" action="/makeoffer">
+                      <input type="hidden" name="listingid" value={{row[0]}} />
+                      <button class = "btn btn-default" type="submit">Make Offer</button>
+                      &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
+                    </form>
+                  </td>
+                % end
+              % end
+            %end
           </table>
         </div>
       <hr>
