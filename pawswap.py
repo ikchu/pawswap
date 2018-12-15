@@ -47,6 +47,20 @@ def mainpage():
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
 
+    # Temporary code: this can be removed if we can removed the 'value={{dept}}', etc. from
+    # the mainpage.tpl. And I think we can.
+
+    # 
+    return template('mainpage.tpl')
+
+    
+@route('/searchresults')
+def searchresults():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+
     errorMsg = request.query.get('errorMsg')
     if errorMsg is None:
         errorMsg = ''   
@@ -83,9 +97,40 @@ def mainpage():
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
 
+    # COPIED FROM ASS 4 (working with AJAX) - adapted to return what we want
+    ret = '''<tr>
+                <th>Book Name</th>
+                <th>Department</th>
+                <th>Course Number</th>
+                <th>Course Title</th>
+                <th>Price</th>
+            </tr>'''
+
+    if (len(listings) != 0):
+        # # now return all of the listings
+        for row in listings:
+            retAdd = '<tr class = "clickable-row">' \
+            '<td><a href="/listingsdetails?listingid=' + str(row[0]) + '">' + str(row[1]) + ',</a></td>' \
+            '<td>' + str(row[2]) + '</td>' \
+            '<td>' + str(row[3]) + '</td>' \
+            '<td>' + str(row[4]) + '</td>' \
+            '<td>$ ' + str(row[5]) + '</td>' \
+            '</tr>'
+            ret += retAdd
+        return ret
+    # otherwise there are no current listings
+    else:
+        retAdd = '''<tr>
+                        <th></th>
+                        <th></th>
+                        <th>There are no current listings.</th>
+                        <th></th>
+                        <th></th>
+                    </tr>'''
+        ret += retAdd
+        return ret
     # first element of listings is the id
-    return template('mainpage.tpl', templateInfo)
-    
+    # return template('mainpage.tpl', templateInfo)
 @route('/listingsdetails')
 def listingsdetails():
     session = request.environ.get('beaker.session')
@@ -93,7 +138,7 @@ def listingsdetails():
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
     listingid = request.query.get('listingid')
-
+    print 'Listings Details being called!'
     try: 
         details = getDetails(listingid)
     except Exception, e:
@@ -107,6 +152,7 @@ def listingsdetails():
     }
 
     return template('listingsdetails.tpl', templateInfo)
+
 # same as listing deets except it returns accountlistingdetails.tpl which
 # has delete functionality; regular listingdetails does not
 @route('/accountlistingsdetails')

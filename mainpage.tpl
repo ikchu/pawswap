@@ -102,7 +102,7 @@
     <head>
       <title>PawSwap</title>
    </head>
-   <body>
+   <body onLoad="getResults(); document.getElementById('dept').focus();">
     <!-- Pawswap nav bar to go home -->
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
@@ -111,59 +111,22 @@
     </nav>
 
     <div class="container">
-      <form action="/mainpage" method="get">
                       <br>
-                      <input type="text" class="input form-control no-border" placeholder="Department" name="dept" value={{dept}} >
+                      <input type="text" class="input form-control no-border" placeholder="Department" name="dept" oninput="getResults()" id='dept'>
                       <hr>
-                      <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" value={{coursenum}}>
+                      <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" oninput="getResults()" id='coursenum'>
                       <hr>
-                      <input type="text" class="input form-control no-border" placeholder="Course Title" name="coursetitle" value={{title}}>
+                      <input type="text" class="input form-control no-border" placeholder="Course Title" name="coursetitle" oninput="getResults()" id='coursetitle'>
                       <hr>
-                      <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" value={{bookname}}>
+                      <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" oninput="getResults()" id='bookname'>
                       <hr>
-                  </td>
-              </tr>
-          
-
-          </table>
-
-          <input class = "btn" type="submit" value="Search">
-        </form>
       <hr>
     </div>
       <!-- PUT RESULTS IN HERE -->
     <div class="container">
-        <table class="table table-hover table-striped">
-            <tr>
-                <th>Book Name</th>
-                <th>Department</th>
-                <th>Course Number</th>
-                <th>Course Name</th>
-                <th>Price</th>
-            </tr>
-             % if len(listings) == 0:
-<!-- do something here? -->
-            <tr>
-                <th></th>
-                <th></th>
-                <th>There are no current listings.</th>
-                <th></th>
-                <th></th>
-            </tr>
-             % else:
-             %    for row in listings:
-                    <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}&mpHotFix=True">
-                        <td>{{row[1]}}</td>
-                        <td>{{row[2]}}</td>
-                        <td>{{row[3]}}</td>
-                        <td>{{row[4]}}</td>
-                        <td>$ {{row[5]}}</td>
-                    </tr>
-            
-             %    end
-             % end
-       </table>
-     </div>
+        <table class="table table-hover table-striped" id="resultsTable">
+        </table>
+    </div>
 
        <!-- Copyright -->
        <footer class="footer">
@@ -174,7 +137,7 @@
        </footer>
     
     
-      <script>
+    <script>
         jQuery(document).ready(function($) {
             $(".clickable-row").click(function() {
             window.location = $(this).data("href");
@@ -186,8 +149,93 @@
           }
           document.querySelector('.Navbar__Link-toggle')
             .addEventListener('click', classToggle);
+    </script>
+
+    <script>
+        function createAjaxRequest()  // From Nixon book
+            {
+                let req;
+                        
+                try  // Some browser other than Internet Explorer
+                {
+                    req = new XMLHttpRequest();
+                }
+                    catch (e1) 
+                    {    
+                        try  // Internet Explorer 6+
+                        {
+                            req = new ActiveXObject("Msxml2.XMLHTTP");
+                        }
+                        catch (e2) 
+                        {  
+                            try  // Internet Explorer 5
+                            { 
+                                req = new ActiveXObject("Microsoft.XMLHTTP"); 
+                            }
+                            catch (e3)
+                            {  
+                                req = false;
+                            }
+                        }
+                    }
+                return req;
+            }
+
+            function processReadyStateChange()
+            {
+                const STATE_UNINITIALIZED = 0;
+                const STATE_LOADING       = 1;
+                const STATE_LOADED        = 2;
+                const STATE_INTERACTIVE   = 3;
+                const STATE_COMPLETED     = 4;
+            
+                if (this.readyState != STATE_COMPLETED)
+                { return; }
+                
+                if (this.status != 200)  // Request succeeded?
+                {  
+                alert("AJAX error: Request failed: " + this.statusText);
+                return;
+                }
+                
+                if (this.responseText == null)  // Data received?
+                {  
+                alert("AJAX error: No data received");
+                return;
+                }
+                console.log('called theresultsTable pawswap!');
+                var resultsListings = document.getElementById('resultsTable');
+                resultsListings.innerHTML = this.responseText;
+            }
+
+            var date = new Date();
+            var seed = date.getSeconds();
+            var request = null;
+            
+            function getResults()
+            {
+                console.log('getResults is being called');
+                var dept = document.getElementById('dept').value;
+                var coursenum = document.getElementById('coursenum').value;
+                var coursetitle = document.getElementById('coursetitle').value;
+                var bookname = document.getElementById('bookname').value;
+                dept = encodeURIComponent(dept);
+                coursenum = encodeURIComponent(coursenum);
+                coursetitle = encodeURIComponent(coursetitle);
+                bookname = encodeURIComponent(bookname);
+                var messageId = Math.floor(Math.random(seed) * 1000000) + 1;
+                var url = '/searchresults?dept=' + dept + '&coursenum=' + coursenum + '&coursetitle=' + coursetitle + '&bookname=' + bookname + '&messageId=' + messageId;
+                if (request != null)
+                    request.abort();
+    
+                request = createAjaxRequest();
+                if (request == null) return;
+                request.onreadystatechange = processReadyStateChange;
+                request.open("GET", url);
+                request.send(null);
+            }
+
       </script> 
 
    </body>
-
 </html>
