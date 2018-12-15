@@ -143,7 +143,13 @@
             </tr>
              % if len(listings) == 0:
 <!-- do something here? -->
-<div align="center">There are no current listings.>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>There are no current listings.</th>
+                <th></th>
+                <th></th>
+            </tr>
              % else:
              %    for row in listings:
                     <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}&mpHotFix=True">

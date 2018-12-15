@@ -216,6 +216,8 @@ def createlisting():
         email = ''
         emptyField = True
     dept = request.query.get('dept')
+    # make it uppercase automatically
+    dept = dept.upper()
     if ((dept is None) or (dept.strip() == '')):
         dept = ''
         emptyField = True
