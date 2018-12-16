@@ -110,7 +110,7 @@ def searchresults():
         # # now return all of the listings
         for row in listings:
             retAdd = '<tr class = "clickable-row">' \
-            '<td><a href="/listingsdetails?listingid=' + str(row[0]) + '">' + str(row[1]) + ',</a></td>' \
+            '<td><a href="/listingsdetails?listingid=' + str(row[0]) + '">' + str(row[1]) + '</a></td>' \
             '<td>' + str(row[2]) + '</td>' \
             '<td>' + str(row[3]) + '</td>' \
             '<td>' + str(row[4]) + '</td>' \
