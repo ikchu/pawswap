@@ -589,6 +589,22 @@ def getCrsTitleJSON(dept, coursenum):
         title = (((((crsData['term'])[0])['subjects'])[0])['courses'][0])['title']
         return title
     except Exception:
+        # raise exception but try the next term as well
+        pass
+    try:
+        title = (((((crsData['term'])[1])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
+        pass
+    try:
+        title = (((((crsData['term'])[2])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
+        pass
+    try:
+        title = (((((crsData['term'])[3])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
         # this will mean that the title was not found
         raise Exception('This course was not found. Please try a different Department and Course Number.')
 
