@@ -14,7 +14,7 @@ from bottle.ext import beaker
 from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
 from listings import getListings, getDetails, createListing, editListing, deleteListing, unclaimListing
-from listings import getMyListings, claimListing, getMyClaims, makeOffer, getMyOffers, getClaimsToMe, getOffersToMe
+from listings import getMyListings, claimListing, getMyClaims, makeOffer, makeCounter, getMyOffers, getClaimsToMe, getOffersToMe
 from listings import acceptOffer, unacceptOffer, rejectOffer
 TEMPLATE_PATH.insert(0, '')
 
@@ -138,7 +138,6 @@ def listingsdetails():
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
     listingid = request.query.get('listingid')
-    print 'Listings Details being called!'
     try: 
         details = getDetails(listingid)
     except Exception, e:
@@ -180,7 +179,6 @@ def accListDet():
 
 @route('/account')
 def account():
-    print 'pawswap.py > account'
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
@@ -206,8 +204,6 @@ def account():
 
             listingsClaimsAndOffs[listing[0]] = claimsAndOffers
 
-        print 'pawswap.py > account : listingsClaimsAndOffs dict =', listingsClaimsAndOffs
-
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
      
@@ -218,7 +214,6 @@ def account():
         'myOffers': offers,
         'claimsAndOffs': listingsClaimsAndOffs,
     }
-    print 'pawswap.py > account : account.tpl should be called now'
     return template('account.tpl', templateInfo)
 
 # This is the method that redirect the user to the creatlistings page
@@ -481,6 +476,8 @@ def claimlisting():
     details = getDetails(listingid)
     claimPrice = request.query.get('price')
 
+    print 'pawswap.py > claimlisting: listingid =', listingid, 'claimprice =', claimPrice
+
     try:
         claimListing(listingid, username, claimPrice)
     except Exception, e:
@@ -537,6 +534,46 @@ def makeoffer():
     try:
         makeOffer(listingid, username, offerprice)
         return template('afterOffer.tpl', templateInfo)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e })
+
+@route('/makecounteroffer')
+def makecounteroffer():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+    listingid = request.query.get('listingid')
+    details = getDetails(listingid)
+    offererid = request.query.get('offererid')
+    counterprice = request.query.get('counterprice')
+
+    try:
+        makeCounter(listingid, offererid, counterprice)
+        
+        # Code below identical to account(). It displays the account page
+        # I tried just calling redirect('/account') instead but it didn't seem to work
+        # -----------------------------------------------
+        listings = getMyListings(username)
+        claims = getMyClaims(username)
+        offers = getMyOffers(username)
+        listingsClaimsAndOffs = {}
+        for listing in listings:
+            listingid = listing[0]
+            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
+            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
+            claimsAndOffers = claimsToMe + offersToMe
+            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
+
+        templateInfo = {
+        'listings': listings,
+        'username': username,
+        'myClaims': claims,
+        'myOffers': offers,
+        'claimsAndOffs': listingsClaimsAndOffs,
+        }
+        return template('account.tpl', templateInfo)
+        # -----------------------------------------------
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
 

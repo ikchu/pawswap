@@ -122,14 +122,24 @@
                             <form method="get" action="/acceptoffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                              <button class = "btn btn-default" type="submit"><strong>Accept Offer</strong></button>
+                              <button class = "btn btn-default" type="submit">Accept Offer</button>
                             </form>
                             <form method="get" action="/rejectoffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                              <button class = "btn btn-default" type="submit"><strong>Reject Offer</strong></button>
+                              <button class = "btn btn-default" type="submit">Reject Offer</button>
+                            </form>
+                            <form method="get" action="/makecounteroffer">
+                              <input type="hidden" name="listingid" value={{row[0]}} />
+                              <input type="hidden" name="offererid" value={{claimOff[0]}} />
+                              <button class = "btn btn-default" type="submit">Make Counter Offer</button>
+                              &nbsp; $<input type="text" placeholder="Counter Offer" name="counterprice" required />
                             </form>
                           </td>
+                        % end
+                        % if claimOff[2] == "Countered":
+                          <td><strong>You rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}} and made a counter offer of (WRITE CODE HERE).</strong></td>
+                          <td></td>
                         % end
                         <!-- if this offer has been accepted --> 
                         % if claimOff[2] == "Accepted":
@@ -242,6 +252,26 @@
                     <form method="get" action="/makeoffer">
                       <input type="hidden" name="listingid" value={{row[0]}} />
                       <button class = "btn btn-default" type="submit">Make Offer</button>
+                      &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
+                    </form>
+                  </td>
+                % end
+                % if row[7] == "Countered":
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td colspan="2"><strong>The seller has made a counter offer of ${{row[8]}}.</strong></td>
+                  <td>
+                    <form method="get" action="/claimlisting">
+                      <input type="hidden" name="listingid" value={{row[0]}} />
+                      <input type="hidden" name="price" value={{row[8]}} />
+                      <button class = "btn btn-default" type="submit">Claim for ${{row[8]}}</button>
+                    </form>
+                  </td>
+                  <td>
+                    <form method="get" action="/makeoffer">
+                      <input type="hidden" name="listingid" value={{row[0]}} />
+                      <button class = "btn btn-default" type="submit">Make New Offer</button>
                       &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
                     </form>
                   </td>

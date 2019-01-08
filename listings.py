@@ -282,6 +282,23 @@ def makeOffer(listingid, offererid, offerprice):
     cursor.close()
     connection.close()
 
+def makeCounter(listingid, offererid, counter):
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = makeCounterStmtStr()
+    print 'listings.py > makeCounter: stmtStr =', stmtStr, 'Values = [ Countered', counter, 'Pending', listingid, offererid,']'
+    cursor.execute(stmtStr, ['Countered', counter, 'Pending', listingid, offererid])
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
 # this returns a list of all the claims associated with a netid
 def getMyClaims(claimerid):
     dataList = []
@@ -293,7 +310,7 @@ def getMyClaims(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND status = ?'
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND offerstatus = ?'
     cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -315,7 +332,7 @@ def getMyOffers(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer, status FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND status != ?'
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND offerstatus != ?'
     cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -339,7 +356,7 @@ def getOffersToMe(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer, status FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    stmtStr = 'SELECT offererid, offer, offerstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
     cursor.execute(stmtStr, [listingid, '0'])
 
     row = cursor.fetchone()
@@ -366,7 +383,7 @@ def getClaimsToMe(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer, status FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND status = ?'
+    stmtStr = 'SELECT offererid, offer, offerstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND offerstatus = ?'
     cursor.execute(stmtStr, [listingid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -390,7 +407,7 @@ def acceptOffer(listingid, offererid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE offers SET status=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=? WHERE listingid=? AND offererid=?'
     cursor.execute(stmtStr, ['Accepted',listingid,offererid])
     connection.commit()
 
@@ -406,7 +423,7 @@ def unacceptOffer(listingid, offererid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE offers SET status=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=? WHERE listingid=? AND offererid=?'
     cursor.execute(stmtStr, ['Pending',listingid,offererid])
     connection.commit()
 
@@ -422,7 +439,7 @@ def rejectOffer(listingid, offererid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE offers SET status=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=? WHERE listingid=? AND offererid=?'
     cursor.execute(stmtStr, ['Rejected',listingid,offererid])
     connection.commit()
 
@@ -589,22 +606,6 @@ def getCrsTitleJSON(dept, coursenum):
         title = (((((crsData['term'])[0])['subjects'])[0])['courses'][0])['title']
         return title
     except Exception:
-        # raise exception but try the next term as well
-        pass
-    try:
-        title = (((((crsData['term'])[1])['subjects'])[0])['courses'][0])['title']
-        return title
-    except Exception:
-        pass
-    try:
-        title = (((((crsData['term'])[2])['subjects'])[0])['courses'][0])['title']
-        return title
-    except Exception:
-        pass
-    try:
-        title = (((((crsData['term'])[3])['subjects'])[0])['courses'][0])['title']
-        return title
-    except Exception:
         # this will mean that the title was not found
         raise Exception('This course was not found. Please try a different Department and Course Number.')
 
@@ -615,16 +616,25 @@ def editListingStmtStr():
 def makeOfferStmtStr(listingid, offererid, cursor):
     # checking to see if the offerer has already made an offer for this listing. 
     # if so, then we want to update that row in offers table. Otherwise create new row
-    tmpStr = 'SELECT * FROM offers WHERE listingid LIKE ? AND offererid LIKE ?'
-    cursor.execute(tmpStr, [listingid, offererid])
+    precheckStr = 'SELECT * FROM offers WHERE listingid LIKE ? AND offererid LIKE ?'
+    cursor.execute(precheckStr, [listingid, offererid])
     offerAlreadyExists = (cursor.fetchone() is not None)
     
     if offerAlreadyExists:
-        stmtStr = 'UPDATE offers SET offer=?, status=? WHERE listingid=? AND offererid=?'
+        stmtStr = 'UPDATE offers SET offer=?, offerstatus=? WHERE listingid=? AND offererid=?'
     else:
-        stmtStr = 'INSERT INTO offers (offer, status, listingid, offererid) VALUES (?,?,?,?)'
+        # fields seem out of order. but leave it this way so that order is same for INSERT vs. UPDATE stmts
+        stmtStr = 'INSERT INTO offers (offer, offerstatus, listingid, offererid) VALUES (?,?,?,?)'
 
     return stmtStr 
+
+def makeCounterStmtStr():
+    # when this function is called, it is assumed that it is being called on a 
+    # specfiic offer that already exists in the table
+
+    stmtStr = 'UPDATE offers SET offerstatus=?, counter=?, counterstatus=? WHERE listingid=? AND offererid=?'
+    return stmtStr
+
 
 
     
