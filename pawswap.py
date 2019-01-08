@@ -214,6 +214,7 @@ def account():
         'myOffers': offers,
         'claimsAndOffs': listingsClaimsAndOffs,
     }
+    print 'pawswap.py > account : claimsAndOffs =', listingsClaimsAndOffs
     return template('account.tpl', templateInfo)
 
 # This is the method that redirect the user to the creatlistings page

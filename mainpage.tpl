@@ -120,16 +120,15 @@
     </nav>
 
     <div class="container">
-                      <br>
-                      <input type="text" class="input form-control no-border" placeholder="Department" name="dept" oninput="getResults()" id='dept'>
-                      <hr>
-                      <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" oninput="getResults()" id='coursenum'>
-                      <hr>
-                      <input type="text" class="input form-control no-border" placeholder="Course Title" name="coursetitle" oninput="getResults()" id='coursetitle'>
-                      <hr>
-                      <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" oninput="getResults()" id='bookname'>
-                      <hr>
-      <hr>
+        <br>
+        <input type="text" class="input form-control no-border" placeholder="Department" name="dept" oninput="getResults()" id='dept'>
+        <hr>
+        <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" oninput="getResults()" id='coursenum'>
+        <hr>
+        <input type="text" class="input form-control no-border" placeholder="Course Title" name="coursetitle" oninput="getResults()" id='coursetitle'>
+        <hr>
+        <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" oninput="getResults()" id='bookname'>
+        <hr>
     </div>
       <!-- PUT RESULTS IN HERE -->
     <div class="container">

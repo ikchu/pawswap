@@ -11,6 +11,7 @@ from sys import argv, stderr, exit
 from sqlite3 import connect
 import requests
 import random
+import datetime
 
 #-----------------------------------------------------------------------
 # Search Fields Available to User: 
@@ -120,7 +121,11 @@ def createListing(fieldList):
 
     # make sure that listings are initially 'unclaimed'
     claimedStatus = '0'
-    newList = [listingid, listingFields[0], listingFields[1], listingFields[2], listingFields[3], listingFields[4], listingFields[5], coursetitle, listingFields[6], listingFields[7], listingFields[8], claimedStatus]
+
+    # include date and time of posting
+    dt = str(datetime.datetime.utcnow())
+
+    newList = [listingid, listingFields[0], listingFields[1], listingFields[2], listingFields[3], listingFields[4], listingFields[5], coursetitle, listingFields[6], listingFields[7], listingFields[8], claimedStatus, dt]
     cursor.execute(stmtStr, newList)
     connection.commit()
 
@@ -356,7 +361,7 @@ def getOffersToMe(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer, offerstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
     cursor.execute(stmtStr, [listingid, '0'])
 
     row = cursor.fetchone()
@@ -383,7 +388,7 @@ def getClaimsToMe(listingid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer, offerstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND offerstatus = ?'
+    stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND offerstatus = ?'
     cursor.execute(stmtStr, [listingid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -462,8 +467,7 @@ def getListingsStmtStr(searchDict):
     # baseline string with no key/value pairs (this will get all listings)
     # this only needs to get the bare minimum data that will show up on the listings results page
     # I figured that on the thumbnails we should need only these 5 fields?
-    stmtStrBase = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price ' + \
-        'FROM listings'
+    stmtStrBase = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price, dt FROM listings'
 
     # specifies sort order - eventually have user select the 'sort by' method and adjust this accordingly
     stmtStrEnd = ' ORDER BY dept ASC, coursenum ASC, bookname ASC'
@@ -562,7 +566,7 @@ def newListingID(cursor):
     
 
 def createListingStmtStr():
-    return 'INSERT INTO listings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    return 'INSERT INTO listings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
 
 # returns the course title when given dept and coursenum
 def getCourseTitle(dept, coursenum):

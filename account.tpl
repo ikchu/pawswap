@@ -114,7 +114,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      % if claimOff[3] == "Offer":
+                      % if claimOff[5] == "Offer":
                         <!-- if this offer has not been accepted --> 
                         % if claimOff[2] == "Pending":
                           <td><strong>{{claimOff[0]}} made an offer of ${{claimOff[1]}}.</strong></td>
@@ -138,7 +138,7 @@
                           </td>
                         % end
                         % if claimOff[2] == "Countered":
-                          <td><strong>You rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}} and made a counter offer of (WRITE CODE HERE).</strong></td>
+                          <td><strong>You rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}} and made a counter offer of ${{claimOff[3]}}.</strong></td>
                           <td></td>
                         % end
                         <!-- if this offer has been accepted --> 
