@@ -61,6 +61,7 @@ def getListings(userSearchDict):
     cursor = connection.cursor()
 
     stmtStr = getListingsStmtStr(userSearchDict)
+
     searchFields = createValList(userSearchDict)
 
     cursor.execute(stmtStr, searchFields)
@@ -470,7 +471,7 @@ def getListingsStmtStr(searchDict):
     stmtStrBase = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price, dt FROM listings'
 
     # specifies sort order - eventually have user select the 'sort by' method and adjust this accordingly
-    stmtStrEnd = ' ORDER BY dept ASC, coursenum ASC, bookname ASC'
+    stmtStrEnd = ' ORDER BY dt DESC, dept ASC, coursenum ASC, bookname ASC'
 
     stmtStrEsc = ' ESCAPE \'\\\''
 
@@ -492,7 +493,7 @@ def getListingsStmtStr(searchDict):
     stmtStr += ' AND ' + keyStmtDict['bookname']
     stmtStr += ' AND ' + keyStmtDict['claimed']
 
-    stmtStrEnd = stmtStrEsc + stmtStrEnd
+    stmtStr += stmtStrEnd
 
     # hasKeyValue = False
     # adding key/value conditions to stmtStr
