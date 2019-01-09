@@ -124,7 +124,7 @@
 
               <div class="thisfont form-row ">
                 <label for = "thistext"> <strong> Textbook Name: </strong> </div>
-                    <div class = "col-md-6"> <input id = "thistext" type="text" class="input form-control no-border thisfont " name="textbook" value="{{details[3]}}" required> 
+                    <div class = "col-md-6"> <input id = "thistext" type="text" class="input form-control no-border thisfont " name="bookname" value="{{details[3]}}" required> 
               </div>
  
               <div class="thisfont form-row ">

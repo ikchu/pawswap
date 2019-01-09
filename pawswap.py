@@ -269,36 +269,15 @@ def createlisting():
     # sellerid is the person's username as collected by CAS
 
     name = request.query.get('name')
-    if ((name is None) or (name.strip() == '')):
-        name = ''
-        emptyField = True
     email = request.query.get('email')
-    if ((email is None) or (email.strip() == '')):
-        email = ''
-        emptyField = True
     dept = request.query.get('dept')
     # make it uppercase automatically
     dept = dept.upper()
-    if ((dept is None) or (dept.strip() == '')):
-        dept = ''
-        emptyField = True
     coursenum = request.query.get('coursenum')
-    if (coursenum is None) or (coursenum.strip() == ''):
-        coursenum = ''
-        emptyField = True
     bookname = request.query.get('bookname')
-    if (bookname is None) or (bookname.strip() == ''):
-        bookname = ''
-        emptyField = True
     condition = request.query.get('condition')
-    if ((condition is None) or (condition.strip() == '')):
-        condition = ''
-        emptyField = True
     price = int(request.query.get('price'))
     negotiable = request.query.get('negotiable')
-    if (negotiable is None):
-        negotiable = True
-
 
     detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
@@ -384,37 +363,20 @@ def editlisting():
     # sellerid is the person's netid but this will be retrieved from username
 
     name = request.query.get('name')
-    if ((name is None) or (name.strip() == '')):
-        name = ''
-        emptyField = True
     email = request.query.get('email')
-    if ((email is None) or (email.strip() == '')):
-        email = ''
-        emptyField = True
     dept = request.query.get('dept')
-    if ((dept is None) or (dept.strip() == '')):
-        dept = ''
-        emptyField = True
+    # make it uppercase automatically
+    dept = dept.upper()
     coursenum = request.query.get('coursenum')
-    if (coursenum is None) or (coursenum.strip() == ''):
-        coursenum = ''
-        emptyField = True
     bookname = request.query.get('bookname')
-    if (bookname is None) or (bookname.strip() == ''):
-        bookname = ''
-        emptyField = True
     condition = request.query.get('condition')
-    if ((condition is None) or (condition.strip() == '')):
-        condition = ''
-        emptyField = True
     price = int(request.query.get('price'))
     negotiable = request.query.get('negotiable')
-    if (negotiable is None) or (negotiable.strip() == ''):
-        negotiable = ''
-        emptyField = True
 
     detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template
+
+    print 'pawswap.py > editlisting : edit fields',detailsList
 
     templateInfo = {
         'listingid': listingid,
