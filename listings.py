@@ -562,7 +562,13 @@ def newListingID(cursor):
     # listingid = str(row[0] + 1)
     # return listingid
 
-    return random.randint(1, 10000)
+    while True:
+        randomId = random.randint(1, 1000000)
+        stmtStr = 'SELECT listingid FROM listings WHERE listingid = ?'
+        cursor.execute(stmtStr, [randomId])
+        row = cursor.fetchone()
+        if row is None:
+            return randomId
     
 
 def createListingStmtStr():
