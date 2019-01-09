@@ -299,7 +299,7 @@ def createlisting():
         return template('createlisting.tpl', templateInfo)
     
     try:
-        # modifies detailsList to include listingid and coursetitle
+        # returns detailsList that now includes listingid and coursetitle
         detailsList = createListing(detailsList)
     except Exception, e:
         templateInfo['errorBool'] = True

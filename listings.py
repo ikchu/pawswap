@@ -605,12 +605,29 @@ def getCrsTitleJSON(dept, coursenum):
     url = 'http://etcweb.princeton.edu/webfeeds/courseofferings/?term=all&subject=' + dept + '&catnum=' + coursenum + '&fmt=json&brief=yes'
     resp = requests.get(url)
     crsData = resp.json()
+
     try:
-        # indexing into the JSON response which is a dictionary of lists (hence the weird code)
         title = (((((crsData['term'])[0])['subjects'])[0])['courses'][0])['title']
         return title
     except Exception:
-        # this will mean that the title was not found
+        pass
+    
+    try:
+        title = (((((crsData['term'])[1])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
+        pass
+
+    try:
+        title = (((((crsData['term'])[2])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
+        pass
+
+    try:
+        title = (((((crsData['term'])[3])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
         raise Exception('This course was not found. Please try a different Department and Course Number.')
 
 def editListingStmtStr():
