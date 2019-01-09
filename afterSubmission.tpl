@@ -21,6 +21,8 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
     <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
@@ -39,11 +41,13 @@
         background-color: #343a40;
         text-align: center;
         padding: 0px;
+        font-family: 'Avenir';
        }
        .title {
         color: black;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
       }
       .btn {
         background-color: #343a40;
@@ -54,12 +58,17 @@
        }
        .navbar{
         color: white;
+        font-family: 'Avenir';
+       }
+       .thisfont {
+       	font-family: 'Avenir';
        }
     </style>
    <body>
     <!-- Pawswap nav bar to go home -->
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
+      <a class="navbar-brand" href="/account">My Account</a>
     </nav>
     <br>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

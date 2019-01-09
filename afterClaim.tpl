@@ -27,11 +27,13 @@
    <style>
       h1{
           color: black;
+          font-family: 'Avenir';
       } 
       .title {
         color: black;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
       }
       .container{
         padding: 0;
@@ -41,10 +43,15 @@
         background-color: #343a40;
         text-align: center;
         padding: 0px;
+        font-family: 'Avenir';
        }
        .navbar {
         color: white;
         text-align: center;
+        font-family: 'Avenir';
+       }
+       .thisfont {
+       	font-family: 'Avenir';
        }
     </style>
 
@@ -69,7 +76,7 @@
           Claimed Listing
        </nav>
   
-      <div class="container">
+      <div class="container thisfont">
          <hr>
             <strong>*You've claimed this listing for ${{claimprice}}. This textbook has been added to your Claimed List*</strong>
             <p>Please contact the seller at <strong>{{details[1]}}</strong> to pay and retrieve your book.</p>
@@ -89,7 +96,7 @@
      <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>

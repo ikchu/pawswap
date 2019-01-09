@@ -280,9 +280,9 @@ def createlisting():
         price = ''
         emptyField = True
     negotiable = request.query.get('negotiable')
-    if (negotiable is None) or (negotiable.strip() == ''):
-        negotiable = ''
-        emptyField = True
+    if (negotiable is None):
+        negotiable = True
+
 
     detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
     # define template

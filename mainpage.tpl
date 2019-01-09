@@ -21,7 +21,8 @@
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +32,7 @@
            text-align: left;
        }   
        .header {
-        font-family: "Verdana", Geneva, sans-serif;
+        font-family: 'Avenir';
        }
        .container{
         padding: 0;
@@ -44,6 +45,7 @@
        .newlistingbutton {
         background-color: #EE7F2D;
         border: none;
+        font-family: 'Avenir';
         color: black;
         padding: 10px 20px;
         text-align: center;
@@ -57,6 +59,7 @@
         border: none;
         float: right;
         color: black;
+        font-family: 'Avenir';
         padding: 10px 20px;
         text-align: center;
         text-decoration: none;
@@ -68,12 +71,14 @@
         color: black;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
        }
        .footer {
         color: white;
         background-color: #343a40;
         text-align: center;
         padding: 0px;
+        font-family: 'Avenir';
        }
        .center {
         background-color: #EE7F2D;
@@ -84,6 +89,7 @@
        }
        .btn {
         color: white;
+        font-family: 'Avenir';
         background-color: #343a40;
        }
        .no-border {
@@ -95,8 +101,15 @@
         }
         .navbar {
           display: flex;
+          font-family: 'Avenir';
           flex-direction: row
           margin-left: 150px;
+        }
+        .thisfont {
+          font-family: 'Avenir';
+        }
+        .specific {
+          font-size: large;
         }
    </style>
     <head>
@@ -119,19 +132,19 @@
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
 
-    <div class="container">
+    <div class="container thisfont">
         <br>
-        <input type="text" class="input form-control no-border" placeholder="Department" name="dept" oninput="getResults()" id='dept'>
+        <input type="text" class="input form-control no-border thisfont" placeholder="Search by Department" name="dept" oninput="getResults()" id='dept'>
         <hr>
-        <input type="text" class="input form-control no-border" placeholder="Course Number" name="coursenum" oninput="getResults()" id='coursenum'>
+        <input type="text" class="input form-control no-border thisfont" placeholder="Search by Course Number" name="coursenum" oninput="getResults()" id='coursenum'>
         <hr>
-        <input type="text" class="input form-control no-border" placeholder="Course Title" name="coursetitle" oninput="getResults()" id='coursetitle'>
+        <input type="text" class="input form-control no-border thisfont" placeholder="Search by Course Title" name="coursetitle" oninput="getResults()" id='coursetitle'>
         <hr>
-        <input type="text" class="input form-control no-border" placeholder="Textbook Name" name="bookname" oninput="getResults()" id='bookname'>
+        <input type="text" class="input form-control no-border thisfont" placeholder="Search by Textbook Name" name="bookname" oninput="getResults()" id='bookname'>
         <hr>
     </div>
       <!-- PUT RESULTS IN HERE -->
-    <div class="container">
+    <div class="container thisfont">
         <table class="table table-hover table-striped" id="resultsTable">
         </table>
     </div>
@@ -139,7 +152,7 @@
        <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>

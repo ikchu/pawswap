@@ -22,6 +22,8 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,26 +49,34 @@
         color: #FFFFFF;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
       }
       .footer {
         color: white;
         background-color: #343a40;
         text-align: center;
         padding: 0px;
+        font-family: 'Avenir';
        }
        .navbar {
         color: white;
         text-align: center;
+        font-family: 'Avenir';
        }
        .sentence{
         text-align: right;
         float: right;
+        font-family: 'Avenir';
+       }
+       .thisfont {
+        font-family: 'Avenir';
        }
     </style>
 
    <body>
     <!-- Pawswap nav bar to go home -->
     <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
@@ -75,7 +85,7 @@
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           Books I'm Selling
        </nav>
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped thisfont">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
@@ -90,7 +100,7 @@
               </tr>
             % else:
               % for row in listings:
-                <tr class = "clickable-row" data-href="/accountlistingsdetails?listingid={{row[0]}}">
+                <tr class = "clickable-row thisfont" data-href="/accountlistingsdetails?listingid={{row[0]}}">
                   <td>{{row[1]}}</td>
                   <td>{{row[2]}}</td>
                   <td>{{row[3]}}</td>
@@ -171,7 +181,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           Books I've Claimed
        </nav>
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped thisfont">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
@@ -187,7 +197,7 @@
               </tr>
             % else:
               % for row in myClaims:
-                  <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
+                  <tr class = "clickable-row thisfont" data-href="/listingsdetails?listingid={{row[0]}}">
                       <td>{{row[1]}}</td>
                       <td>{{row[2]}}</td>
                       <td>{{row[3]}}</td>
@@ -203,7 +213,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           Offers I've Made
        </nav>
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped thisfont">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
@@ -220,7 +230,7 @@
               </tr>
             % else:
               % for row in myOffers:
-                <tr class = "clickable-row" data-href="/listingsdetails?listingid={{row[0]}}">
+                <tr class = "clickable-row thisfont" data-href="/listingsdetails?listingid={{row[0]}}">
                   <td>{{row[1]}}</td>
                   <td>{{row[2]}}</td>
                   <td>{{row[3]}}</td>
@@ -284,7 +294,7 @@
         <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>

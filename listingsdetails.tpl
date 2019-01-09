@@ -16,6 +16,8 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+     <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -31,21 +33,30 @@
         color: black;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
       }
       .footer {
         color: white;
         background-color: #343a40;
         text-align: center;
         padding: 0px;
+        font-family: 'Avenir';
        }
        .navbar {
         color: white;
+        font-family: 'Avenir';
 
        }
        .btn {
         background-color: #343a40;
         color: white;
+        font-family: 'Avenir';
        }
+
+       .thisfont {
+        font-family: 'Avenir';
+       }
+
     </style>
 
    <head> 
@@ -62,6 +73,7 @@
    <body>
     <!-- Pawswap nav bar to go home -->
     <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
@@ -72,7 +84,7 @@
       </nav>
       
 
-      <div class="container">
+      <div class="container thisfont">
          <hr>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
@@ -91,8 +103,6 @@
                   <input type="hidden" name="price" value={{details[7]}} />
                   <button class = "btn btn-default" type="submit">Claim at Listed Price</button>
                </form>
-               <br>
-               OR
                <br>
                <br>
                <form method="get" action="/makeoffer">

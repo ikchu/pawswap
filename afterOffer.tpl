@@ -17,12 +17,16 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
     <!-- Custom styles for this template -->
     <link href="css/landing-page.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
    <style>
       h1{
@@ -32,29 +36,30 @@
         color: black;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
       }
       .footer {
         color: black;
         background-color: #EE7F2D;
         text-align: center;
+        font-family: 'Avenir';
        }
        .navbar {
         color: white;
         text-align: center;
+        font-family: 'Avenir';
        }
     </style>
 
    <head>  
    </head>
    <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark">
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
         </nav>
         <br>
-       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Claimed Listing
-       </nav>
+
   
       <div class="container">
          <hr>

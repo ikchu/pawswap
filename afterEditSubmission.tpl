@@ -20,6 +20,8 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
     <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
@@ -37,6 +39,7 @@
           color: white;
           background-color: #343a40;
           text-align: center;
+          font-family: 'Avenir';
           padding: 0px;
        }
        .container{
@@ -44,15 +47,18 @@
        }
         .title {
         color: black;
+        font-family: 'Avenir';
         background-color: #EE7F2D;
         text-align: center;
         } 
         .btn {
         background-color: #343a40;
         color: white;
+        font-family: 'Avenir';
        }
        .navbar {
         color: white;
+        font-family: 'Avenir';
        }
     </style>
    <body>

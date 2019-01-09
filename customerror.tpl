@@ -16,6 +16,8 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Avenir">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -26,15 +28,18 @@
         color: white;
         background-color: #343a40;
         text-align: center;
+        font-family: 'Avenir';
        }
        .footer {
         color: white;
+        font-family: 'Avenir';
         background-color: #343a40;
         text-align: center;
         padding: 0px;
        }
        .navbar {
         color: white;
+        font-family: 'Avenir';
         text-align: center;
        }
     </style>
