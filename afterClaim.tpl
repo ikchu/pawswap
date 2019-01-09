@@ -30,7 +30,7 @@
           font-family: 'Avenir';
       } 
       .title {
-        color: black;
+        color: white;
         background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';

@@ -51,6 +51,18 @@
         text-align: center;
         font-family: 'Avenir';
       }
+      .no-border {
+          border: 0;
+          box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+      }
+      .form-control {
+          border: 0;
+      }
+      .input:focus {
+        outline:none;
+        border:0;
+        box-shadow:none;
+      }
       .footer {
         color: white;
         background-color: #343a40;
@@ -69,7 +81,7 @@
         font-family: 'Avenir';
        }
        .btn {
-        padding:10;
+        padding:5;
 
         /*position:absolute;*/
        }
@@ -125,11 +137,14 @@
                       <td></td>
                       <td colspan="2">No current offers or claims.</td>
                     </tr>
+
+
                 <!-- If there are claims or offers on the listing -->
                 % else:
                   <!-- For each claim and/or offer -->
                   % for claimOff in claimsAndOffs[row[0]]:
                     <tr>
+                      <td></td>
                       
                       % if claimOff[5] == "Offer":
                         <!-- if this offer has not been accepted --> 
@@ -156,8 +171,15 @@
                             <form method="get" action="/makecounteroffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                              <button class = "btn btn-default" type="submit">Make Counter Offer</button>
-                              &nbsp; $<input type="text" placeholder="Counter Offer" name="counterprice" required />
+                              <div class = "input-group">
+
+                                  <input type="text" class="input form-control no-border thisfont" placeholder="$ Counter Offer" name="counterprice" required />
+                                  <br>
+                                  <span class="input-group-btn">
+                                    &nbsp;
+                                    <button class = "btn btn-default" type="submit">Go!</button>
+                                  </span>
+                            </div>
                             </form>
                           </td>
                         % end

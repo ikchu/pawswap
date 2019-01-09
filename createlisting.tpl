@@ -36,7 +36,8 @@
        .top {
         color: black;
         font-family: 'Avenir';
-        background-color: #343a40;
+        background-color: #343a40
+        ;
         text-align: center;
        }
    
