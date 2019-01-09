@@ -126,7 +126,7 @@
                     <input type="text" class="input form-control no-border thisfont" placeholder="Condition" name="condition" value="{{details[6]}}" required> 
                     <hr>
              
-                    <input type="text" class="input form-control no-border thisfont" placeholder="Price (ex. 100)" name="price" value="{{details[7]}}" required>
+                    <input type="number" step="0.01" class="input form-control no-border thisfont" placeholder="Price (ex. 100)" name="price" value="{{details[7]}}" required>
                     <hr>
               
                     <input class = "btn" type="submit" value="Submit">

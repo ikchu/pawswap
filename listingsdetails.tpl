@@ -83,7 +83,9 @@
         Listing Details
       </nav>
       
-
+    %if errorBool==1:
+        <strong>{{e}}</strong>
+    %end
       <div class="container thisfont">
          <hr>
                <strong> Name: </strong> {{details[0]}}<br>
@@ -107,8 +109,9 @@
                <br>
                <form method="get" action="/makeoffer">
                   <input type="hidden" name="listingid" value={{listingid}} />
+                  <input type="hidden" name="price" value={{details[7]}} />
                   <button class = "btn btn-default" type="submit">Make Offer</button>
-                  &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
+                  &nbsp; $<input type="number" step="0.01" placeholder="Offer" name="offerprice" required />
                </form>
             % end
             % if claimed==1:

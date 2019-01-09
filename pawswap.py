@@ -142,12 +142,16 @@ def listingsdetails():
         details = getDetails(listingid)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
+    
+    erBool = 0
     # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
     templateInfo = {
         'listingid': listingid,
         'details': details,
         'username': username,
-        'claimed': details[9]
+        'claimed': details[9],
+        'errorBool': erBool,
+        'e': ''
     }
 
     return template('listingsdetails.tpl', templateInfo)
@@ -275,10 +279,7 @@ def createlisting():
     if ((condition is None) or (condition.strip() == '')):
         condition = ''
         emptyField = True
-    price = request.query.get('price')
-    if ((price is None) or (price.strip() == '')):
-        price = ''
-        emptyField = True
+    price = int(request.query.get('price'))
     negotiable = request.query.get('negotiable')
     if (negotiable is None):
         negotiable = True
@@ -298,6 +299,11 @@ def createlisting():
         templateInfo['e'] = 'One of the fields below is empty.'
         return template('createlisting.tpl', templateInfo)
     
+    # if the price is not >= 0 then raise an error
+    if (price < 0):
+        templateInfo['errorBool'] = True
+        templateInfo['e'] = 'Price must be greater than or equal to 0.'
+        return template('createlisting.tpl', templateInfo)
     try:
         # returns detailsList that now includes listingid and coursetitle
         detailsList = createListing(detailsList)
@@ -386,10 +392,7 @@ def editlisting():
     if ((condition is None) or (condition.strip() == '')):
         condition = ''
         emptyField = True
-    price = request.query.get('price')
-    if ((price is None) or (price.strip() == '')):
-        price = ''
-        emptyField = True
+    price = int(request.query.get('price'))
     negotiable = request.query.get('negotiable')
     if (negotiable is None) or (negotiable.strip() == ''):
         negotiable = ''
@@ -404,10 +407,11 @@ def editlisting():
         'username': username,
         'fromEditListing': True
         }
-    # if there is an empty field, return the createlisting template
-    if emptyField:
+
+    # if the price is not >= 0 then raise an error
+    if (price < 0):
         templateInfo['errorBool'] = True
-        templateInfo['e'] = 'One of the fields below is empty.'
+        templateInfo['e'] = 'Price must be greater than or equal to 0.'
         return template('editlisting.tpl', templateInfo)
 
     try:
@@ -438,32 +442,32 @@ def deleteThisListing():
 
     try:
         deleteListing(listingid)
-    except Exception, e:
-        return template('customerror.tpl', {'errorMsg' : e})
-    
-    # create dictionary
-    dept = ''
-    coursenum = ''
-    title = ''
-    bookname = ''
+        
+        # Code below identical to account(). It displays the account page
+        # I tried just calling redirect('/account') instead but it didn't seem to work
+        # -----------------------------------------------
+        listings = getMyListings(username)
+        claims = getMyClaims(username)
+        offers = getMyOffers(username)
+        listingsClaimsAndOffs = {}
+        for listing in listings:
+            listingid = listing[0]
+            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
+            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
+            claimsAndOffers = claimsToMe + offersToMe
+            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
 
-    dbSearchCriteria = {'dept' : dept, 'coursenum': coursenum, 'coursetitle': title, 'bookname' : bookname }
-    # search with that criteria; returns bookname, dept, coursenum, price
-    try:
-        listings = getListings(dbSearchCriteria)
-    except Exception, e:
-        return template('customerror.tpl', {'errorMsg' : e})
-
-    templateInfo = {
-        'errorMsg': '',
-        'bookname': '',
-        'coursenum': '',
-        'dept': '',
-        'title': '',
+        templateInfo = {
         'listings': listings,
-        'username': username
+        'username': username,
+        'myClaims': claims,
+        'myOffers': offers,
+        'claimsAndOffs': listingsClaimsAndOffs,
         }
-    return template('mainpage.tpl', templateInfo)
+        return template('account.tpl', templateInfo)
+        # -----------------------------------------------
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e })
 
 # this links the claimerid and the listingid in a table
 @route('/claimlisting')
@@ -523,14 +527,28 @@ def makeoffer():
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
     listingid = request.query.get('listingid')
+    price = int(request.query.get('price'))
     details = getDetails(listingid)
-    
-    offerprice = request.query.get('offerprice')
+    offerprice = int(request.query.get('offerprice'))
+
+    erBool = 0
     templateInfo = {
         'listingid': listingid,
         'details': details,
-        'offerprice': offerprice
+        'offerprice': offerprice,
+        'errorBool': erBool,
+        'claimed': details[9],
+        'e': ''
     }
+
+    print 'offerprice:', offerprice
+    print 'offerprice type:', type(offerprice)
+    print 'price:', price
+    print (offerprice <= 0)
+    if (offerprice <= 0) or (offerprice > price):
+        templateInfo['errorBool'] = 1
+        templateInfo['e'] = 'Your offer price must be greater than 0 and less than the listed price.'
+        return template('listingsdetails.tpl', templateInfo)
 
     try:
         makeOffer(listingid, username, offerprice)
