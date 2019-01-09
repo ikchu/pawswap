@@ -23,25 +23,62 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <style>
-
-       .header {
-        color: white;
-        background-color: #343a40;
-        text-align: center;
-        font-family: 'Avenir';
+        h1{
+            font-family: 'Avenir';
+            color: black;
+          } 
+       td, th {
+           text-align: left;
+       }   
+       .container{
+        padding: 0;
        }
+       .top {
+        color: black;
+        font-family: 'Avenir';
+        background-color: #EE7F2D;
+        text-align: center;
+       }
+   
        .footer {
         color: white;
-        font-family: 'Avenir';
         background-color: #343a40;
         text-align: center;
         padding: 0px;
+        font-family: 'Avenir';
        }
        .navbar {
         color: white;
         font-family: 'Avenir';
         text-align: center;
        }
+       .btn {
+        color:white;
+        font-family: 'Avenir';
+        background-color: #343a40;
+       }
+       .no-border {
+          border: 0;
+          box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+        }
+        .form-control {
+          border: 0;
+        }
+        .input:focus {
+        outline:none;
+        border:0;
+        box-shadow:none;
+        }
+        .nego{
+            color:grey;
+        }
+        .thisfont {
+        	font-family: 'Avenir';
+        	color: #343a40;
+        }
+        .specific{
+        	font-size: large;
+        }
     </style>
 
     <head>
@@ -59,12 +96,19 @@
 
     <body>
          <nav class="navbar navbar-dark bg-dark">
-              <a class="navbar-brand" href="/mainpage">PawSwap</a>
-              <a class="navbar-brand" href="/account">My Account</a>
-        </nav> 
-        <div class= "header">
-            <h2>Error: {{errorMsg}}</h2>
-        </div>
+          <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
+          <a class="navbar-brand" href="/mainpage">PawSwap</a>
+          <a class="navbar-brand" href="/account">My Account</a>
+        </nav>
+        
+        <br>
+
+        <nav class="thisfont text-center title specific">
+          <strong> Error: Page Not Found </strong>
+        </nav>
+
+        <br>
+
           <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
