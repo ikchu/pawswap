@@ -87,7 +87,10 @@
       </nav>
       
     %if errorBool==1:
-        <strong>{{e}}</strong>
+      <br>
+      <div class="container thisfont">
+         <strong>{{e}}</strong>
+      </div>
     %end
       <div class="container thisfont">
          <hr>
