@@ -82,7 +82,7 @@
     </nav>
     
     <br>
-      <nav class="thisfont text-center title specific">
+      <nav class="thisfont text-center specific">
         <strong> Listing Details </strong>
       </nav>
       
