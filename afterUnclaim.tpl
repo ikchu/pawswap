@@ -33,14 +33,14 @@
       } 
       .title {
         color: black;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
       }
       .footer {
-        color: black;
+        color: white;
         font-family: 'Avenir';
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
        }
        .navbar {
@@ -72,7 +72,7 @@
       <div class="container thisfont">
          <hr>
          <div class= "text-center thisfont">
-            <strong >*You've unclaimed this listing. This textbook has been removed from your Claimed List*</strong><br> <br></div>
+            <strong >*You've unclaimed this listing. This textbook has been removed from your Claimed List*</strong><br> <hr></div>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
                <strong> Textbook Name: </strong> {{details[2]}}<br>

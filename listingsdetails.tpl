@@ -31,7 +31,7 @@
        }
       .title {
         color: black;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
       }

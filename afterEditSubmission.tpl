@@ -48,7 +48,7 @@
         .title {
         color: black;
         font-family: 'Avenir';
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         } 
         .btn {
@@ -72,13 +72,12 @@
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
     <br>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="thisfont text-center specific">
      <strong> Your Listing </strong>
     </nav>
       <hr>
-        <a class = "btn thisfont" href="/goToEditListing?listingid={{details[10]}}">Click here to edit your listing</a>
-        <br>
-        <div class= "thisfont">
+        <div class= "container thisfont">
+           <a class = "btn thisfont" href="/goToEditListing?listingid={{details[10]}}">Edit Listing</a> <br> <br>
             <strong> Name: </strong> {{details[1]}}<br>
             <strong> Email: </strong> {{details[2]}}<br>
             <strong> Textbook Name: </strong> {{details[3]}}<br>
@@ -88,7 +87,6 @@
             <strong> Condition: </strong> {{details[6]}}<br>
             <strong> Price: </strong> {{details[7]}}<br>
         </div>
-      <hr>
       <hr>
         <!-- Copyright -->
        <footer class="footer">

@@ -39,7 +39,7 @@
         .title {
             color: black;
             font-family: 'Avenir';
-            background-color: #EE7F2D;
+            background-color: #343a40;
             text-align: center;
         } 
         .btn {

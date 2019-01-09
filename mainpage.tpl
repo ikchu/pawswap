@@ -43,7 +43,7 @@
         box-shadow:none;
         }
        .newlistingbutton {
-        background-color: #EE7F2D;
+        background-color: #343a40;
         border: none;
         font-family: 'Avenir';
         color: black;
@@ -55,7 +55,7 @@
         cursor: pointer;
        }
        .accountbutton {
-        background-color: #EE7F2D;
+        background-color: #343a40;
         border: none;
         float: right;
         color: black;
@@ -69,7 +69,7 @@
        }
        .header {
         color: black;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
        }
@@ -81,7 +81,7 @@
         font-family: 'Avenir';
        }
        .center {
-        background-color: #EE7F2D;
+        background-color: #343a40;
        }
        .container {
         text-align: center;

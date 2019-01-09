@@ -31,7 +31,7 @@
       } 
       .title {
         color: black;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
       }
@@ -82,7 +82,7 @@
   
       <div class="container thisfont">
          <hr>
-            <strong>*You've claimed this listing for ${{claimprice}}. This textbook has been added to your Claimed List*</strong>
+            <strong>*You've claimed this listing for ${{claimprice}}. This textbook has been added to your Claimed List*</strong> <br> <hr>
             <p>Please contact the seller at <strong>{{details[1]}}</strong> to pay and retrieve your book.</p>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>

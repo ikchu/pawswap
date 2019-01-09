@@ -68,12 +68,18 @@
         float: right;
         font-family: 'Avenir';
        }
+       .btn {
+        padding:10;
+
+        /*position:absolute;*/
+       }
        .thisfont {
         font-family: 'Avenir';
        }
        .specific {
         font-size: large;
        }
+
     </style>
 
    <body>
@@ -124,24 +130,29 @@
                   <!-- For each claim and/or offer -->
                   % for claimOff in claimsAndOffs[row[0]]:
                     <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      
                       % if claimOff[5] == "Offer":
                         <!-- if this offer has not been accepted --> 
                         % if claimOff[2] == "Pending":
                           <td><strong>{{claimOff[0]}} made an offer of ${{claimOff[1]}}.</strong></td>
-                          <td>
+                        
+                            <div>
+                              <td>
                             <form method="get" action="/acceptoffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                              <button class = "btn btn-default" type="submit">Accept Offer</button>
+                              <button class = "btn btn-default" type="submit">Accept Offer</button> <br>
                             </form>
+                          </td>
+                          <td>
                             <form method="get" action="/rejectoffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />
-                              <button class = "btn btn-default" type="submit">Reject Offer</button>
+                              <button class = "btn pull-right btn-default" type="submit">Reject Offer</button>
                             </form>
+                          </td>
+                          </div>
+                          <td>
                             <form method="get" action="/makecounteroffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />

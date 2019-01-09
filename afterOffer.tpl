@@ -34,13 +34,13 @@
       } 
       .title {
         color: black;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
       }
       .footer {
-        color: black;
-        background-color: #EE7F2D;
+        color: white;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
        }
@@ -68,7 +68,7 @@
       <div class="container thisfont">
          <hr>
          <div class="text-center">
-            <strong>*Your offer for this book is ${{offerprice}}. This offer can be viewed and updated from your Account page.*</strong> <br> <br>
+            <strong>*Your offer for this book is ${{offerprice}}. This offer can be viewed and updated from your Account page.*</strong> <br><hr>
         </div>
             <p>You will be notified when the seller accepts or rejects this offer.</p>
                <strong> Name: </strong> {{details[0]}}<br>
