@@ -47,9 +47,31 @@
         color: white;
         font-family: 'Avenir';
        }
+       .input:focus {
+        outline:none;
+        border:0;
+        box-shadow:none;
+        max-width: 500px;
+        }
+       .no-border {
+          border: 0;
+          max-width: 500px;
+          box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+        }
+        .form-control {
+          border: 0;
+          max-width: 500px;
+        }
+
        .navbar {
         color: white;
         font-family: 'Avenir';
+       }
+       .thisfont {
+        font-family: 'Avenir';
+       }
+       .specific {
+        font-size: large;
        }
        td, th {
            text-align: left;
@@ -69,13 +91,14 @@
       <title>PawSwap</title>
     </head>
     <body>
-      <nav class="navbar navbar-dark bg-dark">
+      <nav class="navbar navbar-dark bg-dark thisfont">
+          <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
         </nav>
         <br>
-       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Edit Your Listing
+       <nav class="thisfont text-center specific">
+          <strong> Edit Your Listing </strong>
        </nav>
     <hr>
 
@@ -85,67 +108,59 @@
     
         <!-- can't add listingid and coursetitle in link below because they will be overwritten when form is submitted
             so need to add them manually as hidden fields -->  
-        <form action="/editlisting" method="get">
+        <form class = "container" action="/editlisting" method="get">
         <input type="hidden" name="listingid" value={{listingid}} />
-        <table>
-            <tr>
-                <td>Your Name: </td>
-                <td>
-                        <input type="text" name="name" value="{{details[1]}}" required> <br>
-                </td>
-            </tr>
-             <tr>
-                <td>Email: </td>
-                <td>
-                        <input type="text" name="email" value="{{details[2]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>Textbook Name: </td>
-                <td>
-                        <input type="text" name="bookname" value="{{details[3]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>Department (3 Letter Abbreviation): </td>
-                <td>   
-                    <input type="text" name="dept" value="{{details[4]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>Course Number: </td>
-                <td>   
-                    <input type="text" name="coursenum" value="{{details[5]}}" required> <br>
-                </td>
-            </tr>
-             <!-- Skipping over details[5] which is coursetitle -->
-            <tr>
-                <td>Condition (New, Good, Fair, or Poor): </td>
-                <td>   
-                    <input type="text" name="condition" value="{{details[6]}}" required> <br>
-                </td>
-            </tr>
-            <tr>
-                <td>Price: </td>
-                <td>
-                        <input type="text" name="price" value="{{details[7]}}" required>
-                </td>
-            </tr>
-            
-            <tr>
-                <td></td>
-                <td>
-                    <input class = "btn" type="submit" value="Confirm Edit">
-                </td>
-            </tr>
-        </table>
+
+        
+              <div class = "thisfont form-row">
+                <label for = "thisname"> <strong> Your Name: </strong>  </div>
+                  <div class = "col-md-6"> <input id = "thisname" type="text" class="input form-control no-border thisfont" name="name" value="{{details[1]}}" required>
+              </div>
+           
+              <div class="thisfont form-row ">
+                <label for = "thisemail"> <strong> Email: </strong> </div>
+                    <div class = "col-md-6"> <input id = "thisemail" type="text" class="input form-control no-border thisfont " name="email" value="{{details[2]}}" required> 
+              </div>
+
+              <div class="thisfont form-row ">
+                <label for = "thistext"> <strong> Textbook Name: </strong> </div>
+                    <div class = "col-md-6"> <input id = "thistext" type="text" class="input form-control no-border thisfont " name="textbook" value="{{details[3]}}" required> 
+              </div>
+ 
+              <div class="thisfont form-row ">
+                <label for = "thisdep"> <strong> Department (3 Letter Abbreviation) </strong> </div>
+                    <div class = "col-md-6"> <input id = "thisdep" type="text" class="input form-control no-border thisfont " name="dept" value="{{details[4]}}" required> 
+              </div>
+           
+              <div class="thisfont form-row "> 
+                <label for="thiscourse"> <strong> Course Number: </strong> </div> 
+                    <div class = "col-md-6"> <input id="thiscourse" type="text" class="input form-control no-border thisfont" name="coursenum" value="{{details[5]}}" required>
+              </div> 
+           
+              <div class="thisfont form-row "> 
+                <label for="thiscon"> <strong> Condition (New, Good, Fair, or Poor): </strong> </div>
+                  <div class = "col-md-6"> <input id = "thiscond" type="text" class="input form-control no-border thisfont" name="condition" value="{{details[6]}}" required> 
+              </div> 
+       
+              <div class="thisfont form-row "> 
+                <label for="thisp"> <strong> Price: </strong> </div>
+                  <div class = "col-md-6"> <input id = "thisp" type="text" class="input form-control no-border thisfont" name="price" value="{{details[7]}}" required> 
+              </div> 
+         
+              </label>
+              </div>
+
+              <div class = "container">
+                  <input class = "btn" type="submit" value="Confirm Edit"> <br>
+              </div> <hr>
+          
       </form>
+      <br>
         <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>
-    <hr>
        

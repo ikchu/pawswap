@@ -53,8 +53,11 @@
        .thisfont {
        	font-family: 'Avenir';
        }
+       .specific {
+       	font-size: large;
+       }
     </style>
-
+ 
    <head>
            <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131225117-1"></script>
@@ -67,13 +70,14 @@
         </script>  
    </head>
    <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark thisfont">
+    	  <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
         </nav>
         <br>
-       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Claimed Listing
+       <nav class="thisfont text-center title specific">
+          <strong> Claimed Listing </strong>
        </nav>
   
       <div class="container thisfont">
@@ -88,7 +92,6 @@
                <strong> Course Title: </strong> {{details[5]}}<br>
                <strong> Price: </strong> {{details[6]}}<br>
                <strong> Condition: </strong> {{details[7]}}<br>
-               <strong> Price Negotiable: </strong> {{details[8]}}<br>
                <br>
          <hr>
    </div>

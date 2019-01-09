@@ -60,21 +60,25 @@
         color: white;
         font-family: 'Avenir';
        }
+       .thisfont {
+        font-family: 'Avenir';
+       }
     </style>
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark thisfont">
+      <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
     <br>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-     Your Listing
+     <strong> Your Listing </strong>
     </nav>
       <hr>
-        <!-- I don't think this is necessary % courseid, days, starttime, endtime, bldg, roomnum = details[0] -->
-        <a class = "btn" href="/goToEditListing?listingid={{details[10]}}">Click here to edit your listing</a>
+        <a class = "btn thisfont" href="/goToEditListing?listingid={{details[10]}}">Click here to edit your listing</a>
         <br>
+        <div class= "thisfont">
             <strong> Name: </strong> {{details[1]}}<br>
             <strong> Email: </strong> {{details[2]}}<br>
             <strong> Textbook Name: </strong> {{details[3]}}<br>
@@ -83,13 +87,13 @@
             <strong> Course Title: </strong> {{details[9]}}<br>
             <strong> Condition: </strong> {{details[6]}}<br>
             <strong> Price: </strong> {{details[7]}}<br>
-            <strong> Price Negotiable: </strong> {{details[8]}}<br>
+        </div>
       <hr>
       <hr>
         <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>

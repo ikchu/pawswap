@@ -95,7 +95,7 @@
     </head>
 
     <body>
-         <nav class="navbar navbar-dark bg-dark">
+         <nav class="navbar navbar-dark bg-dark thisfont">
           <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
@@ -112,7 +112,7 @@
           <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>

@@ -47,7 +47,7 @@
       } 
       .title {
         color: #FFFFFF;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
       }
@@ -71,19 +71,22 @@
        .thisfont {
         font-family: 'Avenir';
        }
+       .specific {
+        font-size: large;
+       }
     </style>
 
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark thisfont">
       <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
 
-    <div class="w3-container w3-padding-16">
-       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Books I'm Selling
+    <div class="w3-container w3-padding-16"> 
+       <nav class="thisfont text-center title specific">
+          <strong> Books I'm Selling </strong>
        </nav>
         <table class="table table-hover table-striped thisfont">
             <tr>
@@ -178,8 +181,8 @@
             </table>
           </div>
         <div class="w3-container w3-padding-16">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Books I've Claimed
+        <nav class="thisfont text-center specific title">
+          <strong> Books I've Claimed </strong>
        </nav>
         <table class="table table-hover table-striped thisfont">
             <tr>
@@ -210,8 +213,8 @@
           </table>
         </div>
         <div class="w3-container w3-padding-16">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Offers I've Made
+        <nav class="thisfont text-center title specific">
+          <strong> Offers I've Made </strong>
        </nav>
         <table class="table table-hover table-striped thisfont">
             <tr>

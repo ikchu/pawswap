@@ -48,23 +48,31 @@
         color: white;
         text-align: center;
        }
+       .thisfont {
+        font-family: 'Avenir';
+       }
+       .specific {
+        font-size: large;
+       }
     </style>
 
    <head>  
    </head>
    <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark thisfont">
+          <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
         </nav>
         <br>
-       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          Unclaimed Listing
+       <nav class="thisfont text-center title specific">
+          <strong> Unclaimed Listing </strong>
        </nav>
   
-      <div class="container">
+      <div class="container thisfont">
          <hr>
-            <strong>*You've unclaimed this listing. This textbook has been removed from your Claimed List*</strong><br>
+         <div class= "text-center thisfont">
+            <strong >*You've unclaimed this listing. This textbook has been removed from your Claimed List*</strong><br> <br></div>
                <strong> Name: </strong> {{details[0]}}<br>
                <strong> Email: </strong> {{details[1]}}<br>
                <strong> Textbook Name: </strong> {{details[2]}}<br>
@@ -73,10 +81,15 @@
                <strong> Course Title: </strong> {{details[5]}}<br>
                <strong> Price: </strong> {{details[6]}}<br>
                <strong> Condition: </strong> {{details[7]}}<br>
-               <strong> Price Negotiable: </strong> {{details[8]}}<br>
                <br>
          <hr>
    </div>
+   <footer class="footer">
+          <div class="footer-copyright text-center py-3 thisfont">
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
+            Please email pawswappu@gmail.com with questions, comments, or known bugs.
+          </div>
+    </footer>
       <!-- PUT IN COOKIE STUFF LATER -->
    </body>
 </html>

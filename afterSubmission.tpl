@@ -45,7 +45,7 @@
        }
        .title {
         color: black;
-        background-color: #EE7F2D;
+        background-color: #343a40;
         text-align: center;
         font-family: 'Avenir';
       }
@@ -63,38 +63,43 @@
        .thisfont {
        	font-family: 'Avenir';
        }
+       .specific{
+       	font-size: large;
+       }
     </style>
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark thisfont">
+      <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
     <br>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        Your PawSwap Listing    
+    <nav class="thisfont text-center specific">
+        <strong> Your PawSwap Listing </strong>
     </nav>
       <hr>
         <!-- if routing to goToEditListing, need to provide listingid and coursetitle -->
-        <div>
-            <a class="btn" href="/goToEditListing?listingid={{details[10]}}&coursetitle={{details[9]}}">Edit Your Listing</a>
-         </div>
-        <br>
-            <strong> Name: </strong> {{details[1]}}<br>
-            <strong> Email: </strong> {{details[2]}}<br>
-            <strong> Textbook Name: </strong> {{details[3]}}<br>
-            <strong> Department: </strong> {{details[4]}}<br>
-            <strong> Course Number: </strong> {{details[5]}}<br>
-            <strong> Course Title: </strong> {{details[9]}}<br>
-            <strong> Condition: </strong> {{details[6]}}<br>
-            <strong> Price: </strong> {{details[7]}}<br>
-            <strong> Price Negotiable: </strong> {{details[8]}}<br>
-      <hr>
-      <hr>
+         <div class = "container">
+         	<a class="btn thisfont" href="/goToEditListing?listingid={{details[10]}}&coursetitle={{details[9]}}">Edit Your Listing</a>
+	        <br>
+	        <br>
+	        <div class = "thisfont">
+	            <strong> Name: </strong> {{details[1]}}<br>
+	            <strong> Email: </strong> {{details[2]}}<br>
+	            <strong> Textbook Name: </strong> {{details[3]}}<br>
+	            <strong> Department: </strong> {{details[4]}}<br>
+	            <strong> Course Number: </strong> {{details[5]}}<br>
+	            <strong> Course Title: </strong> {{details[9]}}<br>
+	            <strong> Condition: </strong> {{details[6]}}<br>
+	            <strong> Price: </strong> {{details[7]}}<br>
+	        </div>
+	      	<hr>
+  		</div>
         <!-- Copyright -->
        <footer class="footer">
           <div class="footer-copyright text-center py-3">
-            © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+            © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
        </footer>

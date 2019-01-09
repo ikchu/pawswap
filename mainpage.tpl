@@ -126,7 +126,7 @@
    </head>
    <body onLoad="getResults(); document.getElementById('dept').focus();">
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark thisfont">
       <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>

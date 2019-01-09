@@ -79,6 +79,9 @@
         .specific{
         	font-size: large;
         }
+        .thisfont {
+       	font-family: 'Avenir';
+       }
     </style>
     <head>
                 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -94,7 +97,7 @@
     </head>
     <body>
         <!-- Pawswap nav bar to go home -->
-        <nav class="navbar navbar-dark bg-dark">
+        <nav class="navbar navbar-dark bg-dark thisfont">
           <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
           <a class="navbar-brand" href="/mainpage">PawSwap</a>
           <a class="navbar-brand" href="/account">My Account</a>
@@ -139,5 +142,4 @@
             © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
             Please email pawswappu@gmail.com with questions, comments, or known bugs.
           </div>
-       </footer>
-    <hr>      
+       </footer>    

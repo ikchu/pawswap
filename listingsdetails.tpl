@@ -56,6 +56,9 @@
        .thisfont {
         font-family: 'Avenir';
        }
+       .specific {
+        font-size: large;
+       }
 
     </style>
 
@@ -72,15 +75,15 @@
    </head>
    <body>
     <!-- Pawswap nav bar to go home -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark thisfont">
         <a class="navbar-brand" href="/goToCreateListing">Sell a Textbook</a>
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
     
     <br>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        Listing Details
+      <nav class="thisfont text-center title specific">
+        <strong> Listing Details </strong>
       </nav>
       
     %if errorBool==1:
@@ -96,7 +99,6 @@
                <strong> Course Title: </strong> {{details[5]}}<br>
                <strong> Condition: </strong> {{details[6]}}<br>
                <strong> Price: </strong> {{details[7]}}<br>
-               <strong> Price Negotiable: </strong> {{details[8]}}<br>
                <br>
          %if errorBool==1:
             <form method="get" action="/claimlisting">
@@ -133,7 +135,7 @@
  <!-- Copyright -->
    <footer class="footer">
       <div class="footer-copyright text-center py-3">
-        © 2018 Copyright:Reece Schachne, Ikaia Chu, David Bowman. <br>
+        © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
         Please email pawswappu@gmail.com with questions, comments, or known bugs.
       </div>
    </footer>
