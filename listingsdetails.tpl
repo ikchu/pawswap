@@ -98,6 +98,11 @@
                <strong> Price: </strong> {{details[7]}}<br>
                <strong> Price Negotiable: </strong> {{details[8]}}<br>
                <br>
+         %if errorBool==1:
+            <form method="get" action="/claimlisting">
+            <button class = "btn btn-default" type="submit">Return to Mainpage</button>
+            </form>     
+         %else:
             <!-- if claimed then give option to unclaim (details[9] is 'claimed')-->
             % if claimed==0:
                <form method="get" action="/claimlisting">
@@ -120,6 +125,7 @@
                   <button class = "btn btn-default" type="submit">Unclaim Listing</button>
                </form>
             % end
+         %end
          <hr>
          <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
         

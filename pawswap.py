@@ -153,7 +153,22 @@ def listingsdetails():
         'errorBool': erBool,
         'e': ''
     }
+    # check to make sure not claimed by someone else
+    claimed = details[9]
+    # get the claims you've made and see if the listingid corresponds to this listinid
+    # create boolean
+    claimedByMe = False
 
+    claimsIMade = getMyClaims(username)
+    for row in claimsIMade:
+        if (row[0] == listingid):
+            claimsIMade = True
+            break
+    
+    if (claimed == 1) and (claimedByMe == False):
+        # don't let the offer happen
+        templateInfo['errorBool'] = 1
+        templateInfo['e'] = 'Sorry, this listing has just been claimed. Please navigate to the mainpage.'
     return template('listingsdetails.tpl', templateInfo)
 
 # same as listing deets except it returns accountlistingdetails.tpl which
@@ -481,7 +496,23 @@ def claimlisting():
     details = getDetails(listingid)
     claimPrice = request.query.get('price')
 
-    print 'pawswap.py > claimlisting: listingid =', listingid, 'claimprice =', claimPrice
+    erBool = 0
+    templateInfo = {
+        'listingid': listingid,
+        'details': details,
+        'claimprice': claimPrice,
+        'claimed': details[9],
+        'errorBool': erBool,
+        'e': ''
+    }
+
+    # check to make sure not claimed
+    claimed = details[9]
+    if claimed == 1:
+        # don't let the offer happen
+        templateInfo['errorBool']= 1
+        templateInfo['e'] = 'Sorry, this listing has just been claimed by another user. Please navigate to the mainpage.'
+        return template('listingsdetails.tpl', templateInfo)
 
     try:
         claimListing(listingid, username, claimPrice)
@@ -492,11 +523,7 @@ def claimlisting():
     # this listingid
     # newClaim(listingid, username)
     
-    templateInfo = {
-        'listingid': listingid,
-        'details': details,
-        'claimprice': claimPrice
-    }
+    
     return template('afterClaim.tpl', templateInfo)
 
 @route('/unclaimlisting')
@@ -531,6 +558,7 @@ def makeoffer():
     details = getDetails(listingid)
     offerprice = int(request.query.get('offerprice'))
 
+    
     erBool = 0
     templateInfo = {
         'listingid': listingid,
@@ -540,11 +568,15 @@ def makeoffer():
         'claimed': details[9],
         'e': ''
     }
-
-    print 'offerprice:', offerprice
-    print 'offerprice type:', type(offerprice)
-    print 'price:', price
-    print (offerprice <= 0)
+    
+    # check to make sure not claimed
+    claimed = details[9]
+    if claimed == 1:
+        # don't let the offer happen
+        templateInfo['errorBool']= 1
+        templateInfo['e'] = 'Sorry - this listing has just been claimed. Please navigate to the mainpage.'
+        return template('listingsdetails.tpl', templateInfo)
+    
     if (offerprice <= 0) or (offerprice > price):
         templateInfo['errorBool'] = 1
         templateInfo['e'] = 'Your offer price must be greater than 0 and less than the listed price.'
