@@ -113,7 +113,7 @@
       %if relation == "My_Claim":
          <div class="container thisfont">
             <hr>
-            <strong> You've claimed this listing for ${{claimOrOffer[6]}}. This textbook has been added to your Claimed List. Please contact the seller at <strong>{{details[1]}}</strong> to pay for and retrieve your book. </strong>
+            <strong> You've claimed this listing for ${{claimOrOffer[6]}}. This textbook has been added to your Claimed List. Please contact the seller at <a href="mailto:{{details[1]}}?subject=(__subject__)&body=(__body__)">{{details[1]}}</a> to pay for and retrieve your book. </strong>
          </div>
       %end
    %end

@@ -204,7 +204,13 @@
                         % end
                       <!-- If it's a claim -->
                       % else:
-                        <td colspan="4"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
+                        <td colspan="3"><strong>This listing was claimed by {{claimOff[0]}} for ${{claimOff[1]}} and has been taken offline. If you can't complete the transaction, repost your listing.</strong></td>
+                        <td>
+                          <form method="get" action="/repost">
+                            <input type="hidden" name="listingid" value={{row[0]}} />
+                            <input type="hidden" name="offererid" value={{claimOff[0]}} />
+                            <button class = "btn btn-default" type="submit"><strong>Repost</strong></button>
+                          </form>
                         </td>
                       % end
                     </tr>

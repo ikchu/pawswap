@@ -15,7 +15,7 @@ from bottle import route, request, response, error, redirect, run, get
 from bottle import template, TEMPLATE_PATH, app
 from listings import getListings, getDetails, createListing, editListing, deleteListing, unclaimListing
 from listings import getMyListings, claimListing, getMyClaims, makeOffer, makeCounter, getMyOffers, getClaimsToMe, getOffersToMe
-from listings import acceptOffer, unacceptOffer, rejectOffer
+from listings import acceptOffer, unacceptOffer, rejectOffer, repost
 TEMPLATE_PATH.insert(0, '')
 
 # CAS things
@@ -557,9 +557,6 @@ def unacceptoffer():
 
 @route('/rejectoffer')
 def rejectoffer():
-
-    print 'pawswap.py > rejectoffer'
-
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
@@ -574,6 +571,22 @@ def rejectoffer():
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
 
+    redirect('/account')
+
+@route('/repost')
+def repostlisting():
+    session = request.environ.get('beaker.session')
+    
+    casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
+
+    listingid = request.query.get('listingid')
+
+    try:
+        repost(listingid)
+    except Exception, e:
+        return template('customerror.tpl', {'errorMsg' : e })
+    
     redirect('/account')
 
 @error(404)

@@ -452,6 +452,26 @@ def rejectOffer(listingid, offererid):
 
     cursor.close()
     connection.close()
+    
+def repost(listingid):
+    DATABASE_NAME = 'listings.sqlite'
+
+    if not path.isfile(DATABASE_NAME):
+        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+
+    connection = connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    stmtStr = 'UPDATE listings SET claimed=? WHERE listingid=?'
+    cursor.execute(stmtStr, ['0',listingid])
+    connection.commit()
+
+    stmtStr = 'DELETE FROM offers WHERE listingid=?'
+    cursor.execute(stmtStr, [listingid])
+    connection.commit()
+
+    cursor.close()
+    connection.close()
 
 #------------------------------------------------------------------------------
 # 'Private' Helper Functions
