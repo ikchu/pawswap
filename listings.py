@@ -636,6 +636,12 @@ def getCrsTitleJSON(dept, coursenum):
         title = (((((crsData['term'])[3])['subjects'])[0])['courses'][0])['title']
         return title
     except Exception:
+        pass
+
+    try:
+        title = (((((crsData['term'])[4])['subjects'])[0])['courses'][0])['title']
+        return title
+    except Exception:
         raise Exception('This course was not found. Please try a different Department and Course Number.')
 
 def editListingStmtStr():
