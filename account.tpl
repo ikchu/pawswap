@@ -106,7 +106,7 @@
        <nav class="thisfont text-center title specific">
           <strong> Books I'm Selling </strong>
        </nav>
-        <table class="table table-hover table-striped thisfont">
+        <table class="table table-hover thisfont">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
@@ -226,7 +226,7 @@ Let me know at your earliest convenience. Thank you!">{{claimOff[0]}}@princeton.
         <nav class="thisfont text-center specific title">
           <strong> Books I've Claimed </strong>
        </nav>
-        <table class="table table-hover table-striped thisfont">
+        <table class="table table-hover thisfont">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
@@ -258,7 +258,7 @@ Let me know at your earliest convenience. Thank you!">{{claimOff[0]}}@princeton.
         <nav class="thisfont text-center title specific">
           <strong> Offers I've Made </strong>
        </nav>
-        <table class="table table-hover table-striped thisfont">
+        <table class="table table-hover thisfont">
             <tr>
               <!-- new way to list out the mylistings -->
                 <th>Book Name</th>
