@@ -102,8 +102,13 @@
        </nav>
     <hr>
 
-    %if ({errorBool}):
-        <strong>{{e}}</strong>
+    %if errorBool == True:
+      <div class="container thisfont">
+         <br>
+         <strong>{{e}}</strong>
+         <br>
+         <hr>
+      </div>
     %end
     
         <!-- can't add listingid and coursetitle in link below because they will be overwritten when form is submitted

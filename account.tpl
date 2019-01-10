@@ -204,7 +204,7 @@
                         % end
                       <!-- If it's a claim -->
                       % else:
-                        <td colspan="2"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
+                        <td colspan="4"><strong>{{claimOff[0]}} claimed this listing for ${{claimOff[1]}}.</strong>
                         </td>
                       % end
                     </tr>

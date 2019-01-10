@@ -108,8 +108,13 @@
           <strong> New Listing </strong>
        </nav>
   
-    %if ({errorBool}):
-        <strong>{{e}}</strong>
+    %if errorBool == True:
+      <div class="container thisfont">
+         <br>
+         <strong>{{e}}</strong>
+         <br>
+         <hr>
+      </div>
     %end
         
         <form class=container action="/createlisting" method="get">
