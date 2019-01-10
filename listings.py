@@ -19,34 +19,24 @@ import datetime
 #   - coursenum 
 #   - coursetitle 
 #   - bookname
-# Functions:
+# Public Functions:
 #   - getListings(userSearchDict)
 #   - getDetails(listingid)
-#   - createListing(fieldDict)
-#   - deleteListing(listingid)
-#   Note: Only these functions should be called from outside this program
-# Usage:
-#   - getListings(userSearchDict):
-#       - takes in a dictionary created from the user's search form
-#           - dictionary in form of {'dept' : 'cos', 'courseTitle' : 'algorithms'} for example
-#       - returns list of 'rows' from the database
-#           - technically a list of lists
-#           - each 'row' is actually a list containing listingid, bookname, dept, coursenum, coursetitle, price
-#   - getDetails(listingid):
-#       - takes in a listingid
-#       - returns list whose elements are fields of that listing
-#           - name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
-#   - createListing(fieldDict):
-#       - takes in a dictionary created by the 'create listing page'
-#           - dictionary contains sellerid, name, email, bookname, dept, coursenum, price, condition, negotiable
-#       - uses dictionary to add new row to database
-#           - will need to write helper function to create listingid
-#           - will need to connect registrar database to be able to add coursetitle to listing without user having to type it in manually
+#   - createListing(fieldList)
 #   - editListing(listingid, fieldList)
-#       - edits some field(s) of a listing
-#       - list contains only the fields that are to be updated (name, email, bookname, dept, coursenum, price, condition, negotiable)
-#   - deleteListing(listingid):
-#       - deletes row from database by listingid
+#   - deleteListing(listingid)
+#   - getMyListings(username)
+#   - claimListing(listingid, claimerid, price)
+#   - unclaimListing(listingid, claimerid)
+#   - makeOffer(listingid, offererid, offerprice)
+#   - makeCounter(listingid, offererid, counter)
+#   - getMyClaims(claimerid)
+#   - getMyOffers(claimerid)
+#   - getOffersToMe(listingid)
+#   - getClaimsToMe(listingid)
+#   - acceptOffer(listingid, offererid)
+#   - unacceptOffer(listingid, offererid)
+#   - def rejectOffer(listingid, offererid)
 #-----------------------------------------------------------------------
 
 def getListings(userSearchDict):
@@ -222,29 +212,34 @@ def getMyListings(username):
     return dataList
 
 # this method takes a listingid and claimerid and adds them to our second table
+# will only claim a listing that is not already claimed
 def claimListing(listingid, claimerid, price):
-    DATABASE_NAME = 'listings.sqlite'
+    # check if listing has already been claimed
+    details = getDetails(listingid)
+    claimed = details[9]
+    if (claimed != 1):
+        DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+        if not path.isfile(DATABASE_NAME):
+            raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    connection = connect(DATABASE_NAME)
-    cursor = connection.cursor()
+        connection = connect(DATABASE_NAME)
+        cursor = connection.cursor()
 
-    stmtStr = makeOfferStmtStr(listingid, claimerid, cursor)
-    cursor.execute(stmtStr, [price, 'Claimed', listingid, claimerid])
+        stmtStr = makeOfferStmtStr(listingid, claimerid, cursor)
+        cursor.execute(stmtStr, [price, 'Claimed', listingid, claimerid])
 
-    # update table 1 (listings) so that claimed col is '1'
-    stmtStr = 'UPDATE listings SET claimed=1 WHERE listingid=?'
-    cursor.execute(stmtStr, [listingid])
+        # update table 1 (listings) so that claimed col is '1'
+        stmtStr = 'UPDATE listings SET claimed=1 WHERE listingid=?'
+        cursor.execute(stmtStr, [listingid])
 
-    # maybe here I should also have it change any offer statuses on this listing to be something like 'This listing has been claimed'
-    # if I do that, make sure that unclaimListing reverts the offer statuses to 'Pending'
+        # maybe here I should also have it change any offer statuses on this listing to be something like 'This listing has been claimed'
+        # if I do that, make sure that unclaimListing reverts the offer statuses to 'Pending'
 
-    connection.commit()
+        connection.commit()
 
-    cursor.close()
-    connection.close()
+        cursor.close()
+        connection.close()
 
 def unclaimListing(listingid, claimerid):
     DATABASE_NAME = 'listings.sqlite'
@@ -269,24 +264,28 @@ def unclaimListing(listingid, claimerid):
     connection.close()
 
 def makeOffer(listingid, offererid, offerprice):
-    DATABASE_NAME = 'listings.sqlite'
+    # check if listing has already been claimed
+    details = getDetails(listingid)
+    claimed = details[9]
+    if (claimed != 1):
+        DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
+        if not path.isfile(DATABASE_NAME):
+            raise Exception("database \'" + DATABASE_NAME + "\' not found")
 
-    connection = connect(DATABASE_NAME)
-    cursor = connection.cursor()
+        connection = connect(DATABASE_NAME)
+        cursor = connection.cursor()
 
-    stmtStr = makeOfferStmtStr(listingid, offererid, cursor)
-    cursor.execute(stmtStr, [offerprice, 'Pending', listingid, offererid])
+        stmtStr = makeOfferStmtStr(listingid, offererid, cursor)
+        cursor.execute(stmtStr, [offerprice, 'Pending', listingid, offererid])
 
-    connection.commit()
+        connection.commit()
 
-    #-----------------------------------------------------------------
-    # ideally, here we send notification to seller that offer was made
-    #-----------------------------------------------------------------
-    cursor.close()
-    connection.close()
+        #-----------------------------------------------------------------
+        # ideally, here we send notification to seller that offer was made
+        #-----------------------------------------------------------------
+        cursor.close()
+        connection.close()
 
 def makeCounter(listingid, offererid, counter):
     DATABASE_NAME = 'listings.sqlite'
@@ -316,6 +315,7 @@ def getMyClaims(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
+    # get all rows that ARE claimed
     stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND offerstatus = ?'
     cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
@@ -338,6 +338,7 @@ def getMyOffers(claimerid):
     connection = connect(DATABASE_NAME)
     cursor = connection.cursor()
 
+    # get all rows that are NOT claimed
     stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND offerstatus != ?'
     cursor.execute(stmtStr, [claimerid, 'Claimed'])
 

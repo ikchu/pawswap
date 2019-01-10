@@ -121,7 +121,7 @@
               </tr>
             % else:
               % for row in listings:
-                <tr class = "clickable-row thisfont" data-href="/accountlistingsdetails?listingid={{row[0]}}">
+                <tr class = "clickable-row thisfont" data-href="/listingsdetails?listingid={{row[0]}}">
                   <td>{{row[1]}}</td>
                   <td>{{row[2]}}</td>
                   <td>{{row[3]}}</td>
@@ -184,12 +184,11 @@
                           </td>
                         % end
                         % if claimOff[2] == "Countered":
-                          <td><strong>You rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}} and made a counter offer of ${{claimOff[3]}}.</strong></td>
-                          <td></td>
+                          <td colspan="4"><strong>You rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}} and made a counter offer of ${{claimOff[3]}}.</strong></td>
                         % end
                         <!-- if this offer has been accepted --> 
                         % if claimOff[2] == "Accepted":
-                          <td><strong>You have accepted {{claimOff[0]}}'s offer of ${{claimOff[1]}}.</strong></td>
+                          <td colspan="3"><strong>You have accepted {{claimOff[0]}}'s offer of ${{claimOff[1]}}.</strong></td>
                           <td>
                             <form method="get" action="/unacceptoffer">
                               <input type="hidden" name="listingid" value={{row[0]}} />
@@ -200,6 +199,8 @@
                         % end
                         % if claimOff[2] == "Rejected":
                           <td colspan="2"><strong>You have rejected {{claimOff[0]}}'s offer of ${{claimOff[1]}}.</strong></td>
+                          <td></td>
+                          <td></td>
                         % end
                       <!-- If it's a claim -->
                       % else:
@@ -278,9 +279,7 @@
                 <!-- If this offer was accepted, display an option to claim at the accepted offer price -->
                 % if row[7] == "Accepted":
                   <td></td>
-                  <td></td>
-                  <td></td>
-                  <td colspan="3"><strong>The seller has accepted your offer</strong></td>
+                  <td colspan="5"><strong>The seller has accepted your offer</strong></td>
                   <td>
                     <form method="get" action="/claimlisting">
                       <input type="hidden" name="listingid" value={{row[0]}} />
@@ -297,6 +296,7 @@
                   <td colspan="2">
                     <form method="get" action="/makeoffer">
                       <input type="hidden" name="listingid" value={{row[0]}} />
+                      <input type="hidden" name="price" value={{row[5]}} />
                       <button class = "btn btn-default" type="submit">Make Offer</button>
                       &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
                     </form>
@@ -304,9 +304,7 @@
                 % end
                 % if row[7] == "Countered":
                   <td></td>
-                  <td></td>
-                  <td></td>
-                  <td colspan="2"><strong>The seller has made a counter offer of ${{row[8]}}.</strong></td>
+                  <td colspan="3"><strong>The seller has made a counter offer of ${{row[8]}}.</strong></td>
                   <td>
                     <form method="get" action="/claimlisting">
                       <input type="hidden" name="listingid" value={{row[0]}} />
@@ -314,13 +312,20 @@
                       <button class = "btn btn-default" type="submit">Claim for ${{row[8]}}</button>
                     </form>
                   </td>
-                  <td>
+                  <td colspan="2">
                     <form method="get" action="/makeoffer">
                       <input type="hidden" name="listingid" value={{row[0]}} />
-                      <button class = "btn btn-default" type="submit">Make New Offer</button>
-                      &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
-                    </form>
+                      <input type="hidden" name="price" value={{row[5]}} />
+                      <div class = "input-group">
+                        <input type="text" class="input form-control no-border thisfont" placeholder="$ New Offer" name="offerprice" required />
+                        <br>
+                        <span class="input-group-btn">
+                          &nbsp;
+                          <button class = "btn btn-default" type="submit">Go!</button>
+                        </span>
+                      </div>
                   </td>
+                  </form>
                 % end
               % end
             %end

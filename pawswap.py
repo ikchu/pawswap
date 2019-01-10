@@ -138,66 +138,63 @@ def listingsdetails():
     casClient = CASClient()
     username = casClient.authenticate(request, response, redirect, session)
     listingid = request.query.get('listingid')
+
     try: 
         details = getDetails(listingid)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e})
-    
-    erBool = 0
+
+    # initially assume this listing has no relation to the user
+    relation = 'None'
+    # if it turns out that you claimed or made an offer on this listing,
+    # store your claim/offer row and pass it through 
+    claimOrOffer = []
+
+    # is this my offer?
+    myOffers = getMyOffers(username)
+    for row in myOffers:
+        if str(row[0]) == listingid:
+            relation = 'My_Offer'
+            claimOrOffer = row
+            break
+    # is this my claim?
+    myClaims = getMyClaims(username)
+    for row in myClaims:
+        if str(row[0]) == listingid:
+            relation = 'My_Claim'
+            claimOrOffer = row
+            break
+    # is this my listing?
+    myListings = getMyListings(username)
+    for row in myListings:
+        if str(row[0]) == listingid:
+            relation = 'My_Listing'
+            break
     # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
     templateInfo = {
         'listingid': listingid,
         'details': details,
+        'claimOrOffer':claimOrOffer,
         'username': username,
         'claimed': details[9],
-        'errorBool': erBool,
-        'e': ''
+        'errorBool': False,
+        'relation':relation
     }
-    # check to make sure not claimed by someone else
-    claimed = details[9]
-    # get the claims you've made and see if the listingid corresponds to this listinid
-    # create boolean
-    claimedByMe = False
-
-    claimsIMade = getMyClaims(username)
-    for row in claimsIMade:
-        if (row[0] == listingid):
-            claimsIMade = True
-            break
     
-    if (claimed == 1) and (claimedByMe == False):
-        # don't let the offer happen
-        templateInfo['errorBool'] = 1
-        templateInfo['e'] = 'Sorry, this listing has just been claimed. Please navigate to the mainpage.'
+    # Has this listing been claimed by another user?
+    # Note: Only want to display the 'already claimed' error message if the listing
+    # isn't yours or if you aren't the one who claimed it
+    if (details[9]==1) and (relation=='None' or relation=='My_Offer'):
+        templateInfo['errorBool'] = True
+        templateInfo['e'] = 'Sorry - this listing has been claimed by another user and is no longer available. Please return to the mainpage.'
+
     return template('listingsdetails.tpl', templateInfo)
-
-# same as listing deets except it returns accountlistingdetails.tpl which
-# has delete functionality; regular listingdetails does not
-@route('/accountlistingsdetails')
-def accListDet():
-    session = request.environ.get('beaker.session')
-    
-    casClient = CASClient()
-    username = casClient.authenticate(request, response, redirect, session)
-
-    listingid = request.query.get('listingid')
-
-    try:
-        details = getDetails(listingid)
-    except Exception, e:
-        return template('customerror.tpl', {'errorMsg' : e})
-
-    # name, email, bookname, dept, coursenum, coursetitle, price, condition, negotiable
-
-    templateInfo = {
-        'listingid': listingid,
-        'details': details,
-        'username': username
-    }
-    return template('accountlistingsdetails.tpl', templateInfo)
 
 @route('/account')
 def account():
+    
+    print 'pawswap.py > account'
+
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
@@ -301,18 +298,14 @@ def createlisting():
     try:
         # returns detailsList that now includes listingid and coursetitle
         detailsList = createListing(detailsList)
+        listingid = str(detailsList[10])
     except Exception, e:
         templateInfo['errorBool'] = True
         templateInfo['e'] = e
         return template('createlisting.tpl', templateInfo)
-    # update the template now that listingid and course title have been appended
-    templateInfo['details'] = detailsList
-    templateInfo['listingid'] = detailsList[10]
-    templateInfo['errorBool'] = False
-    
-    # Need to think about what template we return to. Maybe return to some new template that previews what your post looks like??
-    # return template('createlisting.tpl', templateInfo)
-    return template('afterSubmission.tpl', templateInfo)
+
+    newurl = '/listingsdetails?listingid=' + listingid
+    redirect(newurl)
 
 @route('/goToEditListing')
 def goToEditListing():
@@ -357,8 +350,6 @@ def editlisting():
 
     listingid = request.query.get('listingid')
     # no longer need to get coursetitle because that'll be obtained once listings.py > editListing() is called
-    
-    emptyField = False
 
     # sellerid is the person's netid but this will be retrieved from username
 
@@ -399,52 +390,23 @@ def editlisting():
         templateInfo['fromEditListing'] = True
         return template('editlisting.tpl', templateInfo)
 
-    # update the template now that listingid and course title have been appended
-    templateInfo['details'] = detailsList
-    templateInfo['errorBool'] = False
-
-    
-    # Need to think about what template we return to. Maybe return to some new template that previews what your post looks like??
-    # return template('createlisting.tpl', templateInfo)
-    return template('afterEditSubmission.tpl', templateInfo)
+    newurl = '/listingsdetails?listingid=' + listingid
+    redirect(newurl)
 
 @route('/deletelisting')
 def deleteThisListing():
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
-    username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
 
     try:
         deleteListing(listingid)
-        
-        # Code below identical to account(). It displays the account page
-        # I tried just calling redirect('/account') instead but it didn't seem to work
-        # -----------------------------------------------
-        listings = getMyListings(username)
-        claims = getMyClaims(username)
-        offers = getMyOffers(username)
-        listingsClaimsAndOffs = {}
-        for listing in listings:
-            listingid = listing[0]
-            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
-            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
-            claimsAndOffers = claimsToMe + offersToMe
-            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
-
-        templateInfo = {
-        'listings': listings,
-        'username': username,
-        'myClaims': claims,
-        'myOffers': offers,
-        'claimsAndOffs': listingsClaimsAndOffs,
-        }
-        return template('account.tpl', templateInfo)
-        # -----------------------------------------------
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
+    
+    redirect('/account')
 
 # this links the claimerid and the listingid in a table
 @route('/claimlisting')
@@ -455,38 +417,28 @@ def claimlisting():
     username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
-    details = getDetails(listingid)
     claimPrice = request.query.get('price')
 
-    erBool = 0
-    templateInfo = {
-        'listingid': listingid,
-        'details': details,
-        'claimprice': claimPrice,
-        'claimed': details[9],
-        'errorBool': erBool,
-        'e': ''
-    }
+    # ------------------------------------------------
 
-    # check to make sure not claimed
-    claimed = details[9]
-    if claimed == 1:
-        # don't let the offer happen
-        templateInfo['errorBool']= 1
-        templateInfo['e'] = 'Sorry, this listing has just been claimed by another user. Please navigate to the mainpage.'
-        return template('listingsdetails.tpl', templateInfo)
+    # # check to make sure not claimed
+    # claimed = details[9]
+    # if claimed == 1:
+    #     # don't let the offer happen
+    #     templateInfo['errorBool']= 1
+    #     templateInfo['e'] = 'Sorry, this listing has just been claimed by another user. Please navigate to the mainpage.'
+    #     return template('listingsdetails.tpl', templateInfo)
+
+    # ------------------------------------------------
 
     try:
+        # note: if listing is already claimed, this will do nothing
         claimListing(listingid, username, claimPrice)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
     
-    # call method in listings.py that adds the claimer netid to a table with
-    # this listingid
-    # newClaim(listingid, username)
-    
-    
-    return template('afterClaim.tpl', templateInfo)
+    newurl = '/listingsdetails?listingid=' + listingid
+    redirect(newurl)
 
 @route('/unclaimlisting')
 def unclaimlisting():
@@ -496,18 +448,14 @@ def unclaimlisting():
     username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
-    details = getDetails(listingid)
 
     try:
         unclaimListing(listingid, username)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
     
-    templateInfo = {
-        'listingid': listingid,
-        'details': details,
-    }
-    return template('afterUnclaim.tpl', templateInfo)
+    newurl = '/listingsdetails?listingid=' + listingid
+    redirect(newurl)
 
 @route('/makeoffer')
 def makeoffer():
@@ -520,35 +468,38 @@ def makeoffer():
     details = getDetails(listingid)
     offerprice = int(request.query.get('offerprice'))
 
-    
-    erBool = 0
     templateInfo = {
         'listingid': listingid,
         'details': details,
         'offerprice': offerprice,
-        'errorBool': erBool,
+        'errorBool': False,
         'claimed': details[9],
-        'e': ''
     }
     
-    # check to make sure not claimed
-    claimed = details[9]
-    if claimed == 1:
-        # don't let the offer happen
-        templateInfo['errorBool']= 1
-        templateInfo['e'] = 'Sorry - this listing has just been claimed. Please navigate to the mainpage.'
-        return template('listingsdetails.tpl', templateInfo)
+    # ------------------------------------------------
+
+    # # check to make sure not claimed
+    # claimed = details[9]
+    # if claimed == 1:
+    #     # don't let the offer happen
+    #     templateInfo['errorBool']= 1
+    #     templateInfo['e'] = 'Sorry - this listing has just been claimed. Please navigate to the mainpage.'
+    #     return template('listingsdetails.tpl', templateInfo)
+    
+    # ------------------------------------------------
     
     if (offerprice <= 0) or (offerprice > price):
-        templateInfo['errorBool'] = 1
-        templateInfo['e'] = 'Your offer price must be greater than 0 and less than the listed price.'
+        templateInfo['errorBool'] = True
+        templateInfo['e'] = 'Error: Your offer must be between $0 and the listed price.'
         return template('listingsdetails.tpl', templateInfo)
 
     try:
         makeOffer(listingid, username, offerprice)
-        return template('afterOffer.tpl', templateInfo)
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
+
+    newurl = '/listingsdetails?listingid=' + listingid
+    redirect(newurl)
 
 @route('/makecounteroffer')
 def makecounteroffer():
@@ -563,32 +514,10 @@ def makecounteroffer():
 
     try:
         makeCounter(listingid, offererid, counterprice)
-        
-        # Code below identical to account(). It displays the account page
-        # I tried just calling redirect('/account') instead but it didn't seem to work
-        # -----------------------------------------------
-        listings = getMyListings(username)
-        claims = getMyClaims(username)
-        offers = getMyOffers(username)
-        listingsClaimsAndOffs = {}
-        for listing in listings:
-            listingid = listing[0]
-            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
-            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
-            claimsAndOffers = claimsToMe + offersToMe
-            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
-
-        templateInfo = {
-        'listings': listings,
-        'username': username,
-        'myClaims': claims,
-        'myOffers': offers,
-        'claimsAndOffs': listingsClaimsAndOffs,
-        }
-        return template('account.tpl', templateInfo)
-        # -----------------------------------------------
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
+
+    redirect('/account')
 
 @route('/acceptoffer')
 def acceptoffer():
@@ -603,32 +532,10 @@ def acceptoffer():
     # calls a listings.py function to change the offers table 'accept' column to accepted
     try:
         acceptOffer(listingid, offererid)
-        
-        # Code below identical to account(). It displays the account page
-        # I tried just calling redirect('/account') instead but it didn't seem to work
-        # -----------------------------------------------
-        listings = getMyListings(username)
-        claims = getMyClaims(username)
-        offers = getMyOffers(username)
-        listingsClaimsAndOffs = {}
-        for listing in listings:
-            listingid = listing[0]
-            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
-            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
-            claimsAndOffers = claimsToMe + offersToMe
-            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
-
-        templateInfo = {
-        'listings': listings,
-        'username': username,
-        'myClaims': claims,
-        'myOffers': offers,
-        'claimsAndOffs': listingsClaimsAndOffs,
-        }
-        return template('account.tpl', templateInfo)
-        # -----------------------------------------------
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
+
+    redirect('/account')
 
 @route('/unacceptoffer')
 def unacceptoffer():
@@ -643,35 +550,16 @@ def unacceptoffer():
     # calls a listings.py function to change the offers table 'accept' column to accepted
     try:
         unacceptOffer(listingid, offererid)
-        
-        # Code below identical to account(). It displays the account page
-        # I tried just calling redirect('/account') instead but it didn't seem to work
-        # -----------------------------------------------
-        listings = getMyListings(username)
-        claims = getMyClaims(username)
-        offers = getMyOffers(username)
-        listingsClaimsAndOffs = {}
-        for listing in listings:
-            listingid = listing[0]
-            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
-            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
-            claimsAndOffers = claimsToMe + offersToMe
-            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
-
-        templateInfo = {
-        'listings': listings,
-        'username': username,
-        'myClaims': claims,
-        'myOffers': offers,
-        'claimsAndOffs': listingsClaimsAndOffs,
-        }
-        return template('account.tpl', templateInfo)
-        # -----------------------------------------------
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
 
+    redirect('/account')
+
 @route('/rejectoffer')
 def rejectoffer():
+
+    print 'pawswap.py > rejectoffer'
+
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
@@ -683,32 +571,10 @@ def rejectoffer():
     # calls a listings.py function to change the offers table 'accept' column to accepted
     try:
         rejectOffer(listingid, offererid)
-        
-        # Code below identical to account(). It displays the account page
-        # I tried just calling redirect('/account') instead but it didn't seem to work
-        # -----------------------------------------------
-        listings = getMyListings(username)
-        claims = getMyClaims(username)
-        offers = getMyOffers(username)
-        listingsClaimsAndOffs = {}
-        for listing in listings:
-            listingid = listing[0]
-            claimsToMe = getClaimsToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Claim'] Note: 'Yes/No' doesn't matter here. Just including for length consistency between offer/claim
-            offersToMe = getOffersToMe(listingid) # returns [offererid, offer, 'Yes/No', 'Offer']
-            claimsAndOffers = claimsToMe + offersToMe
-            listingsClaimsAndOffs[listing[0]] = claimsAndOffers
-
-        templateInfo = {
-        'listings': listings,
-        'username': username,
-        'myClaims': claims,
-        'myOffers': offers,
-        'claimsAndOffs': listingsClaimsAndOffs,
-        }
-        return template('account.tpl', templateInfo)
-        # -----------------------------------------------
     except Exception, e:
         return template('customerror.tpl', {'errorMsg' : e })
+
+    redirect('/account')
 
 @error(404)
 def notFound(error):

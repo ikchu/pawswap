@@ -80,62 +80,106 @@
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
-    
-    <br>
-      <nav class="thisfont text-center specific">
-        <strong> Listing Details </strong>
-      </nav>
-      
-    %if errorBool==1:
-      <br>
+
+   %if errorBool == True:
       <div class="container thisfont">
+         <br>
          <strong>{{e}}</strong>
       </div>
-    %end
-      <div class="container thisfont">
-         <hr>
-               <strong> Name: </strong> {{details[0]}}<br>
-               <strong> Email: </strong> {{details[1]}}<br>
-               <strong> Textbook Name: </strong> {{details[2]}}<br>
-               <strong> Department: </strong> {{details[3]}}<br>
-               <strong> Course Number: </strong> {{details[4]}}<br>
-               <strong> Course Title: </strong> {{details[5]}}<br>
-               <strong> Condition: </strong> {{details[6]}}<br>
-               <strong> Price: </strong> {{details[7]}}<br>
-               <br>
-         %if errorBool==1:
-            <form method="get" action="/claimlisting">
-            <button class = "btn btn-default" type="submit">Return to Mainpage</button>
-            </form>     
-         %else:
-            <!-- if claimed then give option to unclaim (details[9] is 'claimed')-->
-            % if claimed==0:
-               <form method="get" action="/claimlisting">
-                  <input type="hidden" name="listingid" value={{listingid}} />
-                  <input type="hidden" name="price" value={{details[7]}} />
-                  <button class = "btn btn-default" type="submit">Claim at Listed Price</button>
-               </form>
-               <br>
-               <br>
-               <form method="get" action="/makeoffer">
-                  <input type="hidden" name="listingid" value={{listingid}} />
-                  <input type="hidden" name="price" value={{details[7]}} />
-                  <button class = "btn btn-default" type="submit">Make Offer</button>
-                  &nbsp; $<input type="number" step="0.01" placeholder="Offer" name="offerprice" required />
-               </form>
-            % end
-            % if claimed==1:
-               <form method="get" action="/unclaimlisting">
-                  <input type="hidden" name="listingid" value={{listingid}} />
-                  <button class = "btn btn-default" type="submit">Unclaim Listing</button>
-               </form>
-            % end
+   %else:
+      <!------------ Title ------------>
+      <br>
+      <nav class="thisfont text-center specific">
+         %if relation == "My_Offer":
+            <strong> Your Offer </strong>
          %end
-         <hr>
-         <!-- SET THE COOKIES IN HERE< PUSH THE COOKIE VALUES INTO THE TEMPLATE AND USE THOESE VALUES TO SEND THE URL BACK -->
-        
+         %if relation == "My_Claim":
+            <strong> Your Claim </strong>
+         %end
+         %if relation == "My_Listing":
+            <strong> Your Listing </strong>
+         %end
+         %if relation == "None":
+            <strong> Listing Details </strong>
+         %end
+      </nav>
+      <!------------ Message ------------>
+      %if relation == "My_Offer":
+         <div class="container thisfont">
+            <hr>
+            <strong> Your offer for this book is ${{claimOrOffer[6]}}. This offer can be viewed and updated from your Account page. </strong>
+         </div>
+      %end
+      %if relation == "My_Claim":
+         <div class="container thisfont">
+            <hr>
+            <strong> You've claimed this listing for ${{claimOrOffer[6]}}. This textbook has been added to your Claimed List. Please contact the seller at <strong>{{details[1]}}</strong> to pay for and retrieve your book. </strong>
+         </div>
+      %end
+   %end
+   <!------------ BODY ------------>
+   <div class="container thisfont">
+      <hr>
+      <strong> Name: </strong> {{details[0]}}<br>
+      <strong> Email: </strong> {{details[1]}}<br>
+      <strong> Textbook Name: </strong> {{details[2]}}<br>
+      <strong> Department: </strong> {{details[3]}}<br>
+      <strong> Course Number: </strong> {{details[4]}}<br>
+      <strong> Course Title: </strong> {{details[5]}}<br>
+      <strong> Condition: </strong> {{details[6]}}<br>
+      <strong> Price: </strong> ${{details[7]}}<br>
+      <br>
+      <!------------ Buttons ------------>
+      %if errorBool == True:
+         <form method="get" action="/mainpage">
+            <button class = "btn btn-default" type="submit">Return to Mainpage</button>
+         </form>   
+      %else:
+         %if relation == "My_Offer":
+            <form method="get" action="/claimlisting">
+               <input type="hidden" name="listingid" value={{listingid}} />
+               <input type="hidden" name="price" value={{details[7]}} />
+               <button class = "btn btn-default" type="submit">Claim at Listed Price</button>
+            </form>
+            <br>
+            <br>
+            <form method="get" action="/makeoffer">
+               <input type="hidden" name="listingid" value={{listingid}} />
+               <input type="hidden" name="price" value={{details[7]}} />
+               <button class = "btn btn-default" type="submit">Make Offer</button>
+               &nbsp; $<input type="number" step="0.01" placeholder="Offer" name="offerprice" required />
+            </form>
+         %end
+         %if relation == "My_Claim":
+            <form method="get" action="/unclaimlisting">
+               <input type="hidden" name="listingid" value={{listingid}} />
+               <button class = "btn btn-default" type="submit">Unclaim Listing</button>
+            </form>
+         %end
+         %if relation == "My_Listing":
+            <a class="btn" href='/goToEditListing?listingid={{listingid}}'>Edit listing</a>
+            <a class="btn" href='/deletelisting?listingid={{listingid}}'>Delete listing</a>
+         %end
+         %if relation == "None":
+            <form method="get" action="/claimlisting">
+               <input type="hidden" name="listingid" value={{listingid}} />
+               <input type="hidden" name="price" value={{details[7]}} />
+               <button class = "btn btn-default" type="submit">Claim at Listed Price</button>
+            </form>
+            <br>
+            <br>
+            <form method="get" action="/makeoffer">
+               <input type="hidden" name="listingid" value={{listingid}} />
+               <input type="hidden" name="price" value={{details[7]}} />
+               <button class = "btn btn-default" type="submit">Make Offer</button>
+               &nbsp; $<input type="number" step="0.01" placeholder="Offer" name="offerprice" required />
+            </form>
+         %end
+      %end
+      <hr>
    </div>
- <!-- Copyright -->
+
+   <!-- Copyright -->
    <footer class="footer">
       <div class="footer-copyright text-center py-3">
         © 2018 Copyright: Reece Schachne, Ikaia Chu, David Bowman. <br>
