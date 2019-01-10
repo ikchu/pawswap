@@ -113,7 +113,9 @@
       %if relation == "My_Claim":
          <div class="container thisfont">
             <hr>
-            <strong> You've claimed this listing for ${{claimOrOffer[6]}}. This textbook has been added to your Claimed List. Please contact the seller at <a href="mailto:{{details[1]}}?subject=(__subject__)&body=(__body__)">{{details[1]}}</a> to pay for and retrieve your book. </strong>
+            <strong> You've claimed this listing for ${{claimOrOffer[6]}}. This textbook has been added to your Claimed List. Please contact the seller at <a href="mailto:{{details[1]}}?subject=Pawswap Transaction&body=Hi, I’ve claimed your textbook on Pawswap, and I’m reaching out to finalize this transaction. Where/when could I retrieve the book from you? I’ll bring cash or you can provide your Venmo handle. 
+
+Let me know at your earliest convenience. Thank you!">{{details[1]}}</a> to pay for and retrieve your book. </strong>
          </div>
       %end
    %end

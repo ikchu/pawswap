@@ -204,7 +204,9 @@
                         % end
                       <!-- If it's a claim -->
                       % else:
-                        <td colspan="3"><strong>This listing was claimed by {{claimOff[0]}} for ${{claimOff[1]}} and has been taken offline. If you can't complete the transaction, repost your listing.</strong></td>
+                        <td colspan="3"><strong>This listing was claimed by <a href="mailto:{{claimOff[0]}}@princeton.edu?subject=Pawswap Transaction&body=Hi, I noticed that you claimed my textbook on Pawswap, and I’m reaching out to finalize this transaction. Where/when should we meet to give you the book? We can discuss payment method too.
+
+Let me know at your earliest convenience. Thank you!">{{claimOff[0]}}@princeton.edu </a>for ${{claimOff[1]}} and has been taken offline. If you can't complete the transaction, repost your listing.</strong></td>
                         <td>
                           <form method="get" action="/repost">
                             <input type="hidden" name="listingid" value={{row[0]}} />
