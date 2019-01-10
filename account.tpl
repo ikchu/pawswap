@@ -82,6 +82,8 @@
        }
        .btn {
         padding:5;
+        background-color: #343a40;
+        color: white;
 
         /*position:absolute;*/
        }
