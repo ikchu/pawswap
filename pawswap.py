@@ -598,6 +598,4 @@ if __name__ == '__main__':
     if len(argv) != 2:
         print 'Usage: ' + argv[0] + ' port required'
         exit(1)
-    # port = int(environ.get("PORT", 50000))
-    # run(app=pawswapApp, host='0.0.0.0', port=port, debug=True)
     run(app=pawswapApp, host='0.0.0.0', port=argv[1], debug=True)
