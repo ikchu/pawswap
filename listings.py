@@ -44,8 +44,7 @@ def getListings(userSearchDict):
 
     dataList = []
     
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = getListingsStmtStr(userSearchDict)
@@ -66,8 +65,7 @@ def getListings(userSearchDict):
 
 def getDetails(listingid):
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
     
     stmtStr = getdetailsStmtStr()
@@ -83,8 +81,7 @@ def getDetails(listingid):
 # Returns listings list of tuples (containing all the fields)
 def createListing(fieldList):
     
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = createListingStmtStr()
@@ -120,8 +117,7 @@ def createListing(fieldList):
 #       - fieldList contains only the fields that are to be updated (any combo of name, email, bookname, dept, coursenum, price, condition, negotiable)
 def editListing(listingid, fieldList):
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     # getting new coursetitle in case the user edited dept or coursenum
@@ -151,8 +147,7 @@ def editListing(listingid, fieldList):
 
 def deleteListing(listingid):
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'DELETE FROM listings WHERE listingid = %s'
@@ -171,8 +166,7 @@ def deleteListing(listingid):
 def getMyListings(username):
     dataList = []
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = %s'
@@ -197,8 +191,7 @@ def claimListing(listingid, claimerid, price):
     details = getDetails(listingid)
     claimed = details[9]
     if (claimed != 1):
-        port = int(environ.get('PORT', 5432))
-        connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+        connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
         cursor = connection.cursor()
 
         stmtStr = makeOfferStmtStr(listingid, claimerid, cursor)
@@ -217,8 +210,7 @@ def claimListing(listingid, claimerid, price):
         connection.close()
 
 def unclaimListing(listingid, claimerid):
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'DELETE FROM offers WHERE listingid=%s AND offererid=%s'
@@ -239,8 +231,7 @@ def makeOffer(listingid, offererid, offerprice):
     details = getDetails(listingid)
     claimed = details[9]
     if (claimed != 1):
-        port = int(environ.get('PORT', 5432))
-        connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+        connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
         cursor = connection.cursor()
 
         stmtStr = makeOfferStmtStr(listingid, offererid, cursor)
@@ -255,8 +246,7 @@ def makeOffer(listingid, offererid, offerprice):
         connection.close()
 
 def makeCounter(listingid, offererid, counter):
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = makeCounterStmtStr()
@@ -271,8 +261,7 @@ def makeCounter(listingid, offererid, counter):
 def getMyClaims(claimerid):
     dataList = []
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     # get all rows that ARE claimed
@@ -291,8 +280,7 @@ def getMyClaims(claimerid):
 def getMyOffers(claimerid):
     dataList = []
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     # get all rows that are NOT claimed
@@ -313,8 +301,7 @@ def getMyOffers(claimerid):
 def getOffersToMe(listingid):
     dataList = []
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = %s AND claimed = %s'
@@ -337,8 +324,7 @@ def getOffersToMe(listingid):
 def getClaimsToMe(listingid):
     dataList = []
 
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = %s AND offerstatus = %s'
@@ -357,8 +343,7 @@ def getClaimsToMe(listingid):
     return dataList
 
 def acceptOffer(listingid, offererid):
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'UPDATE offers SET offerstatus=%s WHERE listingid=%s AND offererid=%s'
@@ -369,8 +354,7 @@ def acceptOffer(listingid, offererid):
     connection.close()
 
 def unacceptOffer(listingid, offererid):
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'UPDATE offers SET offerstatus=%s WHERE listingid=%s AND offererid=%s'
@@ -381,8 +365,7 @@ def unacceptOffer(listingid, offererid):
     connection.close()
 
 def rejectOffer(listingid, offererid):
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'UPDATE offers SET offerstatus=%s WHERE listingid=%s AND offererid=%s'
@@ -393,8 +376,7 @@ def rejectOffer(listingid, offererid):
     connection.close()
     
 def repost(listingid):
-    port = int(environ.get('PORT', 5432))
-    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port="+port+" user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = 'UPDATE listings SET claimed=%s WHERE listingid=%s'
