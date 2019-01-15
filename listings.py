@@ -6,7 +6,6 @@
 #-----------------------------------------------------------------------
 
 import re
-from os import environ
 import psycopg2
 from sys import argv, stderr, exit
 from sqlite3 import connect
