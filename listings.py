@@ -7,6 +7,7 @@
 
 import re
 from os import path
+import psycopg2
 from sys import argv, stderr, exit
 from sqlite3 import connect
 import requests
@@ -42,12 +43,8 @@ import datetime
 def getListings(userSearchDict):
 
     dataList = []
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = getListingsStmtStr(userSearchDict)
@@ -68,12 +65,7 @@ def getListings(userSearchDict):
 
 def getDetails(listingid):
 
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
     
     stmtStr = getdetailsStmtStr()
@@ -89,12 +81,7 @@ def getDetails(listingid):
 # Returns listings list of tuples (containing all the fields)
 def createListing(fieldList):
     
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = createListingStmtStr()
@@ -130,12 +117,7 @@ def createListing(fieldList):
 #       - fieldList contains only the fields that are to be updated (any combo of name, email, bookname, dept, coursenum, price, condition, negotiable)
 def editListing(listingid, fieldList):
 
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     # getting new coursetitle in case the user edited dept or coursenum
@@ -165,19 +147,14 @@ def editListing(listingid, fieldList):
 
 def deleteListing(listingid):
 
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'DELETE FROM listings WHERE listingid = ?'
+    stmtStr = 'DELETE FROM listings WHERE listingid = %s'
     cursor.execute(stmtStr, [listingid])
     connection.commit()
 
-    stmtStr = 'DELETE FROM offers WHERE listingid = ?'
+    stmtStr = 'DELETE FROM offers WHERE listingid = %s'
     cursor.execute(stmtStr, [listingid])
     connection.commit()
 
@@ -188,15 +165,11 @@ def deleteListing(listingid):
 # for all listings with that username and returns the listings
 def getMyListings(username):
     dataList = []
-    DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = ?'
+    stmtStr = 'SELECT listingid, bookname, dept, coursenum, coursetitle, price FROM listings WHERE sellerid = %s'
     usernameList = [username]
 
     cursor.execute(stmtStr, usernameList)
@@ -218,19 +191,14 @@ def claimListing(listingid, claimerid, price):
     details = getDetails(listingid)
     claimed = details[9]
     if (claimed != 1):
-        DATABASE_NAME = 'listings.sqlite'
-
-        if not path.isfile(DATABASE_NAME):
-            raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-        connection = connect(DATABASE_NAME)
+        connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
         cursor = connection.cursor()
 
         stmtStr = makeOfferStmtStr(listingid, claimerid, cursor)
         cursor.execute(stmtStr, [price, 'Claimed', listingid, claimerid])
 
         # update table 1 (listings) so that claimed col is '1'
-        stmtStr = 'UPDATE listings SET claimed=1 WHERE listingid=?'
+        stmtStr = 'UPDATE listings SET claimed=1 WHERE listingid=%s'
         cursor.execute(stmtStr, [listingid])
 
         # maybe here I should also have it change any offer statuses on this listing to be something like 'This listing has been claimed'
@@ -242,20 +210,15 @@ def claimListing(listingid, claimerid, price):
         connection.close()
 
 def unclaimListing(listingid, claimerid):
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'DELETE FROM offers WHERE listingid=? AND offererid=?'
+    stmtStr = 'DELETE FROM offers WHERE listingid=%s AND offererid=%s'
     # be careful to pass fields in this order when executing
     cursor.execute(stmtStr, [listingid, claimerid])
 
     # update table 1 (listings) so that claimed col is '1'
-    stmtStr = 'UPDATE listings SET claimed=0 WHERE listingid=?'
+    stmtStr = 'UPDATE listings SET claimed=0 WHERE listingid=%s'
     cursor.execute(stmtStr, [listingid])
 
     connection.commit()
@@ -268,12 +231,7 @@ def makeOffer(listingid, offererid, offerprice):
     details = getDetails(listingid)
     claimed = details[9]
     if (claimed != 1):
-        DATABASE_NAME = 'listings.sqlite'
-
-        if not path.isfile(DATABASE_NAME):
-            raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-        connection = connect(DATABASE_NAME)
+        connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
         cursor = connection.cursor()
 
         stmtStr = makeOfferStmtStr(listingid, offererid, cursor)
@@ -288,12 +246,7 @@ def makeOffer(listingid, offererid, offerprice):
         connection.close()
 
 def makeCounter(listingid, offererid, counter):
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     stmtStr = makeCounterStmtStr()
@@ -307,16 +260,12 @@ def makeCounter(listingid, offererid, counter):
 # this returns a list of all the claims associated with a netid
 def getMyClaims(claimerid):
     dataList = []
-    DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     # get all rows that ARE claimed
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND offerstatus = ?'
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer FROM listings, offers WHERE offers.offererid = %s AND listings.listingid = offers.listingid AND offerstatus = %s'
     cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -330,16 +279,12 @@ def getMyClaims(claimerid):
     return dataList
 def getMyOffers(claimerid):
     dataList = []
-    DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
     # get all rows that are NOT claimed
-    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.offererid = ? AND listings.listingid = offers.listingid AND offerstatus != ?'
+    stmtStr = 'SELECT listings.listingid, bookname, dept, coursenum, coursetitle, price, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.offererid = %s AND listings.listingid = offers.listingid AND offerstatus != %s'
     cursor.execute(stmtStr, [claimerid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -355,15 +300,11 @@ def getMyOffers(claimerid):
 # returns offers on the listing with listingid
 def getOffersToMe(listingid):
     dataList = []
-    DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND claimed = ?'
+    stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = %s AND claimed = %s'
     cursor.execute(stmtStr, [listingid, '0'])
 
     row = cursor.fetchone()
@@ -382,15 +323,11 @@ def getOffersToMe(listingid):
 # should only ever return one claim, since we only allow one claim per listing
 def getClaimsToMe(listingid):
     dataList = []
-    DATABASE_NAME = 'listings.sqlite'
 
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = ? AND offerstatus = ?'
+    stmtStr = 'SELECT offererid, offer, offerstatus, counter, counterstatus FROM listings, offers WHERE offers.listingid = listings.listingid AND offers.listingid = %s AND offerstatus = %s'
     cursor.execute(stmtStr, [listingid, 'Claimed'])
 
     row = cursor.fetchone()
@@ -406,15 +343,10 @@ def getClaimsToMe(listingid):
     return dataList
 
 def acceptOffer(listingid, offererid):
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE offers SET offerstatus=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=%s WHERE listingid=%s AND offererid=%s'
     cursor.execute(stmtStr, ['Accepted',listingid,offererid])
     connection.commit()
 
@@ -422,15 +354,10 @@ def acceptOffer(listingid, offererid):
     connection.close()
 
 def unacceptOffer(listingid, offererid):
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE offers SET offerstatus=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=%s WHERE listingid=%s AND offererid=%s'
     cursor.execute(stmtStr, ['Pending',listingid,offererid])
     connection.commit()
 
@@ -438,15 +365,10 @@ def unacceptOffer(listingid, offererid):
     connection.close()
 
 def rejectOffer(listingid, offererid):
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE offers SET offerstatus=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=%s WHERE listingid=%s AND offererid=%s'
     cursor.execute(stmtStr, ['Rejected',listingid,offererid])
     connection.commit()
 
@@ -454,19 +376,14 @@ def rejectOffer(listingid, offererid):
     connection.close()
     
 def repost(listingid):
-    DATABASE_NAME = 'listings.sqlite'
-
-    if not path.isfile(DATABASE_NAME):
-        raise Exception("database \'" + DATABASE_NAME + "\' not found")
-
-    connection = connect(DATABASE_NAME)
+    connection = psycopg2.connect("dbname=da0gcdvn3issq host=ec2-54-235-67-106.compute-1.amazonaws.com port=5432 user=krjwjldbljtshq password=60d5da56862d7e9021a68085dfbf9b2f7ceb107fa2fd8f6e9a12f7be4dfc044f sslmode=require")
     cursor = connection.cursor()
 
-    stmtStr = 'UPDATE listings SET claimed=? WHERE listingid=?'
+    stmtStr = 'UPDATE listings SET claimed=%s WHERE listingid=%s'
     cursor.execute(stmtStr, ['0',listingid])
     connection.commit()
 
-    stmtStr = 'DELETE FROM offers WHERE listingid=?'
+    stmtStr = 'DELETE FROM offers WHERE listingid=%s'
     cursor.execute(stmtStr, [listingid])
     connection.commit()
 
@@ -499,11 +416,11 @@ def getListingsStmtStr(searchDict):
     # for each valid key (ex. '-dept'), the value is the string that will be appended to stmtStr (ex. ' AND dept = \'COS\'')
     # using 'LIKE' will take care of caps/lower issue. 
     keyStmtDict = {
-        'dept'       : 'dept LIKE ?',
-        'coursenum'  : 'coursenum LIKE ?',
-        'coursetitle': 'coursetitle LIKE ?',
-        'bookname'  : 'bookname LIKE ?',
-        'claimed'   : 'claimed = ?'
+        'dept'       : 'dept LIKE %s',
+        'coursenum'  : 'coursenum LIKE %s',
+        'coursetitle': 'coursetitle LIKE %s',
+        'bookname'  : 'bookname LIKE %s',
+        'claimed'   : 'claimed = %s'
     }
     
     stmtStr = stmtStrBase
@@ -571,7 +488,7 @@ def createValList(searchDict):
 def getdetailsStmtStr():
     return 'SELECT name, email, bookname, dept, coursenum, coursetitle, condition, price, negotiable, claimed ' + \
         'FROM listings ' + \
-        'WHERE listingid = ?'
+        'WHERE listingid = %s'
 
 # returns a unique listingid that is not already in the database
 # implementation method: use a counter. start listingid at 1, then 2, 3, etc. 
@@ -586,15 +503,15 @@ def newListingID(cursor):
 
     while True:
         randomId = random.randint(1, 1000000)
-        stmtStr = 'SELECT listingid FROM listings WHERE listingid = ?'
-        cursor.execute(stmtStr, [randomId])
+        stmtStr = 'SELECT listingid FROM listings WHERE listingid = %s'
+        cursor.execute(stmtStr, [str(randomId)])
         row = cursor.fetchone()
         if row is None:
             return randomId
     
 
 def createListingStmtStr():
-    return 'INSERT INTO listings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    return 'INSERT INTO listings VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
 # returns the course title when given dept and coursenum
 def getCourseTitle(dept, coursenum):
@@ -606,8 +523,8 @@ def getCourseTitle(dept, coursenum):
         'FROM classes, courses, crosslistings ' + \
         'WHERE classes.courseid = courses.courseid ' + \
         'AND courses.courseid = crosslistings.courseid ' + \
-        'AND dept = ? ' + \
-        'AND coursenum = ?'
+        'AND dept = %s ' + \
+        'AND coursenum = %s'
 
     DATABASE_NAME_R = 'reg.sqlite'
 
@@ -665,21 +582,21 @@ def getCrsTitleJSON(dept, coursenum):
         raise Exception('This course was not found. Please try a different Department and Course Number.')
 
 def editListingStmtStr():
-    stmtStr = 'UPDATE listings SET sellerid=?, name=?, email=?, bookname=?, dept=?, coursenum=?, condition=?, price=?, negotiable=?, coursetitle=? WHERE listingid=?'
+    stmtStr = 'UPDATE listings SET sellerid=%s, name=%s, email=%s, bookname=%s, dept=%s, coursenum=%s, condition=%s, price=%s, negotiable=%s, coursetitle=%s WHERE listingid=%s'
     return stmtStr
 
 def makeOfferStmtStr(listingid, offererid, cursor):
     # checking to see if the offerer has already made an offer for this listing. 
     # if so, then we want to update that row in offers table. Otherwise create new row
-    precheckStr = 'SELECT * FROM offers WHERE listingid LIKE ? AND offererid LIKE ?'
+    precheckStr = 'SELECT * FROM offers WHERE listingid LIKE %s AND offererid LIKE %s'
     cursor.execute(precheckStr, [listingid, offererid])
     offerAlreadyExists = (cursor.fetchone() is not None)
     
     if offerAlreadyExists:
-        stmtStr = 'UPDATE offers SET offer=?, offerstatus=? WHERE listingid=? AND offererid=?'
+        stmtStr = 'UPDATE offers SET offer=%s, offerstatus=%s WHERE listingid=%s AND offererid=%s'
     else:
         # fields seem out of order. but leave it this way so that order is same for INSERT vs. UPDATE stmts
-        stmtStr = 'INSERT INTO offers (offer, offerstatus, listingid, offererid) VALUES (?,?,?,?)'
+        stmtStr = 'INSERT INTO offers (offer, offerstatus, listingid, offererid) VALUES (%s,%s,%s,%s)'
 
     return stmtStr 
 
@@ -687,7 +604,7 @@ def makeCounterStmtStr():
     # when this function is called, it is assumed that it is being called on a 
     # specfiic offer that already exists in the table
 
-    stmtStr = 'UPDATE offers SET offerstatus=?, counter=?, counterstatus=? WHERE listingid=? AND offererid=?'
+    stmtStr = 'UPDATE offers SET offerstatus=%s, counter=%s, counterstatus=%s WHERE listingid=%s AND offererid=%s'
     return stmtStr
 
 
