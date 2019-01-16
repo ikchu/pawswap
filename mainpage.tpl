@@ -145,7 +145,7 @@
     </div>
 
     <div class="container thisfont">
-      To view more listing details, claim a listing, or make an offer on one, click the <strong>book name</strong>!
+      To view more listing details, claim a listing, or make an offer, click the <strong>book name</strong>!
     </div>
 
       <!-- PUT RESULTS IN HERE -->

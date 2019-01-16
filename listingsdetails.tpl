@@ -170,7 +170,7 @@ Let me know at your earliest convenience. Thank you!">{{details[1]}}</a> to pay 
             </form>
             <br>
             <div>
-              By <strong>claiming</strong> a listing, you are agreeing to pay for it at the listed price. Upon claiming, the listing will be removed from the mainpage; you will still be able to view it from your Account page.
+              By <strong>claiming</strong> a listing, you are agreeing to pay for it at the listed price. Upon claiming, the listing will be removed from the mainpage; you will still be able to view it from your Account.
             </div>
             
             <br>
