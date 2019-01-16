@@ -185,7 +185,7 @@ def listingsdetails():
     # Has this listing been claimed by another user?
     # Note: Only want to display the 'already claimed' error message if the listing
     # isn't yours or if you aren't the one who claimed it
-    if (details[9]==1) and (relation=='None' or relation=='My_Offer'):
+    if (details[9]=='1') and (relation=='None' or relation=='My_Offer'):
         templateInfo['errorBool'] = True
         templateInfo['e'] = 'Sorry - this listing has been claimed by another user and is no longer available. Please return to the mainpage.'
 
@@ -319,27 +319,43 @@ def goToEditListing():
     listingid = request.query.get('listingid')
     coursetitle = request.query.get('coursetitle')
 
-    # call the get details function with this listingid
-    # note: the cursor row is a tuple, not a list. so detailsList is actually a tuple
-    # using list() to convert tuple to list, then deleting coursetitle by index (since del and insert dont work on tuples)
-    detailsList = list(getDetails(listingid))
-    # removing coursetitle to have correct formatting for editlisting.tpl
-    del detailsList[5]
-    # inserting username at start to have correct formatting for editlisting.tpl
-    detailsList.insert(0, username)
-    # now detailsList has order [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
+    # verify that the user is the owner of the listing before allowing them to edit
+    relation = 'None'
+    # if it turns out that you claimed or made an offer on this listing,
+    # store your claim/offer row and pass it through 
+    claimOrOffer = []
 
-    templateInfo = {
-        'listingid': listingid,
-        'coursetitle': coursetitle,
-        'details': detailsList,
-        'errorBool': False,
-        'e': '',
-        'emptyListing': False,
-        'fromEditListing': True
-    }
+    # is this my listing?
+    myListings = getMyListings(username)
+    for row in myListings:
+        if str(row[0]) == listingid:
+            relation = 'My_Listing'
+            break
 
-    return template('editlisting.tpl', templateInfo)
+    if relation == 'None':
+        return template('customerror.tpl')
+    else:
+        # call the get details function with this listingid
+        # note: the cursor row is a tuple, not a list. so detailsList is actually a tuple
+        # using list() to convert tuple to list, then deleting coursetitle by index (since del and insert dont work on tuples)
+        detailsList = list(getDetails(listingid))
+        # removing coursetitle to have correct formatting for editlisting.tpl
+        del detailsList[5]
+        # inserting username at start to have correct formatting for editlisting.tpl
+        detailsList.insert(0, username)
+        # now detailsList has order [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
+
+        templateInfo = {
+            'listingid': listingid,
+            'coursetitle': coursetitle,
+            'details': detailsList,
+            'errorBool': False,
+            'e': '',
+            'emptyListing': False,
+            'fromEditListing': True
+        }
+
+        return template('editlisting.tpl', templateInfo)
 
 @route('/editlisting')
 def editlisting():
@@ -352,62 +368,93 @@ def editlisting():
     listingid = request.query.get('listingid')
     # no longer need to get coursetitle because that'll be obtained once listings.py > editListing() is called
 
-    # sellerid is the person's netid but this will be retrieved from username
+    # verify that the user is the owner of the listing before allowing them to edit
+    relation = 'None'
+    # if it turns out that you claimed or made an offer on this listing,
+    # store your claim/offer row and pass it through 
+    claimOrOffer = []
 
-    name = request.query.get('name')
-    email = request.query.get('email')
-    dept = request.query.get('dept')
-    # make it uppercase automatically
-    dept = dept.upper()
-    coursenum = request.query.get('coursenum')
-    bookname = request.query.get('bookname')
-    condition = request.query.get('condition')
-    price = int(request.query.get('price'))
-    negotiable = request.query.get('negotiable')
+    # is this my listing?
+    myListings = getMyListings(username)
+    for row in myListings:
+        if str(row[0]) == listingid:
+            relation = 'My_Listing'
+            break
 
-    detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
-    # define template
+    if relation == 'None':
+        return template('customerror.tpl')
+    else:
+        # sellerid is the person's netid but this will be retrieved from username
+        name = request.query.get('name')
+        email = request.query.get('email')
+        dept = request.query.get('dept')
+        # make it uppercase automatically
+        dept = dept.upper()
+        coursenum = request.query.get('coursenum')
+        bookname = request.query.get('bookname')
+        condition = request.query.get('condition')
+        price = int(request.query.get('price'))
+        negotiable = request.query.get('negotiable')
 
-    print 'pawswap.py > editlisting : edit fields',detailsList
+        detailsList = [username, name, email, bookname, dept, coursenum, condition, price, negotiable]
+        # define template
 
-    templateInfo = {
-        'listingid': listingid,
-        'details': detailsList,
-        'username': username,
-        'fromEditListing': True
-        }
+        print 'pawswap.py > editlisting : edit fields',detailsList
 
-    # if the price is not >= 0 then raise an error
-    if (price < 0):
-        templateInfo['errorBool'] = True
-        templateInfo['e'] = 'Price must be greater than or equal to 0.'
-        return template('editlisting.tpl', templateInfo)
+        templateInfo = {
+            'listingid': listingid,
+            'details': detailsList,
+            'username': username,
+            'fromEditListing': True
+            }
 
-    try:
-        detailsList = editListing(listingid, detailsList)
-    except Exception, e:
-        templateInfo['errorBool'] = True
-        templateInfo['e'] = e
-        templateInfo['fromEditListing'] = True
-        return template('editlisting.tpl', templateInfo)
+        # if the price is not >= 0 then raise an error
+        if (price < 0):
+            templateInfo['errorBool'] = True
+            templateInfo['e'] = 'Price must be greater than or equal to 0.'
+            return template('editlisting.tpl', templateInfo)
 
-    newurl = '/listingsdetails?listingid=' + listingid
-    redirect(newurl)
+        try:
+            detailsList = editListing(listingid, detailsList)
+        except Exception, e:
+            templateInfo['errorBool'] = True
+            templateInfo['e'] = e
+            templateInfo['fromEditListing'] = True
+            return template('editlisting.tpl', templateInfo)
+
+        newurl = '/listingsdetails?listingid=' + listingid
+        redirect(newurl)
 
 @route('/deletelisting')
 def deleteThisListing():
     session = request.environ.get('beaker.session')
     
     casClient = CASClient()
+    username = casClient.authenticate(request, response, redirect, session)
 
     listingid = request.query.get('listingid')
 
-    try:
-        deleteListing(listingid)
-    except Exception, e:
-        return template('customerror.tpl', {'errorMsg' : e })
-    
-    redirect('/account')
+    # verify that the user is the owner of the listing before allowing them to edit
+    relation = 'None'
+    # if it turns out that you claimed or made an offer on this listing,
+    # store your claim/offer row and pass it through 
+    claimOrOffer = []
+
+    # is this my listing?
+    myListings = getMyListings(username)
+    for row in myListings:
+        if str(row[0]) == listingid:
+            relation = 'My_Listing'
+            break
+
+    if relation == 'None':
+        return template('customerror.tpl')
+    else:
+        try:
+            deleteListing(listingid)
+        except Exception, e:
+            return template('customerror.tpl', {'errorMsg' : e })
+        redirect('/account')
 
 # this links the claimerid and the listingid in a table
 @route('/claimlisting')
@@ -450,13 +497,30 @@ def unclaimlisting():
 
     listingid = request.query.get('listingid')
 
-    try:
-        unclaimListing(listingid, username)
-    except Exception, e:
-        return template('customerror.tpl', {'errorMsg' : e })
-    
-    newurl = '/listingsdetails?listingid=' + listingid
-    redirect(newurl)
+    # verify that the user is the owner of the listing before allowing them to edit
+    relation = 'None'
+    # if it turns out that you claimed or made an offer on this listing,
+    # store your claim/offer row and pass it through 
+    claimOrOffer = []
+
+    # is this my claim?
+    myClaims = getMyClaims(username)
+    for row in myClaims:
+        if str(row[0]) == listingid:
+            relation = 'My_Claim'
+            claimOrOffer = row
+            break
+
+    if relation == 'None':
+        return template('customerror.tpl')
+    else:
+        try:
+            unclaimListing(listingid, username)
+        except Exception, e:
+            return template('customerror.tpl', {'errorMsg' : e })
+        
+        newurl = '/listingsdetails?listingid=' + listingid
+        redirect(newurl)
 
 @route('/makeoffer')
 def makeoffer():
