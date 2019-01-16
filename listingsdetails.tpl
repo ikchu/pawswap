@@ -169,6 +169,11 @@ Let me know at your earliest convenience. Thank you!">{{details[1]}}</a> to pay 
                <button class = "btn btn-default" type="submit">Claim at Listed Price</button>
             </form>
             <br>
+            <div>
+              By <strong>claiming</strong> a listing, you are agreeing to pay for it at the listed price. Upon claiming, the listing will be removed from the mainpage; you will still be able to view it from your Account page.
+            </div>
+            
+            <br>
             <br>
             <form method="get" action="/makeoffer">
                <input type="hidden" name="listingid" value={{listingid}} />
@@ -176,6 +181,10 @@ Let me know at your earliest convenience. Thank you!">{{details[1]}}</a> to pay 
                <button class = "btn btn-default" type="submit">Make Offer</button>
                &nbsp; $<input type="number" step="0.01" placeholder="Offer" name="offerprice" required />
             </form>
+            <br>
+            <div>
+              After <strong>making an offer</strong>, the seller will be notified, and will be able to view the status of your offer in your Account. Others can still make offers on the same listing.
+            </div>
          %end
       %end
       <hr>

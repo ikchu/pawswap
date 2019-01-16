@@ -93,6 +93,9 @@
        .specific {
         font-size: large;
        }
+       .info{
+        text-align: center;
+       }
 
     </style>
 
@@ -103,9 +106,13 @@
       <a class="navbar-brand" href="/mainpage">PawSwap</a>
       <a class="navbar-brand" href="/account">My Account</a>
     </nav>
+    <br>
+    <div class = "container thisfont info"> <strong>To view the details of any listing on this page simply click anywhere on the listing’s row.</strong></div>
+
 
     <div class="w3-container w3-padding-16"> 
        <nav class="thisfont text-center title specific">
+
           <strong> Books I'm Selling </strong>
        </nav>
         <table class="table table-hover thisfont">
@@ -175,7 +182,7 @@
                               <input type="hidden" name="offererid" value={{claimOff[0]}} />
                               <div class = "input-group">
 
-                                  <input type="text" class="input form-control no-border thisfont" placeholder="$ Counter Offer" name="counterprice" required />
+                                  <input type="number" class="input form-control no-border thisfont" placeholder="$ Counter Offer" name="counterprice" required />
                                   <br>
                                   <span class="input-group-btn">
                                     &nbsp;
@@ -308,7 +315,7 @@ Let me know at your earliest convenience. Thank you!">{{claimOff[0]}}@princeton.
                       <input type="hidden" name="listingid" value={{row[0]}} />
                       <input type="hidden" name="price" value={{row[5]}} />
                       <button class = "btn btn-default" type="submit">Make Offer</button>
-                      &nbsp; $<input type="text" placeholder="Offer" name="offerprice" required />
+                      &nbsp; $<input type="number" placeholder="Offer" name="offerprice" required />
                     </form>
                   </td>
                 % end
@@ -327,7 +334,7 @@ Let me know at your earliest convenience. Thank you!">{{claimOff[0]}}@princeton.
                       <input type="hidden" name="listingid" value={{row[0]}} />
                       <input type="hidden" name="price" value={{row[5]}} />
                       <div class = "input-group">
-                        <input type="text" class="input form-control no-border thisfont" placeholder="$ New Offer" name="offerprice" required />
+                        <input type="number" class="input form-control no-border thisfont" placeholder="$ New Offer" name="offerprice" required />
                         <br>
                         <span class="input-group-btn">
                           &nbsp;

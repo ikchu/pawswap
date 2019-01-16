@@ -143,8 +143,14 @@
         <input type="text" class="input form-control no-border thisfont" placeholder="Search by Textbook Name" name="bookname" oninput="getResults()" id='bookname'>
         <hr>
     </div>
+
+    <div class="container thisfont">
+      To view more listing details, claim a listing, or make an offer on one, click the <strong>book name</strong>!
+    </div>
+
       <!-- PUT RESULTS IN HERE -->
     <div class="container thisfont">
+        <br>
         <table class="table table-hover table-striped" id="resultsTable">
         </table>
     </div>

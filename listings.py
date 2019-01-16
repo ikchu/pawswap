@@ -415,10 +415,10 @@ def getListingsStmtStr(searchDict):
     # for each valid key (ex. '-dept'), the value is the string that will be appended to stmtStr (ex. ' AND dept = \'COS\'')
     # using 'LIKE' will take care of caps/lower issue. 
     keyStmtDict = {
-        'dept'       : 'dept LIKE %s',
-        'coursenum'  : 'coursenum LIKE %s',
-        'coursetitle': 'coursetitle LIKE %s',
-        'bookname'  : 'bookname LIKE %s',
+        'dept'       : 'dept ILIKE %s',
+        'coursenum'  : 'coursenum ILIKE %s',
+        'coursetitle': 'coursetitle ILIKE %s',
+        'bookname'  : 'bookname ILIKE %s',
         'claimed'   : 'claimed = %s'
     }
     
